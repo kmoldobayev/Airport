@@ -11,7 +11,7 @@ import java.util.List;
 public class PositionMapper {
     public static PositionResponseDto mapPositionEntityToDto(Position position) {
         MapstructProviderMapper mapper = Mappers.getMapper(MapstructProviderMapper.class);
-        PositionResponseDto result = mapper.mapPositionEntityToDto(position);
+        PositionResponseDto result = mapper.mapPositionToDto(position);
         return result;
     }
 

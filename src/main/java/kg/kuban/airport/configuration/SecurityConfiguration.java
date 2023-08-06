@@ -61,6 +61,7 @@ public class SecurityConfiguration {
                                         "/swagger-resources/**",
                                         "/v3/api-docs/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/users/**").hasAnyRole("ADMIN", "CHIEF", "ROLE_CHIEF")
                 .antMatchers("/system-settings/**").hasRole("ADMIN")
                 .antMatchers("/user-roles/**").hasRole("ADMIN")
                 .antMatchers("/system-statistics/**").hasRole("ADMIN")

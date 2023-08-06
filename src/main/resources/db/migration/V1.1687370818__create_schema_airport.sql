@@ -2,7 +2,7 @@ create schema if not exists airport;
 --Таблица "Должности"
 create table if not exists positions (
     id bigserial primary key,                           -- Уникальный идентификатор
-    title varchar not null                              -- Наименование
+    title varchar not null unique                             -- Наименование
 );
 
 -- ALTER TABLE employees ADD CONSTRAINT
@@ -13,7 +13,7 @@ create table if not exists positions (
 create table if not exists app_roles(
     id bigserial primary key,                                       -- Уникальный идентификатор
     title varchar not null unique,                                  -- Название роли
-    position_id bigint not null references positions(id)            -- Должность
+    position_id bigint references positions(id)            -- Должность
 );
 
 --drop table users cascade ;

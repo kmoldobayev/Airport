@@ -19,8 +19,21 @@ public class AppUserMapper {
     }
 
     public static List<AppUserResponseDto> mapAppUserEntityListToDto(List<AppUser> appUserList) {
-        MapstructProviderMapper mapper = Mappers.getMapper(MapstructProviderMapper.class);
-        List<AppUserResponseDto> result = mapper.mapListAppUserToListDto(appUserList);
+        //MapstructProviderMapper mapper = Mappers.getMapper(MapstructProviderMapper.class);
+        //List<AppUserResponseDto> result = mapper.mapListAppUserToListDto(appUserList);
+
+        List<AppUserResponseDto> result = new ArrayList<>();
+
+        for ( AppUser entity : appUserList) {
+            AppUserResponseDto appUserResponseDto = new AppUserResponseDto();
+            appUserResponseDto.setId(entity.getId());
+            appUserResponseDto.setPosition(PositionMapper.mapPositionEntityToDto(entity.getPosition()));
+            appUserResponseDto.setUserLogin(entity.getUserLogin());
+            appUserResponseDto.setDateLastLogin(entity.getDateLastLogin());
+
+
+            result.add(appUserResponseDto);
+        }
 
         return result;
     }

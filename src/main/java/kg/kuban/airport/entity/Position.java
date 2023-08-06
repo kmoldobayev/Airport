@@ -12,11 +12,6 @@ public class Position {
     @Column(name = "title")
     private String title;
 
-//    @ManyToOne
-//    @JoinColumn(name = "role_id", referencedColumnName = "id")
-//    private AppRole appRole;              // Роль
-//
-
     public Position() {
     }
 

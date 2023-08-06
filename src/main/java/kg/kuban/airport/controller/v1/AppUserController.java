@@ -8,6 +8,9 @@ import kg.kuban.airport.dto.AppUserResponseDto;
 import kg.kuban.airport.entity.AppUser;
 import kg.kuban.airport.mapper.AppUserMapper;
 import kg.kuban.airport.service.AppUserService;
+import kg.kuban.airport.service.AuthService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +35,7 @@ import java.util.Objects;
 )
 public class AppUserController {
     private final AppUserService userService;
+    private final Logger logger = LoggerFactory.getLogger(AppUserController.class);
 
     @Autowired
     public AppUserController(AppUserService userService) {
@@ -44,6 +48,7 @@ public class AppUserController {
     )
     @GetMapping("/users")
     public ResponseEntity<List<AppUserResponseDto>> getUsers(){
+        logger.info("!!!!!!!!!!!!!!getUsers");
         return ResponseEntity.ok(AppUserMapper.mapAppUserEntityListToDto(this.userService.getUsers()));
     }
 

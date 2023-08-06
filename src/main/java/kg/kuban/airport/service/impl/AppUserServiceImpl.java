@@ -1,5 +1,6 @@
 package kg.kuban.airport.service.impl;
 
+import kg.kuban.airport.controller.v1.AppUserController;
 import kg.kuban.airport.dto.AppUserRequestDto;
 import kg.kuban.airport.entity.*;
 import kg.kuban.airport.enums.UserStatus;
@@ -7,6 +8,8 @@ import kg.kuban.airport.mapper.PositionMapper;
 import kg.kuban.airport.repository.AppRoleRepository;
 import kg.kuban.airport.repository.AppUserRepository;
 import kg.kuban.airport.service.AppUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +25,7 @@ public class AppUserServiceImpl implements AppUserService {
     private AppRoleRepository appRoleRepository;
 
     private PasswordEncoder bCryptPasswordEncoder;
+    private final Logger logger = LoggerFactory.getLogger(AppUserController.class);
 
     @Autowired
     public AppUserServiceImpl(AppUserRepository appUserRepository,
@@ -33,12 +37,10 @@ public class AppUserServiceImpl implements AppUserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-
-
-
-
     @Override
     public List<AppUser> getUsers() {
+
+        logger.info("appUserRepository.findAll()");
         return appUserRepository.findAll();
     }
 
@@ -71,10 +73,8 @@ public class AppUserServiceImpl implements AppUserService {
             appUser.setPosition(PositionMapper.mapPositionDtoToEntity(appUserDto.getPosition()));
             return appUser;
         } else {
-            throw new IllegalArgumentException("Такой ID пользователя не существует!");
+            throw new NoSuchElementException("Такой ID пользователя не существует!");
         }
-
-
     }
 
     @Override
@@ -104,10 +104,6 @@ public class AppUserServiceImpl implements AppUserService {
             throw new UsernameNotFoundException("Нет пользователя с ID=" + username);
         }
         return userOptional.get();
-    }
-
-    public void doSmth() {
-        System.out.println("doSmth");
     }
 
 }

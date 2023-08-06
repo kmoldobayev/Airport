@@ -52,8 +52,8 @@ public class AuthService {
     }
 
     public void login(String username, String password) throws InvalidCredentialsException {
-        System.out.println("username=" + username);
-        System.out.println("password=" + password);
+        logger.info("username=" + username);
+        logger.info("password=" + password);
 
 
         // Проверить валидность логина и пароля
@@ -77,8 +77,8 @@ public class AuthService {
         credentials.put("username", user.getUsername());
         credentials.put("password", user.getPassword());
 
-        System.out.println(user.getUsername());
-        System.out.println(user.getPassword());
+        logger.info("credentials username=" + user.getUsername());
+        logger.info("credentials password=" + user.getPassword());
 
         try {
             // Создать из пользваоетля ситсемы объект Authentication
@@ -86,7 +86,7 @@ public class AuthService {
             // Положить этот объект в SecurityContext
             this.securityContext.setAuthentication(token);
         } catch(BadCredentialsException e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
 
     }
