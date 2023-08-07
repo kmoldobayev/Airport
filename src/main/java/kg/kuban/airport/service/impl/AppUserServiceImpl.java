@@ -63,7 +63,6 @@ public class AppUserServiceImpl implements AppUserService {
             Position existingPosition = this.positionRepository.findByTitle(appUserDto.getPosition().getTitle());
 
             appUser.setPosition(existingPosition);
-            //this.positionRepository.save(appUser.getPosition());
             appUser.setStatus(UserStatus.ACTIVE);
             appUser.setUserLogin(appUserDto.getUserLogin());
             appUser.setUserPassword(bCryptPasswordEncoder.encode("a1b2c3"));
@@ -85,7 +84,10 @@ public class AppUserServiceImpl implements AppUserService {
         if (Objects.nonNull(findUser)){
             AppUser appUser = this.getUserById(userId);
             appUser.setUserLogin(appUserDto.getUserLogin());
-            appUser.setPosition(PositionMapper.mapPositionDtoToEntity(appUserDto.getPosition()));
+            Position existingPosition = this.positionRepository.findByTitle(appUserDto.getPosition().getTitle());
+            appUser.setPosition(existingPosition);
+            appUser.setStatus(appUserDto.getStatus());
+            appUserRepository.save(appUser);
             return appUser;
         } else {
             throw new NoSuchElementException("Такой ID пользователя не существует!");

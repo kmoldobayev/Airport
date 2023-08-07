@@ -77,6 +77,13 @@ public class AppUserController {
 
     }
 
+    @Operation(
+            summary = "маппинг Изменение пользователя системы (работника)",
+            description = "Изменение пользователя системы (работника)",
+            parameters = {
+                    @Parameter(name = "AppUser", description = "Данные пользователя")
+            }
+    )
     @PutMapping(value = "/updateUser")
     public ResponseEntity<AppUserResponseDto> updateUser(@RequestParam(value = "id") Long userId,
                            @RequestBody AppUserRequestDto user
