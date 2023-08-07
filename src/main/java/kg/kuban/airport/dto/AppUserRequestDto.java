@@ -3,7 +3,7 @@ package kg.kuban.airport.dto;
 public class AppUserRequestDto {
     private String userLogin;
 
-    private PositionResponseDto position;
+    private PositionRequestDto position;
 
     public AppUserRequestDto() {
     }
@@ -17,11 +17,11 @@ public class AppUserRequestDto {
         return this;
     }
 
-    public PositionResponseDto getPosition() {
+    public PositionRequestDto getPosition() {
         return position;
     }
 
-    public AppUserRequestDto setPosition(PositionResponseDto position) {
+    public AppUserRequestDto setPosition(PositionRequestDto position) {
         this.position = position;
         return this;
     }

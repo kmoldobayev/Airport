@@ -1,6 +1,7 @@
 package kg.kuban.airport.mapper;
 
 import kg.kuban.airport.dto.AppUserResponseDto;
+import kg.kuban.airport.dto.PositionRequestDto;
 import kg.kuban.airport.dto.PositionResponseDto;
 import kg.kuban.airport.entity.AppUser;
 import kg.kuban.airport.entity.Position;
@@ -15,7 +16,7 @@ public class PositionMapper {
         return result;
     }
 
-    public static Position mapPositionDtoToEntity(PositionResponseDto positionDto) {
+    public static Position mapPositionDtoToEntity(PositionRequestDto positionDto) {
         MapstructProviderMapper mapper = Mappers.getMapper(MapstructProviderMapper.class);
         Position result = mapper.mapPositionDtoToEntity(positionDto);
         return result;

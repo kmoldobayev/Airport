@@ -7,6 +7,7 @@ import kg.kuban.airport.enums.UserStatus;
 import kg.kuban.airport.mapper.PositionMapper;
 import kg.kuban.airport.repository.AppRoleRepository;
 import kg.kuban.airport.repository.AppUserRepository;
+import kg.kuban.airport.repository.PositionRepository;
 import kg.kuban.airport.service.AppUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     private AppUserRepository appUserRepository;
     private AppRoleRepository appRoleRepository;
+    private PositionRepository positionRepository;
 
     private PasswordEncoder bCryptPasswordEncoder;
     private final Logger logger = LoggerFactory.getLogger(AppUserController.class);
@@ -30,11 +32,13 @@ public class AppUserServiceImpl implements AppUserService {
     @Autowired
     public AppUserServiceImpl(AppUserRepository appUserRepository,
                               AppRoleRepository appRoleRepository,
+                              PositionRepository positionRepository,
                               PasswordEncoder bCryptPasswordEncoder
                               ) {
         this.appUserRepository = appUserRepository;
         this.appRoleRepository = appRoleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.positionRepository = positionRepository;
     }
 
     @Override
@@ -50,11 +54,22 @@ public class AppUserServiceImpl implements AppUserService {
                 .filter(x -> x.getUserLogin().equals(appUserDto.getUserLogin()))
                 .findFirst()
                 .orElse(null);
+        logger.info("possibleDuplicate");
         if (Objects.isNull(possibleDuplicate)){
             AppUser appUser = new AppUser();
             appUser.setAppRoles(Collections.singleton(new AppRole(1L, "ROLE_USER")));
-            appUser.setUserPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
+            logger.info("appUserDto.getPosition()=" + appUserDto.getPosition().getTitle());
+
+            Position existingPosition = this.positionRepository.findByTitle(appUserDto.getPosition().getTitle());
+
+            appUser.setPosition(existingPosition);
+            //this.positionRepository.save(appUser.getPosition());
+            appUser.setStatus(UserStatus.ACTIVE);
+            appUser.setUserLogin(appUserDto.getUserLogin());
+            appUser.setUserPassword(bCryptPasswordEncoder.encode("a1b2c3"));
+            appUser.setDateBegin(LocalDate.now());
             appUserRepository.save(appUser);
+            logger.info("appUserRepository.save(appUser)");
             return appUser;
         } else {
             throw new IllegalArgumentException("Пользователь с таким логином " + appUserDto.getUserLogin() + " уже есть!");

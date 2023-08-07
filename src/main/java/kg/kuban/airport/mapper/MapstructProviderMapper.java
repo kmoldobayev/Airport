@@ -1,9 +1,6 @@
 package kg.kuban.airport.mapper;
 
-import kg.kuban.airport.dto.AircompanyResponseDto;
-import kg.kuban.airport.dto.AppUserResponseDto;
-import kg.kuban.airport.dto.FlightResponseDto;
-import kg.kuban.airport.dto.PositionResponseDto;
+import kg.kuban.airport.dto.*;
 import kg.kuban.airport.entity.Aircompany;
 import kg.kuban.airport.entity.AppUser;
 import kg.kuban.airport.entity.Flight;
@@ -38,7 +35,7 @@ public interface MapstructProviderMapper {
     List<AppUserResponseDto> mapListAppUserToListDto(List<AppUser> appUser);
 
     PositionResponseDto mapPositionToDto(Position position);
-    Position mapPositionDtoToEntity(PositionResponseDto positionDto);
+    Position mapPositionDtoToEntity(PositionRequestDto positionDto);
     @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
     List<PositionResponseDto> mapListPositionToListDto(List<Position> positions);
 
