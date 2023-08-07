@@ -313,3 +313,204 @@ org.hibernate.TransientPropertyValueException: object references an unsaved tran
 2023-08-08 02:54:46.169 DEBUG 3232 --- [http-nio-8080-exec-6] org.hibernate.SQL                        : select appuser0_.id as id1_6_, appuser0_.date_begin as date_beg2_6_, appuser0_.date_ending as date_end3_6_, appuser0_.date_last_login as date_las4_6_, appuser0_.position_id as position8_6_, appuser0_.status as status5_6_, appuser0_.user_login as user_log6_6_, appuser0_.user_password as user_pas7_6_ from app_users appuser0_
 2023-08-08 02:54:46.171 DEBUG 3232 --- [http-nio-8080-exec-6] org.hibernate.SQL                        : select position0_.id as id1_11_, position0_.title as title2_11_ from positions position0_ where position0_.title=?
 2023-08-08 02:54:46.175 DEBUG 3232 --- [http-nio-8080-exec-6] org.hibernate.SQL                        : update app_users set date_begin=?, date_ending=?, date_last_login=?, position_id=?, status=?, user_login=?, user_password=? where id=?
+2023-08-08 03:02:28.846  INFO 3232 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-08-08 03:02:28.850  INFO 3232 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-08-08 03:02:28.868  INFO 3232 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-08-08 03:02:39.736  INFO 944 --- [main] kg.kuban.airport.AirportApplication      : Starting AirportApplication using Java 11.0.18 on DESKTOP-BPTJB0E with PID 944 (D:\Сourses\Java\Airport\target\classes started by Admin in D:\Сourses\Java\Airport)
+2023-08-08 03:02:39.741  INFO 944 --- [main] kg.kuban.airport.AirportApplication      : No active profile set, falling back to 1 default profile: "default"
+2023-08-08 03:02:41.375  INFO 944 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-08-08 03:02:41.579  INFO 944 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 186 ms. Found 14 JPA repository interfaces.
+2023-08-08 03:02:42.519  INFO 944 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-08-08 03:02:42.529  INFO 944 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-08-08 03:02:42.530  INFO 944 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2023-08-08 03:02:42.703  INFO 944 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-08-08 03:02:42.704  INFO 944 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2882 ms
+2023-08-08 03:02:42.916  INFO 944 --- [main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 8.5.13 by Redgate
+2023-08-08 03:02:42.916  INFO 944 --- [main] o.f.c.internal.license.VersionPrinter    : See what's new here: https://flywaydb.org/documentation/learnmore/releaseNotes#8.5.13
+2023-08-08 03:02:42.917  INFO 944 --- [main] o.f.c.internal.license.VersionPrinter    : 
+2023-08-08 03:02:42.932  INFO 944 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-08-08 03:02:43.071  INFO 944 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-08-08 03:02:43.093  INFO 944 --- [main] o.f.c.i.database.base.BaseDatabaseType   : Database: jdbc:postgresql://localhost:5432/airport (PostgreSQL 10.23)
+2023-08-08 03:02:43.170  INFO 944 --- [main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.054s)
+2023-08-08 03:02:43.196  INFO 944 --- [main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 1.1688899490
+2023-08-08 03:02:43.196  WARN 944 --- [main] o.f.core.internal.command.DbMigrate      : outOfOrder mode is active. Migration of schema "public" may not be reproducible.
+2023-08-08 03:02:43.198  INFO 944 --- [main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2023-08-08 03:02:43.432  INFO 944 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-08-08 03:02:43.523  INFO 944 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2023-08-08 03:02:43.991  INFO 944 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+2023-08-08 03:02:45.092  INFO 944 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-08-08 03:02:45.113  INFO 944 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-08-08 03:02:46.173  WARN 944 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-08-08 03:02:47.169  INFO 944 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5dd12c19, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@40696fc6, org.springframework.security.web.context.SecurityContextPersistenceFilter@2941631f, org.springframework.security.web.header.HeaderWriterFilter@68feca3a, org.springframework.web.filter.CorsFilter@3ce2c5f6, org.springframework.security.web.authentication.logout.LogoutFilter@3bf41cd0, kg.kuban.airport.security.JwtAuthenticationFilter@9f52eb7, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@3dabdd11, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3fb0d9de, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@8ad6d29, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@20a3321a, org.springframework.security.web.session.SessionManagementFilter@4930213b, org.springframework.security.web.access.ExceptionTranslationFilter@674fd531, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@e2696e8]
+2023-08-08 03:02:47.878  INFO 944 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-08-08 03:02:47.894  INFO 944 --- [main] kg.kuban.airport.AirportApplication      : Started AirportApplication in 8.921 seconds (JVM running for 10.551)
+2023-08-08 03:03:28.225  INFO 944 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-08-08 03:03:28.226  INFO 944 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-08-08 03:03:28.229  INFO 944 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2023-08-08 03:04:26.353  INFO 944 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-08-08 03:04:26.356  INFO 944 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-08-08 03:04:26.365  INFO 944 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-08-08 03:04:32.338  INFO 848 --- [main] kg.kuban.airport.AirportApplication      : Starting AirportApplication using Java 11.0.18 on DESKTOP-BPTJB0E with PID 848 (D:\Сourses\Java\Airport\target\classes started by Admin in D:\Сourses\Java\Airport)
+2023-08-08 03:04:32.343  INFO 848 --- [main] kg.kuban.airport.AirportApplication      : No active profile set, falling back to 1 default profile: "default"
+2023-08-08 03:04:33.830  INFO 848 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-08-08 03:04:34.004  INFO 848 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 159 ms. Found 14 JPA repository interfaces.
+2023-08-08 03:04:35.067  INFO 848 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-08-08 03:04:35.082  INFO 848 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-08-08 03:04:35.082  INFO 848 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2023-08-08 03:04:35.292  INFO 848 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-08-08 03:04:35.293  INFO 848 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2878 ms
+2023-08-08 03:04:35.337 ERROR 848 --- [main] o.s.b.web.embedded.tomcat.TomcatStarter  : Error starting Tomcat context. Exception: org.springframework.beans.factory.UnsatisfiedDependencyException. Message: Error creating bean with name 'jwtAuthenticationFilter' defined in file [D:\Сourses\Java\Airport\target\classes\kg\kuban\airport\security\JwtAuthenticationFilter.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'jwtTokenHandler': Unsatisfied dependency expressed through field 'jwtTokenLifetime'; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: "30m"
+2023-08-08 03:04:35.363  INFO 848 --- [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-08-08 03:04:35.373  WARN 848 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server; nested exception is org.springframework.boot.web.server.WebServerException: Unable to start embedded Tomcat
+2023-08-08 03:04:35.386  INFO 848 --- [main] ConditionEvaluationReportLoggingListener : 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2023-08-08 03:04:35.413 ERROR 848 --- [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.context.ApplicationContextException: Unable to start web server; nested exception is org.springframework.boot.web.server.WebServerException: Unable to start embedded Tomcat
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:165) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:577) ~[spring-context-5.3.27.jar:5.3.27]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:731) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:408) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:307) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292) ~[spring-boot-2.7.11.jar:2.7.11]
+	at kg.kuban.airport.AirportApplication.main(AirportApplication.java:10) ~[classes/:na]
+Caused by: org.springframework.boot.web.server.WebServerException: Unable to start embedded Tomcat
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:142) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:104) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:481) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:211) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:184) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:162) ~[spring-boot-2.7.11.jar:2.7.11]
+	... 8 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'jwtAuthenticationFilter' defined in file [D:\Сourses\Java\Airport\target\classes\kg\kuban\airport\security\JwtAuthenticationFilter.class]: Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'jwtTokenHandler': Unsatisfied dependency expressed through field 'jwtTokenLifetime'; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: "30m"
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:800) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:229) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1372) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1222) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:213) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:213) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:176) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:171) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAdaptableBeans(ServletContextInitializerBeans.java:156) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.<init>(ServletContextInitializerBeans.java:87) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.getServletContextInitializerBeans(ServletWebServerApplicationContext.java:262) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.selfInitialize(ServletWebServerApplicationContext.java:236) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.springframework.boot.web.embedded.tomcat.TomcatStarter.onStartup(TomcatStarter.java:53) ~[spring-boot-2.7.11.jar:2.7.11]
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4936) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:183) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1332) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1322) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:140) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:871) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:795) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:183) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1332) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1322) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[na:na]
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:140) ~[na:na]
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:871) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:249) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:183) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:428) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:183) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:917) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:183) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:486) ~[tomcat-embed-core-9.0.74.jar:9.0.74]
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:123) ~[spring-boot-2.7.11.jar:2.7.11]
+	... 13 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'jwtTokenHandler': Unsatisfied dependency expressed through field 'jwtTokenLifetime'; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: "30m"
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:660) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:640) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:119) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:399) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1431) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:619) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:276) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1391) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:887) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791) ~[spring-beans-5.3.27.jar:5.3.27]
+	... 54 common frames omitted
+Caused by: org.springframework.beans.TypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: "30m"
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:79) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1339) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1311) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:657) ~[spring-beans-5.3.27.jar:5.3.27]
+	... 69 common frames omitted
+Caused by: java.lang.NumberFormatException: For input string: "30m"
+	at java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:65) ~[na:na]
+	at java.base/java.lang.Long.parseLong(Long.java:692) ~[na:na]
+	at java.base/java.lang.Long.valueOf(Long.java:1144) ~[na:na]
+	at org.springframework.util.NumberUtils.parseNumber(NumberUtils.java:214) ~[spring-core-5.3.27.jar:5.3.27]
+	at org.springframework.beans.propertyeditors.CustomNumberEditor.setAsText(CustomNumberEditor.java:115) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:429) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:402) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:155) ~[spring-beans-5.3.27.jar:5.3.27]
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:73) ~[spring-beans-5.3.27.jar:5.3.27]
+	... 72 common frames omitted
+
+2023-08-08 03:05:09.601  INFO 2460 --- [main] kg.kuban.airport.AirportApplication      : Starting AirportApplication using Java 11.0.18 on DESKTOP-BPTJB0E with PID 2460 (D:\Сourses\Java\Airport\target\classes started by Admin in D:\Сourses\Java\Airport)
+2023-08-08 03:05:09.606  INFO 2460 --- [main] kg.kuban.airport.AirportApplication      : No active profile set, falling back to 1 default profile: "default"
+2023-08-08 03:05:11.035  INFO 2460 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-08-08 03:05:11.224  INFO 2460 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 164 ms. Found 14 JPA repository interfaces.
+2023-08-08 03:05:11.989  INFO 2460 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-08-08 03:05:11.999  INFO 2460 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-08-08 03:05:11.999  INFO 2460 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2023-08-08 03:05:12.181  INFO 2460 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-08-08 03:05:12.181  INFO 2460 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2509 ms
+2023-08-08 03:05:12.364  INFO 2460 --- [main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 8.5.13 by Redgate
+2023-08-08 03:05:12.364  INFO 2460 --- [main] o.f.c.internal.license.VersionPrinter    : See what's new here: https://flywaydb.org/documentation/learnmore/releaseNotes#8.5.13
+2023-08-08 03:05:12.364  INFO 2460 --- [main] o.f.c.internal.license.VersionPrinter    : 
+2023-08-08 03:05:12.377  INFO 2460 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-08-08 03:05:12.495  INFO 2460 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-08-08 03:05:12.516  INFO 2460 --- [main] o.f.c.i.database.base.BaseDatabaseType   : Database: jdbc:postgresql://localhost:5432/airport (PostgreSQL 10.23)
+2023-08-08 03:05:12.561  INFO 2460 --- [main] o.f.core.internal.command.DbValidate     : Successfully validated 3 migrations (execution time 00:00.026s)
+2023-08-08 03:05:12.575  INFO 2460 --- [main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 1.1688899490
+2023-08-08 03:05:12.576  WARN 2460 --- [main] o.f.core.internal.command.DbMigrate      : outOfOrder mode is active. Migration of schema "public" may not be reproducible.
+2023-08-08 03:05:12.578  INFO 2460 --- [main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2023-08-08 03:05:12.773  INFO 2460 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-08-08 03:05:12.855  INFO 2460 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2023-08-08 03:05:13.271  INFO 2460 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+2023-08-08 03:05:14.144  INFO 2460 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-08-08 03:05:14.157  INFO 2460 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-08-08 03:05:15.101  WARN 2460 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-08-08 03:05:15.916  INFO 2460 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1ecf784f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@344769b9, org.springframework.security.web.context.SecurityContextPersistenceFilter@2941631f, org.springframework.security.web.header.HeaderWriterFilter@68feca3a, org.springframework.web.filter.CorsFilter@34376069, org.springframework.security.web.authentication.logout.LogoutFilter@3bf41cd0, kg.kuban.airport.security.JwtAuthenticationFilter@9f52eb7, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@1dbfbd94, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3fb0d9de, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@8ad6d29, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@9c40f43, org.springframework.security.web.session.SessionManagementFilter@4930213b, org.springframework.security.web.access.ExceptionTranslationFilter@674fd531, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2ba9765b]
+2023-08-08 03:05:16.614  INFO 2460 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-08-08 03:05:16.630  INFO 2460 --- [main] kg.kuban.airport.AirportApplication      : Started AirportApplication in 7.711 seconds (JVM running for 9.177)
+2023-08-08 03:05:22.736  INFO 2460 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-08-08 03:05:22.741  INFO 2460 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-08-08 03:05:22.745  INFO 2460 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2023-08-08 03:05:22.906  INFO 2460 --- [http-nio-8080-exec-1] kg.kuban.airport.service.AuthService     : username=CHIEF
+2023-08-08 03:05:22.907  INFO 2460 --- [http-nio-8080-exec-1] kg.kuban.airport.service.AuthService     : password=CHIEF
+2023-08-08 03:05:23.110 DEBUG 2460 --- [http-nio-8080-exec-1] org.hibernate.SQL                        : select appuser0_.id as id1_6_, appuser0_.date_begin as date_beg2_6_, appuser0_.date_ending as date_end3_6_, appuser0_.date_last_login as date_las4_6_, appuser0_.position_id as position8_6_, appuser0_.status as status5_6_, appuser0_.user_login as user_log6_6_, appuser0_.user_password as user_pas7_6_ from app_users appuser0_ where appuser0_.user_login=?
+2023-08-08 03:05:23.148 DEBUG 2460 --- [http-nio-8080-exec-1] org.hibernate.SQL                        : select position0_.id as id1_11_0_, position0_.title as title2_11_0_ from positions position0_ where position0_.id=?
+2023-08-08 03:05:23.163 DEBUG 2460 --- [http-nio-8080-exec-1] org.hibernate.SQL                        : select approles0_.user_id as user_id1_10_0_, approles0_.role_id as role_id2_10_0_, approle1_.id as id1_5_1_, approle1_.title as title2_5_1_ from m2m_user_role approles0_ inner join app_roles approle1_ on approles0_.role_id=approle1_.id where approles0_.user_id=?
+2023-08-08 03:05:23.360  INFO 2460 --- [http-nio-8080-exec-1] kg.kuban.airport.service.AuthService     : credentials username=CHIEF
+2023-08-08 03:05:23.361  INFO 2460 --- [http-nio-8080-exec-1] kg.kuban.airport.service.AuthService     : credentials password=$2y$10$bbAaqqmP0r4Lee7sDONtpeb0ptds/qVvtJJmxeLBJaQQbwbu3nbsi
+2023-08-08 03:05:23.362 DEBUG 2460 --- [http-nio-8080-exec-1] org.hibernate.SQL                        : select appuser0_.id as id1_6_, appuser0_.date_begin as date_beg2_6_, appuser0_.date_ending as date_end3_6_, appuser0_.date_last_login as date_las4_6_, appuser0_.position_id as position8_6_, appuser0_.status as status5_6_, appuser0_.user_login as user_log6_6_, appuser0_.user_password as user_pas7_6_ from app_users appuser0_ where appuser0_.user_login=?
+2023-08-08 03:05:37.386 DEBUG 2460 --- [http-nio-8080-exec-3] org.hibernate.SQL                        : select appuser0_.id as id1_6_, appuser0_.date_begin as date_beg2_6_, appuser0_.date_ending as date_end3_6_, appuser0_.date_last_login as date_las4_6_, appuser0_.position_id as position8_6_, appuser0_.status as status5_6_, appuser0_.user_login as user_log6_6_, appuser0_.user_password as user_pas7_6_ from app_users appuser0_ where appuser0_.user_login=?
+2023-08-08 03:05:37.388 DEBUG 2460 --- [http-nio-8080-exec-3] org.hibernate.SQL                        : select position0_.id as id1_11_0_, position0_.title as title2_11_0_ from positions position0_ where position0_.id=?
+2023-08-08 03:05:37.390 DEBUG 2460 --- [http-nio-8080-exec-3] org.hibernate.SQL                        : select approles0_.user_id as user_id1_10_0_, approles0_.role_id as role_id2_10_0_, approle1_.id as id1_5_1_, approle1_.title as title2_5_1_ from m2m_user_role approles0_ inner join app_roles approle1_ on approles0_.role_id=approle1_.id where approles0_.user_id=?
+2023-08-08 03:05:37.409  INFO 2460 --- [http-nio-8080-exec-3] k.k.a.controller.v1.AppUserController    : appUserRepository.findAll()
+2023-08-08 03:05:37.427 DEBUG 2460 --- [http-nio-8080-exec-3] org.hibernate.SQL                        : select appuser0_.id as id1_6_, appuser0_.date_begin as date_beg2_6_, appuser0_.date_ending as date_end3_6_, appuser0_.date_last_login as date_las4_6_, appuser0_.position_id as position8_6_, appuser0_.status as status5_6_, appuser0_.user_login as user_log6_6_, appuser0_.user_password as user_pas7_6_ from app_users appuser0_
+2023-08-08 03:05:37.428 DEBUG 2460 --- [http-nio-8080-exec-3] org.hibernate.SQL                        : select position0_.id as id1_11_0_, position0_.title as title2_11_0_ from positions position0_ where position0_.id=?
+2023-08-08 03:05:37.430 DEBUG 2460 --- [http-nio-8080-exec-3] org.hibernate.SQL                        : select position0_.id as id1_11_0_, position0_.title as title2_11_0_ from positions position0_ where position0_.id=?
+2023-08-08 03:05:37.431 DEBUG 2460 --- [http-nio-8080-exec-3] org.hibernate.SQL                        : select approles0_.user_id as user_id1_10_0_, approles0_.role_id as role_id2_10_0_, approle1_.id as id1_5_1_, approle1_.title as title2_5_1_ from m2m_user_role approles0_ inner join app_roles approle1_ on approles0_.role_id=approle1_.id where approles0_.user_id=?
+2023-08-08 03:05:37.432 DEBUG 2460 --- [http-nio-8080-exec-3] org.hibernate.SQL                        : select approles0_.user_id as user_id1_10_0_, approles0_.role_id as role_id2_10_0_, approle1_.id as id1_5_1_, approle1_.title as title2_5_1_ from m2m_user_role approles0_ inner join app_roles approle1_ on approles0_.role_id=approle1_.id where approles0_.user_id=?
+2023-08-08 03:05:37.434 DEBUG 2460 --- [http-nio-8080-exec-3] org.hibernate.SQL                        : select approles0_.user_id as user_id1_10_0_, approles0_.role_id as role_id2_10_0_, approle1_.id as id1_5_1_, approle1_.title as title2_5_1_ from m2m_user_role approles0_ inner join app_roles approle1_ on approles0_.role_id=approle1_.id where approles0_.user_id=?

@@ -82,6 +82,11 @@ public class AppUserServiceImpl implements AppUserService {
                 findFirst().orElse(null);
 
         if (Objects.nonNull(findUser)){
+
+            if (findUser.getAppRoles().stream().anyMatch(x -> x.getTitle().equals("ADMIN"))) {
+                throw new NoSuchElementException("Изменять пользователя с ролью ADMIN нельзя!");
+            }
+
             AppUser appUser = this.getUserById(userId);
             appUser.setUserLogin(appUserDto.getUserLogin());
             Position existingPosition = this.positionRepository.findByTitle(appUserDto.getPosition().getTitle());
