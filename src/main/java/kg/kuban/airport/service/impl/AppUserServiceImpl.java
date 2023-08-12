@@ -3,6 +3,7 @@ package kg.kuban.airport.service.impl;
 import kg.kuban.airport.controller.v1.AppUserController;
 import kg.kuban.airport.dto.AppUserRequestDto;
 import kg.kuban.airport.entity.*;
+import kg.kuban.airport.exception.InvalidCredentialsException;
 import kg.kuban.airport.repository.AppRoleRepository;
 import kg.kuban.airport.repository.AppUserRepository;
 import kg.kuban.airport.repository.PositionRepository;
@@ -26,41 +27,43 @@ public class AppUserServiceImpl implements AppUserService {
     private PositionRepository positionRepository;
 
     private PasswordEncoder bCryptPasswordEncoder;
-    private final SecurityContext securityContext;
-    //private final JwtTokenHandler jwtTokenHandler;
     private final Logger logger = LoggerFactory.getLogger(AppUserController.class);
 
     @Autowired
     public AppUserServiceImpl(AppUserRepository appUserRepository,
                               AppRoleRepository appRoleRepository,
                               PositionRepository positionRepository,
-                              PasswordEncoder bCryptPasswordEncoder,
-                              //JwtTokenHandler jwtTokenHandler,
-                              SecurityContext securityContext
+                              PasswordEncoder bCryptPasswordEncoder
                               ) {
         this.appUserRepository = appUserRepository;
         this.appRoleRepository = appRoleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.positionRepository = positionRepository;
-        //this.jwtTokenHandler = jwtTokenHandler;
-        this.securityContext = securityContext;
     }
 
     @Override
-    public List<AppUser> getUsers(/*String token*/) {
-//        if (!this.jwtTokenHandler.validateToken(token)) {
-//            throw new IllegalArgumentException("Invalid token");
-//        }
-//        if (Objects.isNull(this.securityContext.getAuthentication())) {
-//            throw new LogoutException("Нет залогированного пользователя!");
-//        }
-
+    public List<AppUser> getUsers() {
         logger.info("appUserRepository.findAll()");
         return appUserRepository.findAll();
     }
 
     @Override
-    public AppUser createUser(AppUserRequestDto appUserDto) throws IllegalArgumentException {
+    public AppUser createUser(AppUserRequestDto appUserDto) throws IllegalArgumentException, InvalidCredentialsException {
+
+        if (Objects.isNull(appUserDto)) {
+            throw new IllegalArgumentException("Входящий userDto is null");
+        }
+
+        if (Objects.isNull(appUserDto.getUserLogin())) {
+            throw new InvalidCredentialsException("Login must not be null or empty");
+        }
+        if (Objects.isNull(appUserDto.getUserPassword()) || appUserDto.getUserPassword().isEmpty()) {
+            throw new InvalidCredentialsException("Password must not be null or empty");
+        }
+        if (Objects.isNull(appUserDto.getFullName()) || appUserDto.getFullName().isEmpty()) {
+            throw new InvalidCredentialsException("FullName must not be null or empty");
+        }
+
         AppUser possibleDuplicate = appUserRepository.findAll().stream()
                 .filter(x -> x.getUserLogin().equals(appUserDto.getUserLogin()))
                 .findFirst()
@@ -76,7 +79,6 @@ public class AppUserServiceImpl implements AppUserService {
             appUser.setPosition(existingPosition);
             appUser.setUserLogin(appUserDto.getUserLogin());
             appUser.setUserPassword(bCryptPasswordEncoder.encode(appUserDto.getUserPassword()));
-            //appUser.setDateBegin(LocalDate.now());
             appUserRepository.save(appUser);
             logger.info("appUserRepository.save(appUser)");
             return appUser;
@@ -85,26 +87,7 @@ public class AppUserServiceImpl implements AppUserService {
         }
     }
 
-    @Override
-    public AppUser createCustomer(AppUserRequestDto appUserDto) throws IllegalArgumentException {
-        AppUser possibleDuplicate = appUserRepository.findAll().stream()
-                .filter(x -> x.getUserLogin().equals(appUserDto.getUserLogin()))
-                .findFirst()
-                .orElse(null);
-        logger.info("possibleDuplicate");
-        if (Objects.isNull(possibleDuplicate)){
-            AppUser appUser = new AppUser();
-            appUser.setAppRoles(Collections.singleton(new AppRole(1L, "ROLE_CUSTOMER")));
 
-            appUser.setUserLogin(appUserDto.getUserLogin());
-            appUser.setUserPassword(bCryptPasswordEncoder.encode(appUserDto.getUserPassword()));
-            appUserRepository.save(appUser);
-            logger.info("appUserRepository.save(appUser)");
-            return appUser;
-        } else {
-            throw new IllegalArgumentException("Пользователь с таким логином " + appUserDto.getUserLogin() + " уже есть!");
-        }
-    }
 
     @Override
     public AppUser updateUser(AppUserRequestDto appUserDto, Long userId) throws NoSuchElementException {

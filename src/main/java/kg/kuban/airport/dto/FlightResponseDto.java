@@ -16,9 +16,9 @@ public class FlightResponseDto {
     private AirportResponseDto destination;             // Пункт назначения
 
 
-    private LocalDateTime dateRegister;    // Дата и время реистрации
+    private LocalDateTime dateRegister;                 // Дата и время регистрации
 
-    private AirplaneResponseDto airplane;            // Самолет
+    private AirplaneResponseDto airplane;               // Самолет
 
     public FlightResponseDto() {
     }

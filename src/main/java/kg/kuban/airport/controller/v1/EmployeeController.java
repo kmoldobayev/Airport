@@ -27,6 +27,6 @@ public class EmployeeController {
 
     @GetMapping("/available-flights")
     public List<FlightResponseDto> getAvailableFlights() {
-        return FlightMapper.mapGroupServiceEntityListToDto(this.flightRepository.findAvailableFlights());
+        return FlightMapper.mapFlightEntityListToDto(this.flightRepository.findAvailableFlights());
     }
 }

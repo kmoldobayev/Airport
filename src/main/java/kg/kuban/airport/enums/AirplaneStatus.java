@@ -2,8 +2,8 @@ package kg.kuban.airport.enums;
 
 public enum AirplaneStatus {
     NEEDS_INSPECTION("Требуется инспекция"),    // самолет требует инспекции
-    ON_INSPECTION("На инспекции"),              // самолет на инспекции
-    SERVICEABLE("На тех осмотре"),              // самолет на тех осмотре
+    ON_INSPECTION("На тех осмотре"),              //  самолет на тех осмотре
+    SERVICEABLE("Исправный"),              //
     ON_REPAIRS("На ремонте"),                                               // самолет находится на ремонте
     REGISTRATION_PENDING_CONFIRMATION("Ожидает подтверждение регистрации"), // самолет ожидает подтверждение регистрации
 

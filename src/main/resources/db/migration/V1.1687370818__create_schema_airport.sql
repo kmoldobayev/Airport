@@ -15,6 +15,7 @@ create table if not exists app_roles(
 -- Таблица "Пользователи"
 create table if not exists app_users(
     id bigserial primary key,                                       -- Уникальный идентификатор
+    full_name varchar not null,                                     -- Полное имя пользователя
     user_login varchar not null unique,                             -- Логин пользователя
     user_password varchar not null,                                 -- Пароль пользователя
     position_id bigint references positions(id),                    -- Должность

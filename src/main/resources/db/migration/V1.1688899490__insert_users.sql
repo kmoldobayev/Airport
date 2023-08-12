@@ -31,15 +31,21 @@ values ('ADMIN', null),
        ('CUSTOMER', null)
 on conflict (title) do nothing;
 
-INSERT INTO app_users (user_login,
+INSERT INTO app_users (
+                       full_name,
+                       user_login,
                        user_password,
                        is_enabled,
                        position_id)
-values ('ADMIN',
+values (
+        'Администратор системы',
+        'ADMIN',
         '$2y$08$KmWy6Z5ix2oP3.pWuqrA1.94wOnuknCmfiPLd31wKlTZvzOFr4fOC',
         true,
         null),
-       ('CHIEF',
+       (
+        'Управляющий директор',
+        'CHIEF',
         '$2y$10$bbAaqqmP0r4Lee7sDONtpeb0ptds/qVvtJJmxeLBJaQQbwbu3nbsi',
         true,
         (select id from positions where title = 'CHIEF'))

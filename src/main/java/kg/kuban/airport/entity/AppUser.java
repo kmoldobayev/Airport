@@ -20,6 +20,9 @@ public class AppUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "full_name")
+    private String fullName;
+
     @Column(name = "user_login")
     private String userLogin;
     @Column(name = "user_password")
@@ -112,6 +115,15 @@ public class AppUser implements UserDetails {
 
     public AppUser setPosition(Position position) {
         this.position = position;
+        return this;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public AppUser setFullName(String fullName) {
+        this.fullName = fullName;
         return this;
     }
 

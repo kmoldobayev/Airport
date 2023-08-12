@@ -17,7 +17,7 @@ public class FlightMapper {
         return flightResponseDto;
     }
 
-    public static List<FlightResponseDto> mapGroupServiceEntityListToDto(List<Flight> flightList) {
+    public static List<FlightResponseDto> mapFlightEntityListToDto(List<Flight> flightList) {
         List<FlightResponseDto> result = new ArrayList<>();
 
         for ( Flight flight : flightList) {

@@ -28,6 +28,7 @@ public class AppUserMapper {
             AppUserResponseDto appUserResponseDto = new AppUserResponseDto();
             appUserResponseDto.setId(entity.getId());
             appUserResponseDto.setPosition(PositionMapper.mapPositionEntityToDto(entity.getPosition()));
+            appUserResponseDto.setFullName(entity.getFullName());
             appUserResponseDto.setUserLogin(entity.getUserLogin());
 
             result.add(appUserResponseDto);

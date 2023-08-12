@@ -1,23 +1,18 @@
 package kg.kuban.airport.dto;
 
-public class AppUserRequestDto {
-
+public class CustomerRequestDto {
     private String fullName;
     private String userLogin;
     private String userPassword;
 
-    private PositionRequestDto position;
-
-
-    public AppUserRequestDto() {
+    public CustomerRequestDto() {
     }
-
 
     public String getFullName() {
         return fullName;
     }
 
-    public AppUserRequestDto setFullName(String fullName) {
+    public CustomerRequestDto setFullName(String fullName) {
         this.fullName = fullName;
         return this;
     }
@@ -26,17 +21,8 @@ public class AppUserRequestDto {
         return userLogin;
     }
 
-    public AppUserRequestDto setUserLogin(String userLogin) {
+    public CustomerRequestDto setUserLogin(String userLogin) {
         this.userLogin = userLogin;
-        return this;
-    }
-
-    public PositionRequestDto getPosition() {
-        return position;
-    }
-
-    public AppUserRequestDto setPosition(PositionRequestDto position) {
-        this.position = position;
         return this;
     }
 
@@ -44,7 +30,7 @@ public class AppUserRequestDto {
         return userPassword;
     }
 
-    public AppUserRequestDto setUserPassword(String userPassword) {
+    public CustomerRequestDto setUserPassword(String userPassword) {
         this.userPassword = userPassword;
         return this;
     }
