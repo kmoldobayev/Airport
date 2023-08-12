@@ -29,8 +29,6 @@ public class AppUserMapper {
             appUserResponseDto.setId(entity.getId());
             appUserResponseDto.setPosition(PositionMapper.mapPositionEntityToDto(entity.getPosition()));
             appUserResponseDto.setUserLogin(entity.getUserLogin());
-            appUserResponseDto.setDateLastLogin(entity.getDateLastLogin());
-
 
             result.add(appUserResponseDto);
         }

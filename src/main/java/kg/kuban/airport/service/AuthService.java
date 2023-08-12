@@ -91,13 +91,14 @@ public class AuthService {
 
     }
 
-    public void logout() throws Exception {
-        // Есть ли авторизированный пользователь
-        // Обнулить Authentification SecurityContext
-
+    public void logout() throws LogoutException {
+        // Проверяем, есть ли авторизированный пользователь
         if (Objects.isNull(this.securityContext.getAuthentication())) {
             throw new LogoutException("Нет залогированного пользователя!");
         }
+
+        // Обнуляем Authentication в SecurityContext
+        this.securityContext.setAuthentication(null);
     }
 
     public void doSmth() {
@@ -107,5 +108,9 @@ public class AuthService {
     public String saySmth() {
 
         return "hello world";
+    }
+
+    public SecurityContext getSecurityContext() {
+        return securityContext;
     }
 }

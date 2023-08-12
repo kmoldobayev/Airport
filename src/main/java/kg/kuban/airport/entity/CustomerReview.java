@@ -16,8 +16,8 @@ public class CustomerReview {
     @Column(name = "review")
     private String review;
 
-    @Column(name = "date_create")
-    private LocalDateTime dateCreate;
+    @Column(name = "date_register")
+    private LocalDateTime dateRegister;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "mark")
@@ -26,6 +26,10 @@ public class CustomerReview {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private AppUser appUser;
+
+    @ManyToOne
+    @JoinColumn(name = "flight_id", referencedColumnName = "id")
+    private Flight flight;
 
 
     public CustomerReview() {
@@ -49,12 +53,12 @@ public class CustomerReview {
         return this;
     }
 
-    public LocalDateTime getDateCreate() {
-        return dateCreate;
+    public LocalDateTime getDateRegister() {
+        return dateRegister;
     }
 
-    public CustomerReview setDateCreate(LocalDateTime dateCreate) {
-        this.dateCreate = dateCreate;
+    public CustomerReview setDateRegister(LocalDateTime dateRegister) {
+        this.dateRegister = dateRegister;
         return this;
     }
 
@@ -73,6 +77,15 @@ public class CustomerReview {
 
     public CustomerReview setAppUser(AppUser appUser) {
         this.appUser = appUser;
+        return this;
+    }
+
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public CustomerReview setFlight(Flight flight) {
+        this.flight = flight;
         return this;
     }
 }

@@ -33,15 +33,15 @@ on conflict (title) do nothing;
 
 INSERT INTO app_users (user_login,
                        user_password,
-                       status,
+                       is_enabled,
                        position_id)
 values ('ADMIN',
         '$2y$08$KmWy6Z5ix2oP3.pWuqrA1.94wOnuknCmfiPLd31wKlTZvzOFr4fOC',
-        'ACTIVE',
+        true,
         null),
        ('CHIEF',
         '$2y$10$bbAaqqmP0r4Lee7sDONtpeb0ptds/qVvtJJmxeLBJaQQbwbu3nbsi',
-        'ACTIVE',
+        true,
         (select id from positions where title = 'CHIEF'))
 on conflict (user_login) do nothing;
 

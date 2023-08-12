@@ -20,6 +20,10 @@ public class AppRole implements GrantedAuthority {
     @ManyToMany(mappedBy = "appRoles")
     private Set<AppUser> users;
 
+    @ManyToOne
+    @JoinColumn(name = "position_id", referencedColumnName = "id")
+    private Position position;
+
 
     public AppRole() {
     }
@@ -60,9 +64,20 @@ public class AppRole implements GrantedAuthority {
         return this;
     }
 
+    public Position getPosition() {
+        return position;
+    }
+
+    public AppRole setPosition(Position position) {
+        this.position = position;
+        return this;
+    }
+
     @Override
     public String getAuthority() {
 
         return "ROLE_" + this.title;
     }
+
+
 }

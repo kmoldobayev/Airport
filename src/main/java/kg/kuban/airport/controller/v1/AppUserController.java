@@ -3,16 +3,21 @@ package kg.kuban.airport.controller.v1;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.kuban.airport.dto.AppRoleResponseDto;
 import kg.kuban.airport.dto.AppUserRequestDto;
 import kg.kuban.airport.dto.AppUserResponseDto;
 import kg.kuban.airport.entity.AppUser;
+import kg.kuban.airport.exception.InvalidCredentialsException;
+import kg.kuban.airport.mapper.AppRoleMapper;
 import kg.kuban.airport.mapper.AppUserMapper;
+import kg.kuban.airport.service.AppRoleService;
 import kg.kuban.airport.service.AppUserService;
 import kg.kuban.airport.service.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,11 +40,13 @@ import java.util.Objects;
 )
 public class AppUserController {
     private final AppUserService userService;
+    private final AppRoleService roleService;
     private final Logger logger = LoggerFactory.getLogger(AppUserController.class);
 
     @Autowired
-    public AppUserController(AppUserService userService) {
+    public AppUserController(AppUserService userService, AppRoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @Operation(
@@ -47,6 +54,7 @@ public class AppUserController {
             description = "Просмотр всех пользователей системы!"
     )
     @GetMapping("/users")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CHIEF')")
     public ResponseEntity<List<AppUserResponseDto>> getUsers(){
         logger.info("!!!!!!!!!!!!!!getUsers");
         return ResponseEntity.ok(AppUserMapper.mapAppUserEntityListToDto(this.userService.getUsers()));
@@ -60,6 +68,7 @@ public class AppUserController {
             }
     )
     @GetMapping(value = "/users/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CHIEF')")
     public ResponseEntity<AppUserResponseDto> getUserById(@PathVariable(value = "id") Long userId){
         return ResponseEntity.ok(AppUserMapper.mapAppUserEntityToDto(userService.getUserById(userId)));
     }
@@ -72,9 +81,18 @@ public class AppUserController {
             }
     )
     @PostMapping(value = "/createUser")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CHIEF')")
     public ResponseEntity<AppUserResponseDto> createUser(@RequestBody AppUserRequestDto user){
         return  ResponseEntity.ok(AppUserMapper.mapAppUserEntityToDto(this.userService.createUser(user)));
 
+    }
+
+    @PostMapping(value = "/registerCustomer")
+    @PreAuthorize("hasAnyRole('CUSTOMER')")
+    public ResponseEntity<?> registerCustomer(
+            @RequestBody AppUserRequestDto user
+    ) throws InvalidCredentialsException {
+        return  ResponseEntity.ok(AppUserMapper.mapAppUserEntityToDto(this.userService.createUser(user)));
     }
 
     @Operation(
@@ -85,6 +103,7 @@ public class AppUserController {
             }
     )
     @PutMapping(value = "/updateUser")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CHIEF')")
     public ResponseEntity<AppUserResponseDto> updateUser(@RequestParam(value = "id") Long userId,
                            @RequestBody AppUserRequestDto user
     ){
@@ -100,8 +119,46 @@ public class AppUserController {
             }
     )
     @PostMapping(value = "/dismissUser/{id}")
+    @PreAuthorize("hasAnyRole('CHIEF')")
     public Boolean dismissUser(@PathVariable(value = "id") Long userId){
         return userService.dismissUser(userId);
 
+    }
+
+    @GetMapping(name = "/userRoles")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<List<AppRoleResponseDto>> getUserRoles() {
+        // Логика получения ролей пользователей
+        return ResponseEntity.ok(AppRoleMapper.mapAppRoleEntityListToDto(this.roleService.getRoles()));
+    }
+
+    @PutMapping(name = "/updateUserRole/{roleId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public String updateUserRole(@PathVariable("roleId") Integer roleId) {
+        // Логика обновления ролей пользователей
+        return "User role updated";
+    }
+
+    @PostMapping(name = "/createUserRole")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public String createUserRole() {
+        // Логика обновления ролей пользователей
+        logger.info("createUserRole");
+
+        return "User roles created";
+    }
+
+    @GetMapping("/data")
+    @PreAuthorize("hasRole('CHIEF')")
+    public String getAllData() {
+        // Логика получения всех доступных данных в системе
+        return "All data";
+    }
+
+    @GetMapping("/reports")
+    @PreAuthorize("hasRole('CHIEF')")
+    public String generateReports() {
+        // Логика формирования отчетов
+        return "Reports generated";
     }
 }

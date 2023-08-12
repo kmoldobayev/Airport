@@ -1,10 +1,9 @@
 package kg.kuban.airport.entity;
 
 import kg.kuban.airport.enums.InspectionStatus;
-import kg.kuban.airport.enums.WearDegree;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /*
 
@@ -34,100 +33,102 @@ import java.time.LocalDate;
  */
 
 @Entity
-@Table(name = "tech_inspections")
-public class TechInspection {
+@Table(name = "part_inspections")
+public class PartInspection {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "chief_engineer_id", referencedColumnName = "id")
-    private AppUser chiefEngineer;              // Инженер, который провел технический осмотр
-    @Column(name = "date_inspection")
-    private LocalDate dateInspection;            // Дата технического обслуживания
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private AppUser appUser;              // Инженер, который провел технический осмотр
+    @Column(name = "date_register")
+    private LocalDateTime dateRegister;            // Дата технического обслуживания
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "degree")
-    private WearDegree degree;            // Степень износа
+    @ManyToOne
+    @JoinColumn(name = "part_id", referencedColumnName = "id")
+    private Part part;              //
+
+    @ManyToOne
+    @JoinColumn(name = "airplane_id", referencedColumnName = "id")
+    private Airplane airplane;              //
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private InspectionStatus status;            // Статус
-    @Column(name = "result")
-    private String result;            // Результат
-
-    /*
-    private Airplane aircraft;              // Самолет, по которому проводят техническое обслуживание
-    private Employee engineer;              // Инженер, который провел технический осмотр
-    private LocalDate dateInspection;            // Дата технического обслуживания
-
-    private LocalDate dateNext;             // Дата следующего технического обслуживания самолета, которое нужно выполнить для поддержания его работоспособности.
-    private String number;                  // Номер технического обслуживания
-    private List<TechStage> listTechState;  // Состояния технического обслуживания по типам
-    private Boolean isGeneralOk;            // Общий технический Статус
-    private Boolean isRefueled;             // Признак заправлен топливом самолет или нет
-*/
-
-    //    public void AddTechInspection(Airplane airplane) { // добавить Технический Осмотр
-    //        listInspections.add(techInspection);
-    //    }
+    @Column(name = "inspection_code")
+    private Long inspectionCode;            //
 
 
-    public TechInspection() {
+
+    public PartInspection() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public TechInspection setId(Long id) {
+    public PartInspection setId(Long id) {
         this.id = id;
         return this;
     }
 
-    public AppUser getChiefEngineer() {
-        return chiefEngineer;
-    }
 
-    public TechInspection setChiefEngineer(AppUser chiefEngineer) {
-        this.chiefEngineer = chiefEngineer;
-        return this;
-    }
 
-    public LocalDate getDateInspection() {
-        return dateInspection;
-    }
-
-    public TechInspection setDateInspection(LocalDate dateInspection) {
-        this.dateInspection = dateInspection;
-        return this;
-    }
-
-    public WearDegree getDegree() {
-        return degree;
-    }
-
-    public TechInspection setDegree(WearDegree degree) {
-        this.degree = degree;
-        return this;
-    }
 
     public InspectionStatus getStatus() {
         return status;
     }
 
-    public TechInspection setStatus(InspectionStatus status) {
+    public PartInspection setStatus(InspectionStatus status) {
         this.status = status;
         return this;
     }
 
-    public String getResult() {
-        return result;
+    public AppUser getAppUser() {
+        return appUser;
     }
 
-    public TechInspection setResult(String result) {
-        this.result = result;
+    public PartInspection setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+        return this;
+    }
+
+    public LocalDateTime getDateRegister() {
+        return dateRegister;
+    }
+
+    public PartInspection setDateRegister(LocalDateTime dateRegister) {
+        this.dateRegister = dateRegister;
+        return this;
+    }
+
+    public Part getPart() {
+        return part;
+    }
+
+    public PartInspection setPart(Part part) {
+        this.part = part;
+        return this;
+    }
+
+    public Airplane getAirplane() {
+        return airplane;
+    }
+
+    public PartInspection setAirplane(Airplane airplane) {
+        this.airplane = airplane;
+        return this;
+    }
+
+    public Long getInspectionCode() {
+        return inspectionCode;
+    }
+
+    public PartInspection setInspectionCode(Long inspectionCode) {
+        this.inspectionCode = inspectionCode;
         return this;
     }
 }

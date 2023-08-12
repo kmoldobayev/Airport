@@ -15,21 +15,19 @@ public class Flight {
     @Column(name = "flight_number")
     private String flightNumber;                  // Номер рейса строковый
     @ManyToOne
-    @JoinColumn(name = "source", referencedColumnName = "id")
+    @JoinColumn(name = "source_airport", referencedColumnName = "id")
     @JsonIgnore
     private Airport source;                  // Пункт вылета
     @ManyToOne
-    @JoinColumn(name = "destination", referencedColumnName = "id")
+    @JoinColumn(name = "destination_airport", referencedColumnName = "id")
     private Airport destination;             // Пункт назначения
 
-    @Column(name = "departure_datetime")
-    private LocalDateTime departureTime;    // Дата и время вылета
-    @Column(name = "arrival_datetime")
-    private LocalDateTime arrivalTime;      // Дата и время прибытия
+    @Column(name = "date_register")
+    private LocalDateTime dateRegister;    // Дата и время регистрации
 
     @ManyToOne
-    @JoinColumn(name = "aircompany", referencedColumnName = "id")
-    private Aircompany aircompany;            // Доступен или нет
+    @JoinColumn(name = "airplane_id", referencedColumnName = "id")
+    private Airplane airplane;            // Самолет
 
 
     @Column(name = "isAvailable")
@@ -72,13 +70,12 @@ public class Flight {
     }
 
 
-
-    public Aircompany getAircompany() {
-        return aircompany;
+    public Airplane getAirplane() {
+        return airplane;
     }
 
-    public Flight setAircompany(Aircompany aircompany) {
-        this.aircompany = aircompany;
+    public Flight setAirplane(Airplane airplane) {
+        this.airplane = airplane;
         return this;
     }
 
@@ -91,22 +88,12 @@ public class Flight {
         return this;
     }
 
-    public LocalDateTime getDepartureTime() {
-        return departureTime;
+    public LocalDateTime getDateRegister() {
+        return dateRegister;
     }
 
-    public Flight setDepartureTime(LocalDateTime departureTime) {
-        this.departureTime = departureTime;
+    public Flight setDateRegister(LocalDateTime dateRegister) {
+        this.dateRegister = dateRegister;
         return this;
     }
-
-    public LocalDateTime getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public Flight setArrivalTime(LocalDateTime arrivalTime) {
-        this.arrivalTime = arrivalTime;
-        return this;
-    }
-
 }

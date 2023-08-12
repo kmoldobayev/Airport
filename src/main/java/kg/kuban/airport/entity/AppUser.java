@@ -1,13 +1,12 @@
 package kg.kuban.airport.entity;
 
-import kg.kuban.airport.enums.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,8 +30,6 @@ public class AppUser implements UserDetails {
     private Position position;
 
     @Transient
-    private String passwordConfirm;
-    @Transient
     private List<GrantedAuthority> authorities;
 
     @Column(name = "date_begin")
@@ -40,13 +37,8 @@ public class AppUser implements UserDetails {
     @Column(name = "date_ending")
     private LocalDate dateEnding;
 
-
-    @Column(name = "date_last_login")
-    private LocalDateTime dateLastLogin;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private UserStatus status;
+    @Column(name = "is_enabled")
+    private Boolean isEnabled;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "m2m_user_role",
@@ -54,7 +46,14 @@ public class AppUser implements UserDetails {
                 inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<AppRole> appRoles;
 
+    @PrePersist
+    public void prePersist() {
+        this.setDateBegin(LocalDate.now());
+        this.setEnabled(true);
+    }
+
     public AppUser() {
+        this.appRoles = new HashSet<>();
     }
 
     public AppUser(String userLogin, String userPassword, List<GrantedAuthority> authorities) {
@@ -95,7 +94,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.isEnabled;
     }
 
     public Long getId() {
@@ -113,15 +112,6 @@ public class AppUser implements UserDetails {
 
     public AppUser setPosition(Position position) {
         this.position = position;
-        return this;
-    }
-
-    public LocalDateTime getDateLastLogin() {
-        return dateLastLogin;
-    }
-
-    public AppUser setDateLastLogin(LocalDateTime dateLastLogin) {
-        this.dateLastLogin = dateLastLogin;
         return this;
     }
 
@@ -143,14 +133,6 @@ public class AppUser implements UserDetails {
         return this;
     }
 
-    public UserStatus getStatus() {
-        return status;
-    }
-
-    public AppUser setStatus(UserStatus status) {
-        this.status = status;
-        return this;
-    }
 
     public Set<AppRole> getAppRoles() {
         return appRoles;
@@ -176,6 +158,15 @@ public class AppUser implements UserDetails {
 
     public AppUser setDateEnding(LocalDate dateEnding) {
         this.dateEnding = dateEnding;
+        return this;
+    }
+
+    public Boolean getEnabled() {
+        return isEnabled;
+    }
+
+    public AppUser setEnabled(Boolean enabled) {
+        isEnabled = enabled;
         return this;
     }
 

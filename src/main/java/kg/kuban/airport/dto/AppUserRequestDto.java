@@ -1,13 +1,11 @@
 package kg.kuban.airport.dto;
 
-import kg.kuban.airport.enums.UserStatus;
-
 public class AppUserRequestDto {
     private String userLogin;
+    private String userPassword;
 
     private PositionRequestDto position;
 
-    private UserStatus status;
 
     public AppUserRequestDto() {
     }
@@ -30,12 +28,12 @@ public class AppUserRequestDto {
         return this;
     }
 
-    public UserStatus getStatus() {
-        return status;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public AppUserRequestDto setStatus(UserStatus status) {
-        this.status = status;
+    public AppUserRequestDto setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
         return this;
     }
 }

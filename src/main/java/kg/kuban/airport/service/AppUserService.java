@@ -9,8 +9,9 @@ import java.util.NoSuchElementException;
 
 public interface AppUserService {
     AppUser createUser(AppUserRequestDto user) throws IllegalArgumentException;
+    AppUser createCustomer(AppUserRequestDto appUserDto) throws IllegalArgumentException;
     AppUser updateUser(AppUserRequestDto appUserDto, Long userId) throws NoSuchElementException;
     AppUser getUserById(Long userId) throws NoSuchElementException;
-    List<AppUser> getUsers();
+    List<AppUser> getUsers(/*String token*/);
     Boolean dismissUser(Long userId) throws IllegalArgumentException;
 }

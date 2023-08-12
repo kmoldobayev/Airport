@@ -3,8 +3,6 @@ package kg.kuban.airport.service.impl;
 import kg.kuban.airport.controller.v1.AppUserController;
 import kg.kuban.airport.dto.AppUserRequestDto;
 import kg.kuban.airport.entity.*;
-import kg.kuban.airport.enums.UserStatus;
-import kg.kuban.airport.mapper.PositionMapper;
 import kg.kuban.airport.repository.AppRoleRepository;
 import kg.kuban.airport.repository.AppUserRepository;
 import kg.kuban.airport.repository.PositionRepository;
@@ -12,6 +10,7 @@ import kg.kuban.airport.service.AppUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,22 +26,34 @@ public class AppUserServiceImpl implements AppUserService {
     private PositionRepository positionRepository;
 
     private PasswordEncoder bCryptPasswordEncoder;
+    private final SecurityContext securityContext;
+    //private final JwtTokenHandler jwtTokenHandler;
     private final Logger logger = LoggerFactory.getLogger(AppUserController.class);
 
     @Autowired
     public AppUserServiceImpl(AppUserRepository appUserRepository,
                               AppRoleRepository appRoleRepository,
                               PositionRepository positionRepository,
-                              PasswordEncoder bCryptPasswordEncoder
+                              PasswordEncoder bCryptPasswordEncoder,
+                              //JwtTokenHandler jwtTokenHandler,
+                              SecurityContext securityContext
                               ) {
         this.appUserRepository = appUserRepository;
         this.appRoleRepository = appRoleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.positionRepository = positionRepository;
+        //this.jwtTokenHandler = jwtTokenHandler;
+        this.securityContext = securityContext;
     }
 
     @Override
-    public List<AppUser> getUsers() {
+    public List<AppUser> getUsers(/*String token*/) {
+//        if (!this.jwtTokenHandler.validateToken(token)) {
+//            throw new IllegalArgumentException("Invalid token");
+//        }
+//        if (Objects.isNull(this.securityContext.getAuthentication())) {
+//            throw new LogoutException("Нет залогированного пользователя!");
+//        }
 
         logger.info("appUserRepository.findAll()");
         return appUserRepository.findAll();
@@ -63,10 +74,30 @@ public class AppUserServiceImpl implements AppUserService {
             Position existingPosition = this.positionRepository.findByTitle(appUserDto.getPosition().getTitle());
 
             appUser.setPosition(existingPosition);
-            appUser.setStatus(UserStatus.ACTIVE);
             appUser.setUserLogin(appUserDto.getUserLogin());
-            appUser.setUserPassword(bCryptPasswordEncoder.encode("a1b2c3"));
-            appUser.setDateBegin(LocalDate.now());
+            appUser.setUserPassword(bCryptPasswordEncoder.encode(appUserDto.getUserPassword()));
+            //appUser.setDateBegin(LocalDate.now());
+            appUserRepository.save(appUser);
+            logger.info("appUserRepository.save(appUser)");
+            return appUser;
+        } else {
+            throw new IllegalArgumentException("Пользователь с таким логином " + appUserDto.getUserLogin() + " уже есть!");
+        }
+    }
+
+    @Override
+    public AppUser createCustomer(AppUserRequestDto appUserDto) throws IllegalArgumentException {
+        AppUser possibleDuplicate = appUserRepository.findAll().stream()
+                .filter(x -> x.getUserLogin().equals(appUserDto.getUserLogin()))
+                .findFirst()
+                .orElse(null);
+        logger.info("possibleDuplicate");
+        if (Objects.isNull(possibleDuplicate)){
+            AppUser appUser = new AppUser();
+            appUser.setAppRoles(Collections.singleton(new AppRole(1L, "ROLE_CUSTOMER")));
+
+            appUser.setUserLogin(appUserDto.getUserLogin());
+            appUser.setUserPassword(bCryptPasswordEncoder.encode(appUserDto.getUserPassword()));
             appUserRepository.save(appUser);
             logger.info("appUserRepository.save(appUser)");
             return appUser;
@@ -91,7 +122,6 @@ public class AppUserServiceImpl implements AppUserService {
             appUser.setUserLogin(appUserDto.getUserLogin());
             Position existingPosition = this.positionRepository.findByTitle(appUserDto.getPosition().getTitle());
             appUser.setPosition(existingPosition);
-            appUser.setStatus(appUserDto.getStatus());
             appUserRepository.save(appUser);
             return appUser;
         } else {
@@ -103,7 +133,8 @@ public class AppUserServiceImpl implements AppUserService {
     public Boolean dismissUser(Long userId) throws IllegalArgumentException {
         AppUser findUser = getUserById(userId);
         findUser.setDateEnding(LocalDate.now());
-        findUser.setStatus(UserStatus.DISMISSED);
+        findUser.setEnabled(false);
+
         return true;
     }
 

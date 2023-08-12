@@ -16,11 +16,9 @@ public class FlightResponseDto {
     private AirportResponseDto destination;             // Пункт назначения
 
 
-    private LocalDateTime departureTime;    // Дата и время вылета
+    private LocalDateTime dateRegister;    // Дата и время реистрации
 
-    private LocalDateTime arrivalTime;      // Дата и время прибытия
-
-    private AircompanyResponseDto aircompany;            // Авиакомпания
+    private AirplaneResponseDto airplane;            // Самолет
 
     public FlightResponseDto() {
     }
@@ -61,30 +59,21 @@ public class FlightResponseDto {
         return this;
     }
 
-    public LocalDateTime getDepartureTime() {
-        return departureTime;
+    public LocalDateTime getDateRegister() {
+        return dateRegister;
     }
 
-    public FlightResponseDto setDepartureTime(LocalDateTime departureTime) {
-        this.departureTime = departureTime;
+    public FlightResponseDto setDateRegister(LocalDateTime dateRegister) {
+        this.dateRegister = dateRegister;
         return this;
     }
 
-    public LocalDateTime getArrivalTime() {
-        return arrivalTime;
+    public AirplaneResponseDto getAirplane() {
+        return airplane;
     }
 
-    public FlightResponseDto setArrivalTime(LocalDateTime arrivalTime) {
-        this.arrivalTime = arrivalTime;
-        return this;
-    }
-
-    public AircompanyResponseDto getAircompany() {
-        return aircompany;
-    }
-
-    public FlightResponseDto setAircompany(AircompanyResponseDto aircompany) {
-        this.aircompany = aircompany;
+    public FlightResponseDto setAirplane(AirplaneResponseDto airplane) {
+        this.airplane = airplane;
         return this;
     }
 }

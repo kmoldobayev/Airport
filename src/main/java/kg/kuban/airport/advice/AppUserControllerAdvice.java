@@ -1,5 +1,6 @@
-package kg.kuban.airport.controller.v1;
+package kg.kuban.airport.advice;
 
+import kg.kuban.airport.controller.v1.AppUserController;
 import kg.kuban.airport.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -10,9 +10,8 @@ public class FlightMapper {
     public static FlightResponseDto mapFlightEntityToDto(Flight flight) {
         FlightResponseDto flightResponseDto = new FlightResponseDto();
         flightResponseDto.setId(flight.getId());
-        flightResponseDto.setAircompany(AircompanyMapper.mapAircompanyEntityToDto(flight.getAircompany()));
-        flightResponseDto.setArrivalTime(flight.getArrivalTime());
-        flightResponseDto.setDepartureTime(flight.getDepartureTime());
+        flightResponseDto.setAirplane(AirplaneMapper.mapAirplaneEntityToDto(flight.getAirplane()));
+        flightResponseDto.setDateRegister(flight.getDateRegister());
         flightResponseDto.setSource(AirportMapper.mapAirportEntityToDto(flight.getSource()));
         flightResponseDto.setDestination(AirportMapper.mapAirportEntityToDto(flight.getDestination()));
         return flightResponseDto;
@@ -24,9 +23,8 @@ public class FlightMapper {
         for ( Flight flight : flightList) {
             FlightResponseDto flightResponseDto = new FlightResponseDto();
             flightResponseDto.setId(flight.getId());
-            flightResponseDto.setAircompany(AircompanyMapper.mapAircompanyEntityToDto(flight.getAircompany()));
-            flightResponseDto.setArrivalTime(flight.getArrivalTime());
-            flightResponseDto.setDepartureTime(flight.getDepartureTime());
+            flightResponseDto.setAirplane(AirplaneMapper.mapAirplaneEntityToDto(flight.getAirplane()));
+            flightResponseDto.setDateRegister(flight.getDateRegister());
             flightResponseDto.setSource(AirportMapper.mapAirportEntityToDto(flight.getSource()));
             flightResponseDto.setDestination(AirportMapper.mapAirportEntityToDto(flight.getDestination()));
             result.add(flightResponseDto);

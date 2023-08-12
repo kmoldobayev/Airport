@@ -4,6 +4,7 @@ import kg.kuban.airport.enums.AirplaneStatus;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "airplanes")
@@ -28,11 +29,11 @@ public class Airplane {
     @JoinColumn(name = "aircompany", referencedColumnName = "id")
     private Aircompany airCompany;
 
-    @Column(name = "date_manufacturing")
-    private LocalDate date_manufacturing;
+    @Column(name = "date_register")
+    private LocalDateTime dateRegister;
 
-    @Column(name = "numberOfSeats")
-    private Integer numberOfSeats;          // Количество посадочных мест
+    @Column(name = "number_seats")
+    private Integer numberSeats;          // Количество посадочных мест
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private AirplaneStatus status;          // Статус самолета, которое указывает на текущий статус самолета (например, находится в ремонте, готов к вылету, находится в полете, на обслуживании, находится на земле т.д.).
@@ -70,12 +71,21 @@ public class Airplane {
         return this;
     }
 
-    public Integer getNumberOfSeats() {
-        return numberOfSeats;
+    public LocalDateTime getDateRegister() {
+        return dateRegister;
     }
 
-    public Airplane setNumberOfSeats(Integer numberOfSeats) {
-        this.numberOfSeats = numberOfSeats;
+    public Airplane setDateRegister(LocalDateTime dateRegister) {
+        this.dateRegister = dateRegister;
+        return this;
+    }
+
+    public Integer getNumberSeats() {
+        return numberSeats;
+    }
+
+    public Airplane setNumberSeats(Integer numberSeats) {
+        this.numberSeats = numberSeats;
         return this;
     }
 
@@ -112,15 +122,6 @@ public class Airplane {
 
     public Airplane setAirCompany(Aircompany airCompany) {
         this.airCompany = airCompany;
-        return this;
-    }
-
-    public LocalDate getDate_manufacturing() {
-        return date_manufacturing;
-    }
-
-    public Airplane setDate_manufacturing(LocalDate date_manufacturing) {
-        this.date_manufacturing = date_manufacturing;
         return this;
     }
 
