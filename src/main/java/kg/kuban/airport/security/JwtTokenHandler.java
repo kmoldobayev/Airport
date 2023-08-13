@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -27,6 +28,25 @@ public class JwtTokenHandler {
         Date expiredAt = new Date(now.getTime() + this.jwtTokenLifetime);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
+        Map<String, Object> claims = new HashMap<>();
+        List<String> rolesList = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        claims.put("roles", rolesList);
+
+        return Jwts
+                .builder()
+                .setSubject(userDetails.getUsername())  // Тема токена
+                .setIssuedAt(now)
+                .setExpiration(expiredAt)
+                .signWith(SignatureAlgorithm.HS512, this.secretKey)
+                .compact();
+    }
+
+    public String generateTokenInMemory(UserDetails userDetails) {
+
+        Date now = new Date();
+        Date expiredAt = new Date(now.getTime() + this.jwtTokenLifetime);
         Map<String, Object> claims = new HashMap<>();
         List<String> rolesList = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

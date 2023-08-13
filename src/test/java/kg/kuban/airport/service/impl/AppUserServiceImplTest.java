@@ -13,10 +13,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -24,12 +27,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
-        AppUserServiceImpl.class,
-        PasswordEncoder.class,
-        SecurityContext.class
+        AppUserServiceImpl.class
 })
 public class AppUserServiceImplTest {
 
@@ -45,6 +47,7 @@ public class AppUserServiceImplTest {
     @MockBean(answer = Answers.RETURNS_DEFAULTS)
     private PositionRepository positionRepository;
 
+    @MockBean(answer = Answers.RETURNS_DEFAULTS)
     private PasswordEncoder passwordEncoder;
 
 
@@ -64,14 +67,7 @@ public class AppUserServiceImplTest {
 
     @Test
     void testCreateUser_OK() {
-        ///final AppUser appUser = new AppUser();
-        //appUser.setUserLogin()
-        AppUserService userService = new AppUserServiceImpl(
-                this.appUserRepository,
-                this.appRoleRepository,
-                this.positionRepository,
-                this.passwordEncoder
-                );
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         PositionRequestDto positionRequestDto = new PositionRequestDto();
         positionRequestDto.setTitle("CHIEF");
@@ -83,14 +79,10 @@ public class AppUserServiceImplTest {
                 .setFullName("test")
                 .setPosition(positionRequestDto);
         try {
-            AppUser user = userService.createUser(appUserDto);
+            AppUser user = this.appUserService.createUser(appUserDto);
 
-            ///verify(appUserRepository, times(1)).save(any(AppUser.class));
+            Mockito.verify(appUserRepository, times(1)).save(ArgumentMatchers.any(AppUser.class));
 
-//            assert user.getLogin().equals("test");
-//            assert user.getPassword().equals(Integer.toString(Objects.hash("test")));
-//            assert user.getName().equals("test");
-//            assert user.getEmail().equals("test@gmail.com");
         } catch (Exception ex) {
             Assertions.fail();
         }

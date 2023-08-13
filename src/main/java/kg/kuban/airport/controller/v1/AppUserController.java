@@ -23,20 +23,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 
-/**
-Управляющий аэропортом:
-1.	Просмотр всех доступных данных в системе.
-2.	Добавление, изменение и увольнение работника.
-3.	Формирование отчетов.
- */
-
 @RestController
 @RequestMapping(value = "/users")
 @Tag(
-        name = "Контроллер Управляющий аэропортом",
-        description = "1.\tПросмотр всех доступных данных в системе.\n" +
-                "2.\tДобавление, изменение и увольнение работника.\n" +
-                "3.\tФормирование отчетов."
+        name = "Контроллер для Администратор, Управляющий аэропортом",
+        description = "1.\tПросмотр всех доступных данных в системе (Управляющий аэропортом).\n" +
+                "2.\tДобавление (Администратор, Управляющий аэропортом) , изменение (Администратор, Управляющий аэропортом) и увольнение работника (Управляющий аэропортом).\n" +
+                "3.\tФормирование отчетов (Управляющий аэропортом)."
 )
 public class AppUserController {
     private final AppUserService userService;
@@ -84,9 +77,7 @@ public class AppUserController {
     @PreAuthorize("hasAnyRole('ADMIN', 'CHIEF')")
     public ResponseEntity<AppUserResponseDto> createUser(@RequestBody AppUserRequestDto user) throws InvalidCredentialsException{
         return  ResponseEntity.ok(AppUserMapper.mapAppUserEntityToDto(this.userService.createUser(user)));
-
     }
-
 
     @Operation(
             summary = "маппинг Изменение пользователя системы (работника)",
@@ -101,7 +92,6 @@ public class AppUserController {
                            @RequestBody AppUserRequestDto user
     ){
         return ResponseEntity.ok(AppUserMapper.mapAppUserEntityToDto(this.userService.updateUser(user, userId)));
-
     }
 
     @Operation(
@@ -115,12 +105,12 @@ public class AppUserController {
     @PreAuthorize("hasAnyRole('CHIEF')")
     public Boolean dismissUser(@PathVariable(value = "id") Long userId){
         return userService.dismissUser(userId);
-
     }
 
-    @GetMapping(name = "/userRoles")
+    @GetMapping(value = "/userRoles")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<List<AppRoleResponseDto>> getUserRoles() {
+        logger.info("!!!!!!!!!!!!!!getUserRoles");
         // Логика получения ролей пользователей
         return ResponseEntity.ok(AppRoleMapper.mapAppRoleEntityListToDto(this.roleService.getRoles()));
     }
