@@ -49,6 +49,9 @@ public class AppUser implements UserDetails {
                 inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<AppRole> appRoles;
 
+    @OneToOne(mappedBy = "servicedBy")
+    private Airplane servicedAirplane;
+
     @PrePersist
     public void prePersist() {
         this.setDateBegin(LocalDate.now());
@@ -179,6 +182,15 @@ public class AppUser implements UserDetails {
 
     public AppUser setEnabled(Boolean enabled) {
         isEnabled = enabled;
+        return this;
+    }
+
+    public Airplane getServicedAirplane() {
+        return servicedAirplane;
+    }
+
+    public AppUser setServicedAirplane(Airplane servicedAirplane) {
+        this.servicedAirplane = servicedAirplane;
         return this;
     }
 

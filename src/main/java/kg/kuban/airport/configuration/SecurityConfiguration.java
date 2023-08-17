@@ -2,6 +2,7 @@ package kg.kuban.airport.configuration;
 
 import kg.kuban.airport.security.JwtAuthEntryPoint;
 import kg.kuban.airport.security.JwtAuthenticationFilter;
+import kg.kuban.airport.service.impl.AppUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -68,4 +69,5 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

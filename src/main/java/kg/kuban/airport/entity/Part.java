@@ -1,9 +1,11 @@
 package kg.kuban.airport.entity;
 
+import kg.kuban.airport.enums.AirplaneType;
 import kg.kuban.airport.enums.PartType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "parts")
@@ -11,10 +13,14 @@ public class Part {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                     // Уникальный Идентификатор самолета числового типа
+    private Long id;
 
     @Column(name = "title")
     private String title;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "airplane_type")
+    private AirplaneType airplaneType;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "part_type")
@@ -22,6 +28,11 @@ public class Part {
 
     @Column(name = "date_register")
     private LocalDateTime dateRegister;
+
+//    @ManyToMany(mappedBy = "part")
+//    private List<Airplane> airplanes;
+//    @OneToMany(mappedBy = "part")
+//    private List<PartInspection> partInspections;
 
     public Part() {
     }

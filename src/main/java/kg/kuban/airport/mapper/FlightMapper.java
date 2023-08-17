@@ -12,7 +12,6 @@ public class FlightMapper {
         flightResponseDto.setId(flight.getId());
         flightResponseDto.setAirplane(AirplaneMapper.mapAirplaneEntityToDto(flight.getAirplane()));
         flightResponseDto.setDateRegister(flight.getDateRegister());
-        flightResponseDto.setSource(AirportMapper.mapAirportEntityToDto(flight.getSource()));
         flightResponseDto.setDestination(AirportMapper.mapAirportEntityToDto(flight.getDestination()));
         return flightResponseDto;
     }
@@ -25,7 +24,6 @@ public class FlightMapper {
             flightResponseDto.setId(flight.getId());
             flightResponseDto.setAirplane(AirplaneMapper.mapAirplaneEntityToDto(flight.getAirplane()));
             flightResponseDto.setDateRegister(flight.getDateRegister());
-            flightResponseDto.setSource(AirportMapper.mapAirportEntityToDto(flight.getSource()));
             flightResponseDto.setDestination(AirportMapper.mapAirportEntityToDto(flight.getDestination()));
             result.add(flightResponseDto);
         }

@@ -6,13 +6,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.AppRoleResponseDto;
 import kg.kuban.airport.dto.AppUserRequestDto;
 import kg.kuban.airport.dto.AppUserResponseDto;
-import kg.kuban.airport.entity.AppUser;
 import kg.kuban.airport.exception.InvalidCredentialsException;
 import kg.kuban.airport.mapper.AppRoleMapper;
 import kg.kuban.airport.mapper.AppUserMapper;
 import kg.kuban.airport.service.AppRoleService;
 import kg.kuban.airport.service.AppUserService;
-import kg.kuban.airport.service.AuthService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/users")

@@ -1,14 +1,17 @@
 package kg.kuban.airport.entity;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import javax.persistence.*;
 
+@Tag(name = "Сущность Авиакомпания", description = "Описывает сущность авиакомпании в аэропорту")
 @Entity
 @Table(name = "aircompanies")
 public class Aircompany {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                     // Уникальный Идентификатор самолета числового типа
+    private Long id;
     @Column(name = "title")
     private String title;
 

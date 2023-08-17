@@ -11,8 +11,6 @@ public class FlightResponseDto {
 
     private String number;                      // Номер рейса строковый
 
-    private AirportResponseDto source;                  // Пункт вылета
-
     private AirportResponseDto destination;             // Пункт назначения
 
 
@@ -38,15 +36,6 @@ public class FlightResponseDto {
 
     public FlightResponseDto setNumber(String number) {
         this.number = number;
-        return this;
-    }
-
-    public AirportResponseDto getSource() {
-        return source;
-    }
-
-    public FlightResponseDto setSource(AirportResponseDto source) {
-        this.source = source;
         return this;
     }
 

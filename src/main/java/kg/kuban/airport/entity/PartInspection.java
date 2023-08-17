@@ -1,6 +1,6 @@
 package kg.kuban.airport.entity;
 
-import kg.kuban.airport.enums.InspectionStatus;
+import kg.kuban.airport.enums.AirplanePartStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -57,7 +57,7 @@ public class PartInspection {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private InspectionStatus status;            // Статус
+    private AirplanePartStatus status;            // Статус детали
     @Column(name = "inspection_code")
     private Long inspectionCode;            //
 
@@ -76,13 +76,11 @@ public class PartInspection {
     }
 
 
-
-
-    public InspectionStatus getStatus() {
+    public AirplanePartStatus getStatus() {
         return status;
     }
 
-    public PartInspection setStatus(InspectionStatus status) {
+    public PartInspection setStatus(AirplanePartStatus status) {
         this.status = status;
         return this;
     }

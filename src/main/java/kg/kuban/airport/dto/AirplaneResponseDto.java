@@ -1,20 +1,15 @@
 package kg.kuban.airport.dto;
 
-import kg.kuban.airport.entity.AirplaneType;
+import kg.kuban.airport.enums.AirplaneType;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 public class AirplaneResponseDto {
     private Long id;                     // Уникальный Идентификатор
 
-    private String model;                   // Модель самолета
-
     private AirplaneType marka;              // Тип самолета (например, "боинг", "эйрбас", "суперджет" и т.д.) - тип самолета определяет его грузоподъемность, дальность полета, скорость и другие характеристики, которые важны для диспетчерской службы.
 
-    private Integer boardNumber;
+    private String boardNumber;
 
     private LocalDateTime dateRegister;
 
@@ -27,12 +22,12 @@ public class AirplaneResponseDto {
         return this;
     }
 
-    public String getModel() {
-        return model;
+    public String getBoardNumber() {
+        return boardNumber;
     }
 
-    public AirplaneResponseDto setModel(String model) {
-        this.model = model;
+    public AirplaneResponseDto setBoardNumber(String boardNumber) {
+        this.boardNumber = boardNumber;
         return this;
     }
 
@@ -45,14 +40,6 @@ public class AirplaneResponseDto {
         return this;
     }
 
-    public Integer getBoardNumber() {
-        return boardNumber;
-    }
-
-    public AirplaneResponseDto setBoardNumber(Integer boardNumber) {
-        this.boardNumber = boardNumber;
-        return this;
-    }
 
     public LocalDateTime getDateRegister() {
         return dateRegister;
@@ -62,4 +49,6 @@ public class AirplaneResponseDto {
         this.dateRegister = dateRegister;
         return this;
     }
+
+
 }

@@ -1,22 +1,17 @@
 package kg.kuban.airport.controller.v1;
 
-import kg.kuban.airport.dto.AppUserRequestDto;
 import kg.kuban.airport.dto.AuthDto;
 import kg.kuban.airport.dto.TokenResponseDto;
 import kg.kuban.airport.exception.InvalidCredentialsException;
-import kg.kuban.airport.exception.LogoutException;
-import kg.kuban.airport.service.AuthService;
+import kg.kuban.airport.service.impl.AuthServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Objects;
 
 /**
  Контроллер по авторизации:
@@ -28,13 +23,13 @@ import java.util.Objects;
 @RestController
 @RequestMapping(value = "/v1/auth")
 public class AuthController {
-    private AuthService authService;
+    private AuthServiceImpl authServiceImpl;
 
     private final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
-    public AuthController(AuthService authService) {
-        this.authService = authService;
+    public AuthController(AuthServiceImpl authServiceImpl) {
+        this.authServiceImpl = authServiceImpl;
     }
 
     @PostMapping(value = "/login")
@@ -45,8 +40,8 @@ public class AuthController {
 
         logger.info("authDto login=" + authDto.getLogin());
         logger.info("authDto password=" + authDto.getPassword());
-        this.authService.login(authDto.getLogin(), authDto.getPassword());
-        tokenResponseDto = authService.loginUser(authDto.getLogin(), authDto.getPassword());
+        this.authServiceImpl.login(authDto.getLogin(), authDto.getPassword());
+        tokenResponseDto = authServiceImpl.loginUser(authDto.getLogin(), authDto.getPassword());
         return ResponseEntity.ok(tokenResponseDto);
 
     }

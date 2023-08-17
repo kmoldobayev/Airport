@@ -31,11 +31,11 @@ create table if not exists aircompanies(
     title varchar not null unique                                   -- Название авиакомпании
 );
 
--- Таблица "Типы (марки) самолетов"
-create table if not exists airplane_types(
-    id bigserial primary key,                                       -- Уникальный идентификатор
-    title varchar not null unique                                         -- Название марки скмолета
-);
+-- -- Таблица "Типы (марки) самолетов"
+-- create table if not exists airplane_types(
+--     id bigserial primary key,                                       -- Уникальный идентификатор
+--     title varchar not null unique                                         -- Название марки скмолета
+-- );
 
 -- Таблица "Аэропорты"
 create table if not exists airports(
@@ -47,14 +47,13 @@ create table if not exists airports(
 -- Таблица "Самолеты"
 create table if not exists airplanes (
     id bigserial primary key,                                       -- Уникальный идентификатор
-    model varchar not null,                                         -- Модель самолета
-    board_number integer not null,                                  -- Номер борта (Уникальный идентификатор самолета)
-    marka bigint not null references airplane_types(id),            -- Тип самолета
+    board_number varchar not null unique,                           -- Номер борта (Уникальный идентификатор самолета)
+    marka varchar,                                                  -- Тип самолета
     aircompany bigint not null references aircompanies(id),         -- Ссылка на таблицу "Авиакомпания"
     date_register timestamp without time zone not null,             -- Дата регистрации
-    number_seats integer not null,                                  -- Максимальная вместимость самолета
+    number_seats integer not null check (number_seats > 0),         -- Максимальная вместимость самолета
     status varchar not null,                                        -- Статус самолета (В посадке, На земле, В полете, Готовится к взлету, Вылет)
-    user_id bigint not null references app_users(id),                      -- Пользователь
+    user_id bigint not null references app_users(id),               -- Пользователь
     is_available boolean                                            -- Признак доступности
 );
 
@@ -63,8 +62,7 @@ create table if not exists flights(
     id bigserial primary key,                                       -- id
     flight_number varchar not null,                                 -- Номер рейса
     airplane_id bigint not null references airplanes(id),           -- Ссылка на таблицу "Самолеты"
-    source_airport bigint not null references airports(id),         -- Место отправления
-    destination_airport bigint not null references airports(id),    -- Место назначения
+    destination bigint not null references airports(id),            -- Место назначения
     date_register timestamp without time zone,                      -- Дата и время регистрации
     status varchar,                                                 -- Статус рейса
     is_available boolean not null                                   -- Признак доступности рейса
@@ -112,6 +110,7 @@ create table if not exists parts (
      id bigserial primary key,
      title varchar not null,                                         -- Название оборудования
      part_type varchar,                                              -- Тип оборудования
+     airplane_type varchar,
      date_register timestamp without time zone                       -- Дата и время регистрации
 );
 

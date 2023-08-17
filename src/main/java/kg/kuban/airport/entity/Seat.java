@@ -1,6 +1,8 @@
 package kg.kuban.airport.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "seats")
@@ -8,7 +10,7 @@ public class Seat {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                     // Уникальный Идентификатор самолета числового типа
+    private Long id;
 
     @Column(name = "seat_number")
     private Integer seatNumber;
@@ -17,11 +19,15 @@ public class Seat {
     @JoinColumn(name = "airplane_id", referencedColumnName = "id")
     private Airplane airplane;
 
+//    @OneToMany(mappedBy = "seat")
+//    private List<UserFlight> userFlights;
+
     @Column(name = "is_occupied")
     private Boolean is_occupied;
 
-    public Seat() {
-    }
+//    public Seat() {
+//        this.userFlights = new ArrayList<>();
+//    }
 
     public Long getId() {
         return id;
@@ -58,4 +64,13 @@ public class Seat {
         this.is_occupied = is_occupied;
         return this;
     }
+
+//    public List<UserFlight> getUserFlights() {
+//        return userFlights;
+//    }
+//
+//    public Seat setUserFlights(List<UserFlight> userFlights) {
+//        this.userFlights = userFlights;
+//        return this;
+//    }
 }

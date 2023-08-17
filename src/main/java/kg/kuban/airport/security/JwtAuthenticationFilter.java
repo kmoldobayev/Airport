@@ -1,5 +1,7 @@
 package kg.kuban.airport.security;
 
+import kg.kuban.airport.service.AppUserDetailsService;
+import kg.kuban.airport.service.impl.AppUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,12 +20,13 @@ import java.util.Objects;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenHandler jwtTokenHandler;
-    private final UserDetailsService userDetailsService;
+
+    private final AppUserDetailsService appUserDetailsService;
 
     @Autowired
-    public JwtAuthenticationFilter(JwtTokenHandler jwtTokenHandler, UserDetailsService userDetailsService) {
+    public JwtAuthenticationFilter(JwtTokenHandler jwtTokenHandler, AppUserDetailsService appUserDetailsService) {
         this.jwtTokenHandler = jwtTokenHandler;
-        this.userDetailsService = userDetailsService;
+        this.appUserDetailsService = appUserDetailsService;
     }
 
     @Override
@@ -36,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (Objects.nonNull(token) && this.jwtTokenHandler.validateToken(token)) {
             String username = this.jwtTokenHandler.getUsernameFromToken(token);
-            UserDetails user = this.userDetailsService.loadUserByUsername(username);
+            UserDetails user = this.appUserDetailsService.loadUserByUsername(username);
             UsernamePasswordAuthenticationToken authToken =
                     UsernamePasswordAuthenticationToken.authenticated(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authToken);

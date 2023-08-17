@@ -43,25 +43,6 @@ public class JwtTokenHandler {
                 .compact();
     }
 
-    public String generateTokenInMemory(UserDetails userDetails) {
-
-        Date now = new Date();
-        Date expiredAt = new Date(now.getTime() + this.jwtTokenLifetime);
-        Map<String, Object> claims = new HashMap<>();
-        List<String> rolesList = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
-        claims.put("roles", rolesList);
-
-        return Jwts
-                .builder()
-                .setSubject(userDetails.getUsername())  // Тема токена
-                .setIssuedAt(now)
-                .setExpiration(expiredAt)
-                .signWith(SignatureAlgorithm.HS512, this.secretKey)
-                .compact();
-    }
-
     public String getUsernameFromToken(String token) {
         return getClaimsFromToken(token).getSubject();
     }

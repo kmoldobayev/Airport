@@ -14,12 +14,9 @@ public class Flight {
     private Long id;                     // Уникальный идентификатор рейса
     @Column(name = "flight_number")
     private String flightNumber;                  // Номер рейса строковый
+
     @ManyToOne
-    @JoinColumn(name = "source_airport", referencedColumnName = "id")
-    @JsonIgnore
-    private Airport source;                  // Пункт вылета
-    @ManyToOne
-    @JoinColumn(name = "destination_airport", referencedColumnName = "id")
+    @JoinColumn(name = "destination", referencedColumnName = "id")
     private Airport destination;             // Пункт назначения
 
     @Column(name = "date_register")
@@ -48,15 +45,6 @@ public class Flight {
 
     public Flight setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
-        return this;
-    }
-
-    public Airport getSource() {
-        return this.source;
-    }
-
-    public Flight setSource(Airport source) {
-        this.source = source;
         return this;
     }
 

@@ -1,11 +1,16 @@
 package kg.kuban.airport.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.enums.AirplaneStatus;
+import kg.kuban.airport.enums.AirplaneType;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Schema(name = "Сущность Самолета", description = "Описывает сущность самолета в аэропорту")
 @Entity
 @Table(name = "airplanes")
 public class Airplane {
@@ -13,33 +18,41 @@ public class Airplane {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                     // Уникальный Идентификатор самолета числового типа
+    private Long id;
 
-    @Column(name = "model")
-    private String model;                   // Модель самолета
-
-    @ManyToOne
-    @JoinColumn(name = "marka", referencedColumnName = "id")
-    private AirplaneType marka;              // Тип самолета (например, "боинг", "эйрбас", "суперджет" и т.д.) - тип самолета определяет его грузоподъемность, дальность полета, скорость и другие характеристики, которые важны для диспетчерской службы.
+    @Enumerated(EnumType.STRING)
+    @Column(name = "marka")
+    private AirplaneType marka;              // Тип самолета (например, "боинг", "эйрбас", "суперджет" и т.д.)
 
     @Column(name = "board_number")
-    private Integer boardNumber;
+    private String boardNumber;
 
     @ManyToOne
     @JoinColumn(name = "aircompany", referencedColumnName = "id")
     private Aircompany airCompany;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private AppUser servicedBy;
+
     @Column(name = "date_register")
     private LocalDateTime dateRegister;
 
     @Column(name = "number_seats")
-    private Integer numberSeats;          // Количество посадочных мест
+    private Integer numberSeats;            // Количество посадочных мест
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private AirplaneStatus status;          // Статус самолета, которое указывает на текущий статус самолета (например, находится в ремонте, готов к вылету, находится в полете, на обслуживании, находится на земле т.д.).
+    private AirplaneStatus status;          // Статус самолета
 
     @Column(name = "is_available")
-    private Boolean is_available;
+    private Boolean isAvailable;
+
+//    @OneToMany(mappedBy = "userFlights", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+//    private List<Seat> airplaneSeats;
+//    @OneToMany(mappedBy = "airplanes", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+//    private List<PartInspection> partInspections;
+//    @OneToMany(mappedBy = "airplanes")
+//    private List<Flight> flights;
 
     public Airplane() {
     }
@@ -53,21 +66,12 @@ public class Airplane {
         return this;
     }
 
-    public String getModel() {
-        return model;
-    }
-
-    public Airplane setModel(String model) {
-        this.model = model;
-        return this;
-    }
-
-    public AirplaneType getType() {
+    public AirplaneType getMarka() {
         return marka;
     }
 
-    public Airplane setType(AirplaneType type) {
-        this.marka = type;
+    public Airplane setMarka(AirplaneType marka) {
+        this.marka = marka;
         return this;
     }
 
@@ -89,30 +93,23 @@ public class Airplane {
         return this;
     }
 
-    public AirplaneStatus getAirplaneStatus() {
-        return status;
-    }
 
-    public Airplane setAirplaneStatus(AirplaneStatus status) {
-        this.status = status;
-        return this;
-    }
 
-    public AirplaneType getMarka() {
-        return marka;
-    }
-
-    public Airplane setMarka(AirplaneType marka) {
-        this.marka = marka;
-        return this;
-    }
-
-    public Integer getBoardNumber() {
+    public String getBoardNumber() {
         return boardNumber;
     }
 
-    public Airplane setBoardNumber(Integer boardNumber) {
+    public Airplane setBoardNumber(String boardNumber) {
         this.boardNumber = boardNumber;
+        return this;
+    }
+
+    public Boolean getAvailable() {
+        return isAvailable;
+    }
+
+    public Airplane setAvailable(Boolean available) {
+        isAvailable = available;
         return this;
     }
 
@@ -134,12 +131,48 @@ public class Airplane {
         return this;
     }
 
-    public Boolean getIs_available() {
-        return is_available;
+    public Boolean getIsAvailable() {
+        return isAvailable;
     }
 
-    public Airplane setIs_available(Boolean is_available) {
-        this.is_available = is_available;
+    public Airplane setIsAvailable(Boolean isAvailable) {
+        this.isAvailable = isAvailable;
         return this;
     }
+
+    public AppUser getServicedBy() {
+        return servicedBy;
+    }
+
+    public Airplane setServicedBy(AppUser servicedBy) {
+        this.servicedBy = servicedBy;
+        return this;
+    }
+
+//    public List<Seat> getAirplaneSeats() {
+//        return airplaneSeats;
+//    }
+//
+//    public Airplane setAirplaneSeats(List<Seat> airplaneSeats) {
+//        this.airplaneSeats = airplaneSeats;
+//        return this;
+//    }
+//
+//    public List<PartInspection> getPartInspections() {
+//        return partInspections;
+//    }
+//
+//    public Airplane setPartInspections(List<PartInspection> partInspections) {
+//        this.partInspections = partInspections;
+//        return this;
+//    }
+//
+//    public List<Flight> getFlights() {
+//        return flights;
+//    }
+//
+//    public Airplane setFlights(List<Flight> flights) {
+//        this.flights = flights;
+//        return this;
+//    }
 }

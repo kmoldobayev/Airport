@@ -1,12 +1,15 @@
 package kg.kuban.airport.service.impl;
 
 import com.querydsl.core.BooleanBuilder;
+import kg.kuban.airport.dto.PositionRequestDto;
 import kg.kuban.airport.entity.AppUser;
+import kg.kuban.airport.entity.QAppUser;
 import kg.kuban.airport.repository.AppUserRepository;
 import kg.kuban.airport.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -24,44 +27,41 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<AppUser> getEmployeeReport() {
+    public List<AppUser> getEmployeeReport(LocalDate startDate,
+                                           LocalDate endDate,
+                                           String fullName,
+                                           PositionRequestDto position,
+                                           Boolean isEnabled) {
 
-//        BooleanBuilder builder = new BooleanBuilder();
-//        QPaymentHistoryEntity root = QPaymentHistoryEntity.paymentHistoryEntity;
-//
-//        if (Objects.nonNull(startDate) && Objects.nonNull(endDate)) {
-//            builder.and(root.datePayment.between(startDate, endDate));
-//        }
-//
-//        if (Objects.nonNull(startDate) && !Objects.nonNull(endDate)) {
-//            builder.and(root.datePayment.gt(startDate));
-//        }
-//
-//        if (!Objects.nonNull(startDate) && Objects.nonNull(endDate)) {
-//            builder.and(root.datePayment.loe(endDate));
-//        }
-//
-//        if (Objects.nonNull(serviceId)) {
-//            builder.and(root.service.id.eq(serviceId));
-//        }
-//        if (Objects.nonNull(providerId)) {
-//            builder.and(root.service.groupService.providerService.id.eq(providerId));
-//            //builder.and(root.service.id.eq(serviceId).and(root.service.groupService.providerService.id.eq(providerId)));
-//        }
-//
-//        if (Objects.nonNull(credentials)) {
-//            builder.and(root.credentials.eq(credentials));
-//        }
-//
-//        if (Objects.nonNull(status)) {
-//            builder.and(root.status.eq(status));
-//        }
-//
-//        Iterable<PaymentHistoryEntity> paymentHistoryEntities = this.paymentHistoryEntityRepository.findAll(builder.getValue());
-//        return StreamSupport.stream(paymentHistoryEntities.spliterator(), false)
-//                .sorted(Comparator.comparing(PaymentHistoryEntity::getDatePayment))
-//                .collect(Collectors.toList());
+        BooleanBuilder builder = new BooleanBuilder();
+        QAppUser root = QAppUser.appUser;
 
-        return null;
+        if (Objects.nonNull(startDate) && Objects.nonNull(endDate)) {
+            builder.and(root.dateBegin.between(startDate, endDate));
+        }
+
+        if (Objects.nonNull(startDate) && !Objects.nonNull(endDate)) {
+            builder.and(root.dateBegin.gt(startDate));
+        }
+
+        if (!Objects.nonNull(startDate) && Objects.nonNull(endDate)) {
+            builder.and(root.dateBegin.loe(endDate));
+        }
+        if (Objects.nonNull(fullName)) {
+            builder.and(root.fullName.like(fullName));
+        }
+
+        if (Objects.nonNull(position.getTitle())) {
+            builder.and(root.position.title.eq(position.getTitle()));
+        }
+
+        if (Objects.nonNull(isEnabled)) {
+            builder.and(root.isEnabled.eq(isEnabled));
+        }
+
+        Iterable<AppUser> appUsers = this.appUserRepository.findAll(builder.getValue());
+        return StreamSupport.stream(appUsers.spliterator(), false)
+                .sorted(Comparator.comparing(AppUser::getDateBegin))
+                .collect(Collectors.toList());
     }
 }

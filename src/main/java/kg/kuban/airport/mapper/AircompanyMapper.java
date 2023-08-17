@@ -1,5 +1,6 @@
 package kg.kuban.airport.mapper;
 
+import kg.kuban.airport.dto.AircompanyRequestDto;
 import kg.kuban.airport.dto.AircompanyResponseDto;
 import kg.kuban.airport.dto.FlightResponseDto;
 import kg.kuban.airport.entity.Aircompany;
@@ -14,6 +15,13 @@ public class AircompanyMapper {
         aircompanyResponseDto.setId(aircompany.getId());
         aircompanyResponseDto.setTitle(aircompany.getTitle());
         return aircompanyResponseDto;
+    }
+
+    public static Aircompany mapAircompanyDtoToEntity(AircompanyResponseDto aircompanyResponseDto) {
+        Aircompany aircompany = new Aircompany();
+        aircompany.setId(aircompanyResponseDto.getId());
+        aircompany.setTitle(aircompanyResponseDto.getTitle());
+        return aircompany;
     }
 
     public static List<AircompanyResponseDto> mapAircompanyEntityListToDto(List<Aircompany> aircompanyList) {

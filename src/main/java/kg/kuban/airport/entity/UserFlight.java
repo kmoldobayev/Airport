@@ -38,6 +38,7 @@ public class UserFlight {
     private LocalDateTime dateRegister;            // Дата регистрации
 
 
+
     public UserFlight() {
     }
 
