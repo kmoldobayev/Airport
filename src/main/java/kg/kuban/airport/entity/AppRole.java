@@ -1,10 +1,12 @@
 package kg.kuban.airport.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.Set;
 
+@Schema(name = "Сущность Роль пользователя", description = "Описывает сущность роль пользователя")
 @Entity
 @Table(name = "app_roles")
 public class AppRole implements GrantedAuthority {

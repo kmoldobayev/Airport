@@ -3,6 +3,7 @@ package kg.kuban.airport.controller.v1;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.kuban.airport.dto.AppRoleRequestDto;
 import kg.kuban.airport.dto.AppRoleResponseDto;
 import kg.kuban.airport.dto.AppUserRequestDto;
 import kg.kuban.airport.dto.AppUserResponseDto;
@@ -40,7 +41,7 @@ public class AppUserController {
     }
 
     @Operation(
-            summary = "маппинг Просмотр всех пользователей системы",
+            summary = "Просмотр всех пользователей системы",
             description = "Просмотр всех пользователей системы!"
     )
     @GetMapping("/users")
@@ -51,7 +52,7 @@ public class AppUserController {
     }
 
     @Operation(
-            summary = "маппинг Просмотр пользователя системы по ID",
+            summary = "Просмотр пользователя системы по ID",
             description = "Просмотр пользователя системы по ID",
             parameters = {
                     @Parameter(name = "userId", description = "ID пользователя")
@@ -64,7 +65,7 @@ public class AppUserController {
     }
 
     @Operation(
-            summary = "маппинг Добавление нового пользователя системы (работника)",
+            summary = "Добавление нового пользователя системы (работника)",
             description = "Добавление нового пользователя системы (работника)",
             parameters = {
                     @Parameter(name = "AppUser", description = "Данные пользователя")
@@ -77,7 +78,7 @@ public class AppUserController {
     }
 
     @Operation(
-            summary = "маппинг Изменение пользователя системы (работника)",
+            summary = "Изменение пользователя системы (работника)",
             description = "Изменение пользователя системы (работника)",
             parameters = {
                     @Parameter(name = "AppUser", description = "Данные пользователя")
@@ -92,7 +93,7 @@ public class AppUserController {
     }
 
     @Operation(
-            summary = "маппинг Увольнение пользователя системы (работника)",
+            summary = "Увольнение пользователя системы (работника)",
             description = "Увольнение пользователя системы (работника)",
             parameters = {
                     @Parameter(name = "AppUser", description = "Данные пользователя")
@@ -104,6 +105,10 @@ public class AppUserController {
         return userService.dismissUser(userId);
     }
 
+    @Operation(
+            summary = "Просмотр всех ролей пользователей системы",
+            description = "Просмотр всех ролей пользователей системы!"
+    )
     @GetMapping(value = "/userRoles")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<List<AppRoleResponseDto>> getUserRoles() {
@@ -112,33 +117,29 @@ public class AppUserController {
         return ResponseEntity.ok(AppRoleMapper.mapAppRoleEntityListToDto(this.roleService.getRoles()));
     }
 
+    @Operation(
+            summary = "Редактирование роли системы",
+            description = "Редактирование роли системы!"
+    )
     @PutMapping(name = "/updateUserRole/{roleId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public String updateUserRole(@PathVariable("roleId") Integer roleId) {
+    public ResponseEntity<AppRoleResponseDto> updateUserRole(@RequestBody AppRoleRequestDto roleDto, @PathVariable("roleId") Long roleId) {
         // Логика обновления ролей пользователей
-        return "User role updated";
+        return ResponseEntity.ok(AppRoleMapper.mapAppUserEntityToDto(this.roleService.updateRole(roleDto, roleId)));
     }
 
+    @Operation(
+            summary = "Создание новой роли системы",
+            description = "Создание новой роли системы!"
+    )
     @PostMapping(name = "/createUserRole")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public String createUserRole() {
-        // Логика обновления ролей пользователей
+    public ResponseEntity<AppRoleResponseDto> createUserRole(@RequestBody AppRoleRequestDto roleDto) {
+        // Логика создания роли пользователя
         logger.info("createUserRole");
 
-        return "User roles created";
+        return ResponseEntity.ok(AppRoleMapper.mapAppUserEntityToDto(this.roleService.createRole(roleDto)));
     }
 
-    @GetMapping("/data")
-    @PreAuthorize("hasRole('CHIEF')")
-    public String getAllData() {
-        // Логика получения всех доступных данных в системе
-        return "All data";
-    }
 
-    @GetMapping("/reports")
-    @PreAuthorize("hasRole('CHIEF')")
-    public String generateReports() {
-        // Логика формирования отчетов
-        return "Reports generated";
-    }
 }

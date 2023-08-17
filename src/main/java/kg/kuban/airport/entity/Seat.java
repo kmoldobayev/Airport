@@ -1,9 +1,12 @@
 package kg.kuban.airport.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Schema(name = "Сущность Места в самолете", description = "Описывает сущность Места в самолете")
 @Entity
 @Table(name = "seats")
 public class Seat {
@@ -19,15 +22,15 @@ public class Seat {
     @JoinColumn(name = "airplane_id", referencedColumnName = "id")
     private Airplane airplane;
 
-//    @OneToMany(mappedBy = "seat")
-//    private List<UserFlight> userFlights;
+    @OneToMany(mappedBy = "seat")
+    private List<UserFlight> userFlights;
 
     @Column(name = "is_occupied")
     private Boolean is_occupied;
 
-//    public Seat() {
-//        this.userFlights = new ArrayList<>();
-//    }
+    public Seat() {
+        this.userFlights = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
@@ -65,12 +68,12 @@ public class Seat {
         return this;
     }
 
-//    public List<UserFlight> getUserFlights() {
-//        return userFlights;
-//    }
-//
-//    public Seat setUserFlights(List<UserFlight> userFlights) {
-//        this.userFlights = userFlights;
-//        return this;
-//    }
+    public List<UserFlight> getUserFlights() {
+        return userFlights;
+    }
+
+    public Seat setUserFlights(List<UserFlight> userFlights) {
+        this.userFlights = userFlights;
+        return this;
+    }
 }

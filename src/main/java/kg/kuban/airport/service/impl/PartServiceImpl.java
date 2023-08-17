@@ -3,7 +3,7 @@ package kg.kuban.airport.service.impl;
 import kg.kuban.airport.dto.PartRequestDto;
 import kg.kuban.airport.dto.PartResponseDto;
 import kg.kuban.airport.dto.PartTypesResponseDto;
-import kg.kuban.airport.entity.Part;
+import kg.kuban.airport.entity.AirplanePart;
 import kg.kuban.airport.enums.AirplaneType;
 import kg.kuban.airport.exception.IncompatiblePartException;
 import kg.kuban.airport.exception.PartNotFoundException;
@@ -26,12 +26,12 @@ public class PartServiceImpl implements PartService {
     }
 
     @Override
-    public List<Part> getPartByPartsIdListAndAirplaneType(List<Long> partsIdList, AirplaneType airplaneType) throws PartNotFoundException, IncompatiblePartException {
+    public List<AirplanePart> getPartByPartsIdListAndAirplaneType(List<Long> partsIdList, AirplaneType airplaneType) throws PartNotFoundException, IncompatiblePartException {
         return null;
     }
 
     @Override
-    public List<Part> getPartsByPartsIdListAndAirplaneId(List<Long> partsIdList, Long airplaneId) throws PartNotFoundException {
+    public List<AirplanePart> getPartsByPartsIdListAndAirplaneId(List<Long> partsIdList, Long airplaneId) throws PartNotFoundException {
         return null;
     }
 

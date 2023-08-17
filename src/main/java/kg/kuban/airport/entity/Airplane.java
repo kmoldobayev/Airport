@@ -1,12 +1,10 @@
 package kg.kuban.airport.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.enums.AirplaneStatus;
 import kg.kuban.airport.enums.AirplaneType;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -53,6 +51,14 @@ public class Airplane {
 //    private List<PartInspection> partInspections;
 //    @OneToMany(mappedBy = "airplanes")
 //    private List<Flight> flights;
+
+    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    @JoinTable(
+            name = "m2m_airplanes_parts",
+            joinColumns = @JoinColumn(name = "airplane_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "part_id", referencedColumnName = "id")
+    )
+    private List<AirplanePart> parts;
 
     public Airplane() {
     }

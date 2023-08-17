@@ -31,6 +31,7 @@ public interface MapstructProviderMapper {
     @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
     List<AppUserResponseDto> mapListAppUserToListDto(List<AppUser> appUser);
 
+
     CustomerResponseDto mapCustomerToDto(AppUser appUser);
     @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
     List<CustomerResponseDto> mapListCustomerToListDto(List<AppUser> appUser);

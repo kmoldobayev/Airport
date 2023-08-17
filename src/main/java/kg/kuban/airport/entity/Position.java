@@ -1,14 +1,17 @@
 package kg.kuban.airport.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.persistence.*;
 
+@Schema(name = "Сущность Должности", description = "Описывает сущность Должности работников аэропорта")
 @Entity
 @Table(name = "positions")
 public class Position {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                     // Уникальный Идентификатор самолета числового типа
+    private Long id;
     @Column(name = "title")
     private String title;
 

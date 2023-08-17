@@ -24,8 +24,8 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/flights")
 @Tag(
-        name = "Контроллер для рейсов",
-        description = ""
+        name = "Контроллер для рейсов самолетов",
+        description = "Описывает точки доступа по рейсам аэропорта"
 )
 public class FlightController {
 

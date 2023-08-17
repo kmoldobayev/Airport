@@ -1,5 +1,6 @@
 package kg.kuban.airport.controller.v1;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.AppUserRequestDto;
 import kg.kuban.airport.dto.CustomerRequestDto;
 import kg.kuban.airport.entity.Flight;
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/customers")
+@Tag(
+        name = "Контроллер для клиентов аэропорта",
+        description = "Описывает точки доступа по клиентам аэропорта"
+)
 public class CustomerController {
 
     private final CustomerService customerService;

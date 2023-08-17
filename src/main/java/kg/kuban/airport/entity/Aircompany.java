@@ -1,10 +1,11 @@
 package kg.kuban.airport.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import javax.persistence.*;
 
-@Tag(name = "Сущность Авиакомпания", description = "Описывает сущность авиакомпании в аэропорту")
+@Schema(name = "Сущность Авиакомпания", description = "Описывает сущность авиакомпании в аэропорту")
 @Entity
 @Table(name = "aircompanies")
 public class Aircompany {

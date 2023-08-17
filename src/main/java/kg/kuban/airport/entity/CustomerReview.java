@@ -1,17 +1,19 @@
 package kg.kuban.airport.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import kg.kuban.airport.enums.Mark;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Schema(name = "Сущность Отзывы клиента", description = "Описывает сущность отзывов клиента")
 @Entity
 @Table(name = "customer_reviews")
 public class CustomerReview {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                     // Уникальный Идентификатор самолета числового типа
+    private Long id;
 
     @Column(name = "review")
     private String review;

@@ -1,11 +1,12 @@
 package kg.kuban.airport.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import kg.kuban.airport.enums.AirplanePartStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-/*
+/**
 
 Технический осмотр пассажирского самолета - это процедура, которая выполняется перед каждым полетом,
 чтобы убедиться в том, что самолет находится в рабочем состоянии и безопасен для полета. Она включает в себя следующие этапы:
@@ -32,6 +33,7 @@ import java.time.LocalDateTime;
 Таким образом, технический осмотр пассажирского самолета включает в себя много этапов, чтобы обеспечить безопасность на борту и гарантировать, что самолет находится в полной работоспособности перед вылетом.
  */
 
+@Schema(name = "Сущность История техосмотра самолета", description = "Описывает сущность Истории техосмотра самолета")
 @Entity
 @Table(name = "part_inspections")
 public class PartInspection {
@@ -48,7 +50,7 @@ public class PartInspection {
 
     @ManyToOne
     @JoinColumn(name = "part_id", referencedColumnName = "id")
-    private Part part;              //
+    private AirplanePart part;              //
 
     @ManyToOne
     @JoinColumn(name = "airplane_id", referencedColumnName = "id")
@@ -57,7 +59,7 @@ public class PartInspection {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private AirplanePartStatus status;            // Статус детали
+    private AirplanePartStatus status;            // Статус тех осмотра
     @Column(name = "inspection_code")
     private Long inspectionCode;            //
 
@@ -103,11 +105,11 @@ public class PartInspection {
         return this;
     }
 
-    public Part getPart() {
+    public AirplanePart getPart() {
         return part;
     }
 
-    public PartInspection setPart(Part part) {
+    public PartInspection setPart(AirplanePart part) {
         this.part = part;
         return this;
     }

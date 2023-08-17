@@ -1,8 +1,11 @@
 package kg.kuban.airport.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.persistence.*;
 import java.util.List;
 
+@Schema(name = "Сущность Аэропорт", description = "Описывает сущность аэропорта")
 @Entity
 @Table(name = "airports")
 public class Airport {

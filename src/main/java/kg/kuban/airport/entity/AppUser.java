@@ -1,5 +1,6 @@
 package kg.kuban.airport.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Schema(name = "Сущность Пользователь системы", description = "Описывает сущность пользователя системы")
 @Entity
 @Table(name = "app_users")
 public class AppUser implements UserDetails {

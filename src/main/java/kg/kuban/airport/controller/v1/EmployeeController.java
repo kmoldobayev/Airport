@@ -1,5 +1,6 @@
 package kg.kuban.airport.controller.v1;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.EmployeeReportRequestDto;
 import kg.kuban.airport.dto.EmployeeReportResponseDto;
 import kg.kuban.airport.dto.FlightResponseDto;
@@ -24,6 +25,10 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/employees")
+@Tag(
+        name = "Контроллер для работников аэропорта",
+        description = "Описывает точки доступа по работникам аэропорта"
+)
 public class EmployeeController {
 
     private FlightRepository flightRepository;

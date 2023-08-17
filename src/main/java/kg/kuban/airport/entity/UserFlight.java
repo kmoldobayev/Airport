@@ -1,11 +1,13 @@
 package kg.kuban.airport.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import kg.kuban.airport.enums.AirplaneStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Schema(name = "Сущность Пользователь и Рейс", description = "Описывает сущность бронирования клиентов на рейс и в тоже время используется для статусов экипажа рейса")
 @Entity
 @Table(name = "users_flights")
 public class UserFlight {
@@ -13,26 +15,23 @@ public class UserFlight {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;                     // Уникальный Идентификатор самолета числового типа
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "seat_id", referencedColumnName = "id")
-    @JsonIgnore
     private Seat seat;
 
     @ManyToOne
     @JoinColumn(name = "flight_id", referencedColumnName = "id")
-    @JsonIgnore
     private Flight flight;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnore
     private AppUser appUser;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private AirplaneStatus status;                  // Статус рейса
+    private AirplaneStatus status;                  // Статус самолета
 
     @Column(name = "date_register")
     private LocalDateTime dateRegister;            // Дата регистрации
@@ -40,6 +39,11 @@ public class UserFlight {
 
 
     public UserFlight() {
+    }
+
+    @PrePersist
+    private void prePersist() {
+        this.dateRegister = LocalDateTime.now();
     }
 
     public AirplaneStatus getStatus() {

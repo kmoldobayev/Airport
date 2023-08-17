@@ -1,11 +1,10 @@
 package kg.kuban.airport.service.impl;
 
-import com.querydsl.core.BooleanBuilder;
 import kg.kuban.airport.dto.PartInspectionsRequestDto;
 import kg.kuban.airport.dto.PartInspectionsResponseDto;
 import kg.kuban.airport.dto.PartStatesResponseDto;
 import kg.kuban.airport.entity.Airplane;
-import kg.kuban.airport.entity.Part;
+import kg.kuban.airport.entity.AirplanePart;
 import kg.kuban.airport.entity.PartInspection;
 import kg.kuban.airport.enums.AirplanePartStatus;
 import kg.kuban.airport.exception.*;
@@ -17,12 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class PartInspectionServiceImpl implements PartInspectionService {
@@ -83,7 +79,7 @@ public class PartInspectionServiceImpl implements PartInspectionService {
             );
         }
 
-        List<Part> partsEntities =
+        List<AirplanePart> partsEntities =
                 this.partsService.getPartsByPartsIdListAndAirplaneId(partIdList, airplaneId);
 
         if (Objects.isNull(airplane.getServicedBy())){

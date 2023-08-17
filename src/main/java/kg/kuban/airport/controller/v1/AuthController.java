@@ -1,5 +1,6 @@
 package kg.kuban.airport.controller.v1;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.AuthDto;
 import kg.kuban.airport.dto.TokenResponseDto;
 import kg.kuban.airport.exception.InvalidCredentialsException;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- Контроллер по авторизации:
+ Контроллер по аутентификации:
  1.	Метод Логина в систему
  2.	Метод Выхода логина из системы
  */
@@ -22,6 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/v1/auth")
+@Tag(
+        name = "Контроллер для аутентификации пользователей системы",
+        description = "Описывает точки доступа по аутентификации пользователей системы"
+)
 public class AuthController {
     private AuthServiceImpl authServiceImpl;
 

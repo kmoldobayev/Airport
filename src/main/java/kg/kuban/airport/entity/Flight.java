@@ -1,10 +1,12 @@
 package kg.kuban.airport.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Schema(name = "Сущность Рейс самолета", description = "Описывает сущность рейса самолета")
 @Entity
 @Table(name = "flights")
 public class Flight {
