@@ -17,7 +17,13 @@ public class AircompanyMapper {
         return aircompanyResponseDto;
     }
 
-    public static Aircompany mapAircompanyDtoToEntity(AircompanyResponseDto aircompanyResponseDto) {
+    public static Aircompany mapAircompanyRequestDtoToEntity(AircompanyRequestDto aircompanyRequestDto) {
+        Aircompany aircompany = new Aircompany();
+        aircompany.setTitle(aircompanyRequestDto.getTitle());
+        return aircompany;
+    }
+
+    public static Aircompany mapAircompanyResponseDtoToEntity(AircompanyResponseDto aircompanyResponseDto) {
         Aircompany aircompany = new Aircompany();
         aircompany.setId(aircompanyResponseDto.getId());
         aircompany.setTitle(aircompanyResponseDto.getTitle());

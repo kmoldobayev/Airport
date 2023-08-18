@@ -7,10 +7,7 @@ import kg.kuban.airport.entity.*;
 import kg.kuban.airport.enums.UserFlightsStatus;
 import kg.kuban.airport.exception.*;
 import kg.kuban.airport.mapper.CustomerReviewMapper;
-import kg.kuban.airport.repository.AppUserRepository;
-import kg.kuban.airport.repository.CustomerReviewRepository;
-import kg.kuban.airport.repository.FlightRepository;
-import kg.kuban.airport.repository.UserFlightRepository;
+import kg.kuban.airport.repository.*;
 import kg.kuban.airport.service.AppUserService;
 import kg.kuban.airport.service.CustomerService;
 import kg.kuban.airport.service.FlightService;
@@ -23,9 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -33,6 +28,8 @@ import java.util.stream.StreamSupport;
 public class CustomerServiceImpl implements CustomerService {
 
     private AppUserRepository appUserRepository;
+    private AppRoleRepository appRoleRepository;
+    private PositionRepository positionRepository;
     private AppUserService appUserService;
     private FlightService flightService;
     private UserFlightsService userFlightsService;
@@ -52,7 +49,15 @@ public class CustomerServiceImpl implements CustomerService {
         logger.info("possibleDuplicate");
         if (Objects.isNull(possibleDuplicate)){
             AppUser appUser = new AppUser();
-            appUser.setAppRoles(Collections.singleton(new AppRole(1L, "ROLE_CUSTOMER")));
+            //appUser.setAppRoles(Collections.singleton(new AppRole(1L, "ROLE_CUSTOMER")));
+
+//            Optional<Position> positionOptional =
+//                    this.positionRepository.getUserPositionsEntityByPositionTitle("CLIENT");
+
+            List<AppRole> userRolesEntityList = new ArrayList<>();
+            userRolesEntityList.add(this.appRoleRepository.findByTitle("CUSTOMER"));
+
+            appUser.setAppRoles(userRolesEntityList);
 
             appUser.setUserLogin(appUserDto.getUserLogin());
             appUser.setUserPassword(bCryptPasswordEncoder.encode(appUserDto.getUserPassword()));

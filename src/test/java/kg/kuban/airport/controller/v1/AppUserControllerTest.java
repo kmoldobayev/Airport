@@ -9,6 +9,7 @@ import kg.kuban.airport.security.JwtTokenHandler;
 import kg.kuban.airport.security.JwtTokenUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,100 +42,29 @@ class AppUserControllerTest {
     JwtTokenHandler jwtTokenHandler;
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
-
-//    @Autowired
-//    UserDetailsService userDetailsService;
-
-    @Autowired
     UserDetailsService appUserDetailsService;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
     @LocalServerPort
     private int port;
 
-    @BeforeAll
-    public static void setup() {
+    HttpHeaders headers;
 
+    @BeforeEach
+    public void setup() {
+        UserDetails userDetails = this.appUserDetailsService.loadUserByUsername("ADMIN");
+        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(userDetails, null, userDetails.getAuthorities());
+        String token = this.jwtTokenHandler.generateToken(authentication);
+
+        this.headers = new HttpHeaders();
+        this.headers.setContentType(MediaType.APPLICATION_JSON);
+        this.headers.set("Authorization", "Bearer " + token);
     }
 
-    private String generateToken(String username, String role) {
-        UserDetails userDetails = this.appUserDetailsService.loadUserByUsername(username);
-        //Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(userDetails, null, userDetails.getAuthorities());
-
-        return this.jwtTokenUtil.generateToken(userDetails, role);
-    }
-
-    private TokenResponseDto getAuthHeaderForUser(String login, String password) {
-        try {
-            AuthDto authRequest = new AuthDto();
-            authRequest.setLogin(login);
-            authRequest.setPassword(password);
-
-            URI uri = new URI("http://localhost:" + port + "/v1/auth/login");
-
-            TokenResponseDto authResponse = template.postForObject(uri.toString(), authRequest, TokenResponseDto.class);
-            return authResponse;
-        } catch(Exception ex) {
-            Assertions.fail(ex);
-        }
-        return null;
-    }
-
-    private TokenResponseDto getAuthHeaderForUser2(String login, String password) {
-        try {
-            AuthDto authRequest = new AuthDto();
-            authRequest.setLogin(login);
-            authRequest.setPassword(password);
-
-            URI uri = new URI("http://localhost:" + port + "/v1/auth/login");
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-
-            HttpEntity<AuthDto> request = new HttpEntity<>(authRequest, headers);
-
-            ResponseEntity<TokenResponseDto> authResponse = template.exchange(uri.toString(), HttpMethod.POST, request, TokenResponseDto.class);
-
-            return authResponse.getBody();
-        } catch(Exception ex) {
-            Assertions.fail(ex);
-        }
-        return null;
-    }
-
-    public TokenResponseDto loginUser(String username, String password) throws InvalidCredentialsException {
-        TokenResponseDto result = new TokenResponseDto();
-        UserDetails user = this.appUserDetailsService.loadUserByUsername(username);
-        if (this.passwordEncoder.matches(password, this.passwordEncoder.encode(user.getPassword()))) {
-            Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, null, user.getAuthorities());
-            String jwtToken = this.jwtTokenHandler.generateToken(authentication);
-            result.setAccessToken(jwtToken);
-            return result;
-        }
-        return null;
-    }
-    private String getCreateToken() throws InvalidCredentialsException{
-        TokenResponseDto authResponse = loginUser("ADMIN", "ADMIN");
-        String tokenString = authResponse.getAccessToken();
-        return tokenString;
-    }
     @Test
-   // @WithUserDetails(value="ADMIN", userDetailsServiceBeanName="appUserDetailsService")
     void testGetUsers_OK()  throws InvalidCredentialsException {
         try {
-            //TokenResponseDto authResponse = getAuthHeaderForUser2("ADMIN2", "ADMIN2");
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            //String token = getCreateToken();
-            //String token = authResponse.getAccessToken();
-            String token = generateToken("ADMIN", "ADMIN");
-            headers.set("Authorization", "Bearer " + token);
 
             URI uri = new URI("http://localhost:" + port + "/users/users");
-
 
             ResponseEntity<List<AppUserResponseDto>> entity = template.exchange(uri,
                     HttpMethod.GET,

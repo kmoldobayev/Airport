@@ -6,10 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Schema(name = "Сущность Пользователь системы", description = "Описывает сущность пользователя системы")
@@ -49,7 +46,7 @@ public class AppUser implements UserDetails {
     @JoinTable(name = "m2m_user_role",
                 joinColumns = @JoinColumn(name = "user_id"),
                 inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<AppRole> appRoles;
+    private List<AppRole> appRoles;
 
     @OneToOne(mappedBy = "servicedBy")
     private Airplane servicedAirplane;
@@ -61,7 +58,7 @@ public class AppUser implements UserDetails {
     }
 
     public AppUser() {
-        this.appRoles = new HashSet<>();
+        this.appRoles = new ArrayList<>();
     }
 
     public AppUser(String userLogin, String userPassword, List<GrantedAuthority> authorities) {
@@ -151,11 +148,16 @@ public class AppUser implements UserDetails {
     }
 
 
-    public Set<AppRole> getAppRoles() {
+    public AppUser setAuthorities(List<GrantedAuthority> authorities) {
+        this.authorities = authorities;
+        return this;
+    }
+
+    public List<AppRole> getAppRoles() {
         return appRoles;
     }
 
-    public AppUser setAppRoles(Set<AppRole> appRoles) {
+    public AppUser setAppRoles(List<AppRole> appRoles) {
         this.appRoles = appRoles;
         return this;
     }

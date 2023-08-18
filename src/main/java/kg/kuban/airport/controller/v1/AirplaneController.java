@@ -42,6 +42,7 @@ public class AirplaneController {
     @PostMapping("/register")
     @PreAuthorize("hasAnyRole('DISPATCHER')")
     public ResponseEntity<?> registerNewAirplane(@RequestBody AirplaneRequestDto airplaneRequestDto) {
+        logger.info("registerNewAirplane");
         return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.registerNewAirplane(airplaneRequestDto)));
     }
 

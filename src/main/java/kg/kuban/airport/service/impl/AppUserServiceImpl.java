@@ -74,14 +74,23 @@ public class AppUserServiceImpl implements AppUserService {
         logger.info("possibleDuplicate");
         if (Objects.isNull(possibleDuplicate)){
             AppUser appUser = new AppUser();
-            appUser.setAppRoles(Collections.singleton(new AppRole(1L, "ROLE_USER")));
+
             logger.info("appUserDto.getPosition()=" + appUserDto.getPosition().getTitle());
 
             Position existingPosition = this.positionRepository.findByTitle(appUserDto.getPosition().getTitle());
 
+            appUser.setFullName(appUserDto.getFullName());
             appUser.setPosition(existingPosition);
             appUser.setUserLogin(appUserDto.getUserLogin());
             appUser.setUserPassword(bCryptPasswordEncoder.encode(appUserDto.getUserPassword()));
+
+            List<AppRole> userRolesEntityList =
+                    this.appRoleRepository.getAppRolesByPosition(existingPosition);
+            appUser.setAppRoles(userRolesEntityList);
+
+            //appUser.setAppRoles(Collections.singleton(new AppRole(1L, "ROLE_USER")));
+
+
             appUserRepository.save(appUser);
             logger.info("appUserRepository.save(appUser)");
             return appUser;

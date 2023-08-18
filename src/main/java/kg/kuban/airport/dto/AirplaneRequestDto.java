@@ -10,7 +10,6 @@ public class AirplaneRequestDto {
 
     private String boardNumber;
 
-    private LocalDateTime dateRegister;
     private AircompanyRequestDto aircompany;
     private Integer numberSeats;
 
@@ -31,15 +30,6 @@ public class AirplaneRequestDto {
 
     public AirplaneRequestDto setBoardNumber(String boardNumber) {
         this.boardNumber = boardNumber;
-        return this;
-    }
-
-    public LocalDateTime getDateRegister() {
-        return dateRegister;
-    }
-
-    public AirplaneRequestDto setDateRegister(LocalDateTime dateRegister) {
-        this.dateRegister = dateRegister;
         return this;
     }
 

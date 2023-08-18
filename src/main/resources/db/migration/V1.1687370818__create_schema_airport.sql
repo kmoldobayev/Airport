@@ -53,7 +53,7 @@ create table if not exists airplanes (
     date_register timestamp without time zone not null,             -- Дата регистрации
     number_seats integer not null check (number_seats > 0),         -- Максимальная вместимость самолета
     status varchar not null,                                        -- Статус самолета (В посадке, На земле, В полете, Готовится к взлету, Вылет)
-    user_id bigint not null references app_users(id),               -- Пользователь
+    user_id bigint references app_users(id),                        -- Пользователь
     is_available boolean                                            -- Признак доступности
 );
 

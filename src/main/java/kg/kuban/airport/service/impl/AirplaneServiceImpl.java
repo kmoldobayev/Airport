@@ -10,11 +10,13 @@ import kg.kuban.airport.exception.AirplaneNotFoundException;
 import kg.kuban.airport.exception.EngineerException;
 import kg.kuban.airport.exception.PartInspectionNotFoundException;
 import kg.kuban.airport.exception.StatusChangeException;
+import kg.kuban.airport.mapper.AircompanyMapper;
 import kg.kuban.airport.repository.AircompanyRepository;
 import kg.kuban.airport.repository.AirplaneRepository;
 import kg.kuban.airport.repository.AppUserRepository;
 import kg.kuban.airport.service.AirplaneService;
 import kg.kuban.airport.service.PartInspectionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,11 +27,20 @@ import java.util.Optional;
 @Service
 public class AirplaneServiceImpl implements AirplaneService {
 
-    private AppUserRepository appUserRepository;
-    private AircompanyRepository aircompanyRepository;
-    private AirplaneRepository airplaneRepository;
+    private final AppUserRepository appUserRepository;
+    private final AircompanyRepository aircompanyRepository;
+    private final AirplaneRepository airplaneRepository;
 
-    private PartInspectionService partInspectionService;
+    private final PartInspectionService partInspectionService;
+
+    @Autowired
+    public AirplaneServiceImpl(AppUserRepository appUserRepository, AircompanyRepository aircompanyRepository, AirplaneRepository airplaneRepository, PartInspectionService partInspectionService) {
+        this.appUserRepository = appUserRepository;
+        this.aircompanyRepository = aircompanyRepository;
+        this.airplaneRepository = airplaneRepository;
+        this.partInspectionService = partInspectionService;
+    }
+
     /**
      * Регистрация нового самолета (задача Диспетчера)
      * @param airplaneRequestDto
@@ -43,14 +54,20 @@ public class AirplaneServiceImpl implements AirplaneService {
             throw new IllegalArgumentException("Реквизиты самолета пустые! Заполните!");
         }
 
-        Aircompany existingAircompany = this.aircompanyRepository.findByTitle(airplaneRequestDto.getAircompany().getTitle());
+        if (Objects.isNull(airplaneRequestDto.getAircompany())) {
+            throw new IllegalArgumentException("Заполните авиакомпанию (поле aircompany)!");
+        }
+
+        Aircompany aircompany = AircompanyMapper.mapAircompanyRequestDtoToEntity(airplaneRequestDto.getAircompany());
+
+        Optional<Aircompany> existingAircompany = this.aircompanyRepository.findAircompanyByTitle(aircompany.getTitle());
 
 
         Airplane airplane = new Airplane();
 
         airplane.setMarka(airplaneRequestDto.getMarka());
         airplane.setBoardNumber(airplaneRequestDto.getBoardNumber());
-        airplane.setAirCompany(existingAircompany);
+        airplane.setAirCompany(existingAircompany.get());
 
         airplane.setNumberSeats(airplaneRequestDto.getNumberSeats());
         airplane.setStatus(AirplaneStatus.TO_CHECKUP);
