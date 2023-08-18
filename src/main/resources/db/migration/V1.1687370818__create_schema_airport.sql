@@ -65,6 +65,7 @@ create table if not exists flights(
     destination bigint not null references airports(id),            -- Место назначения
     date_register timestamp without time zone,                      -- Дата и время регистрации
     status varchar,                                                 -- Статус рейса
+    tickets_left int,                                               -- Количество оставшихся билетов
     is_available boolean not null                                   -- Признак доступности рейса
 );
 

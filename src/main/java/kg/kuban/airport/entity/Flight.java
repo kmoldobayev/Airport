@@ -2,9 +2,11 @@ package kg.kuban.airport.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import kg.kuban.airport.enums.FlightStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Schema(name = "Сущность Рейс самолета", description = "Описывает сущность рейса самолета")
 @Entity
@@ -21,6 +23,13 @@ public class Flight {
     @JoinColumn(name = "destination", referencedColumnName = "id")
     private Airport destination;             // Пункт назначения
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status")
+    private FlightStatus status;
+
+    @Column(name = "tickets_left")
+    private Integer ticketsLeft;
+
     @Column(name = "date_register")
     private LocalDateTime dateRegister;    // Дата и время регистрации
 
@@ -31,6 +40,11 @@ public class Flight {
 
     @Column(name = "isAvailable")
     private Boolean isAvailable;            // Доступен или нет
+
+    @OneToMany(mappedBy = "flight", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    private List<UserFlight> userFlights;
+    @OneToMany(mappedBy = "flight")
+    private List<CustomerReview> customerReviews;
 
     public Long getId() {
         return id;
@@ -84,6 +98,42 @@ public class Flight {
 
     public Flight setDateRegister(LocalDateTime dateRegister) {
         this.dateRegister = dateRegister;
+        return this;
+    }
+
+    public FlightStatus getStatus() {
+        return status;
+    }
+
+    public Flight setStatus(FlightStatus status) {
+        this.status = status;
+        return this;
+    }
+
+    public Integer getTicketsLeft() {
+        return ticketsLeft;
+    }
+
+    public Flight setTicketsLeft(Integer ticketsLeft) {
+        this.ticketsLeft = ticketsLeft;
+        return this;
+    }
+
+    public List<UserFlight> getUserFlights() {
+        return userFlights;
+    }
+
+    public Flight setUserFlights(List<UserFlight> userFlights) {
+        this.userFlights = userFlights;
+        return this;
+    }
+
+    public List<CustomerReview> getCustomerReviews() {
+        return customerReviews;
+    }
+
+    public Flight setCustomerReviews(List<CustomerReview> customerReviews) {
+        this.customerReviews = customerReviews;
         return this;
     }
 }

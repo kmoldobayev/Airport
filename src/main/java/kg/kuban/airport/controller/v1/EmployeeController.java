@@ -1,5 +1,7 @@
 package kg.kuban.airport.controller.v1;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.EmployeeReportRequestDto;
 import kg.kuban.airport.dto.EmployeeReportResponseDto;
@@ -43,11 +45,22 @@ public class EmployeeController {
     6.	Подтверждение принятия рейса.
     */
 
-    @GetMapping("/available-flights")
-    public List<FlightResponseDto> getAvailableFlights() {
-        return FlightMapper.mapFlightEntityListToDto(this.flightRepository.findAvailableFlights());
-    }
+//    @GetMapping("/available-flights")
+//    public List<FlightResponseDto> getAvailableFlights() {
+//        return FlightMapper.mapFlightEntityListToDto(this.flightRepository.findAvailableFlights());
+//    }
 
+    @Operation(
+            summary = "Формирование отчета по работникам аэрропорта",
+            description = "отчет по работникам аэрропорта по дате регистрации за заданный период и другие фильтры",
+            parameters = {
+                    @Parameter(name = "startDate", description = "Дата начала периода"),
+                    @Parameter(name = "endDate", description = "Дата начала периода"),
+                    @Parameter(name = "fullName", description = "Полное имя"),
+                    @Parameter(name = "position", description = "DTO должности"),
+                    @Parameter(name = "isEnabled", description = "Активные")
+            }
+    )
     @GetMapping(value = "/report")
     @PreAuthorize("hasAnyRole('CHIEF')")
     public EmployeeReportResponseDto getEmployeeReport(

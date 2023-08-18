@@ -36,7 +36,7 @@ import java.time.LocalDateTime;
 @Schema(name = "Сущность История техосмотра самолета", description = "Описывает сущность Истории техосмотра самолета")
 @Entity
 @Table(name = "part_inspections")
-public class PartInspection {
+public class AirplanePartInspection {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,14 +65,14 @@ public class PartInspection {
 
 
 
-    public PartInspection() {
+    public AirplanePartInspection() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public PartInspection setId(Long id) {
+    public AirplanePartInspection setId(Long id) {
         this.id = id;
         return this;
     }
@@ -82,7 +82,7 @@ public class PartInspection {
         return status;
     }
 
-    public PartInspection setStatus(AirplanePartStatus status) {
+    public AirplanePartInspection setStatus(AirplanePartStatus status) {
         this.status = status;
         return this;
     }
@@ -91,7 +91,7 @@ public class PartInspection {
         return appUser;
     }
 
-    public PartInspection setAppUser(AppUser appUser) {
+    public AirplanePartInspection setAppUser(AppUser appUser) {
         this.appUser = appUser;
         return this;
     }
@@ -100,7 +100,7 @@ public class PartInspection {
         return dateRegister;
     }
 
-    public PartInspection setDateRegister(LocalDateTime dateRegister) {
+    public AirplanePartInspection setDateRegister(LocalDateTime dateRegister) {
         this.dateRegister = dateRegister;
         return this;
     }
@@ -109,7 +109,7 @@ public class PartInspection {
         return part;
     }
 
-    public PartInspection setPart(AirplanePart part) {
+    public AirplanePartInspection setPart(AirplanePart part) {
         this.part = part;
         return this;
     }
@@ -118,7 +118,7 @@ public class PartInspection {
         return airplane;
     }
 
-    public PartInspection setAirplane(Airplane airplane) {
+    public AirplanePartInspection setAirplane(Airplane airplane) {
         this.airplane = airplane;
         return this;
     }
@@ -127,7 +127,7 @@ public class PartInspection {
         return inspectionCode;
     }
 
-    public PartInspection setInspectionCode(Long inspectionCode) {
+    public AirplanePartInspection setInspectionCode(Long inspectionCode) {
         this.inspectionCode = inspectionCode;
         return this;
     }

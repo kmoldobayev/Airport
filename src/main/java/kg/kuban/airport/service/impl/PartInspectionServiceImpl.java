@@ -5,11 +5,11 @@ import kg.kuban.airport.dto.PartInspectionsResponseDto;
 import kg.kuban.airport.dto.PartStatesResponseDto;
 import kg.kuban.airport.entity.Airplane;
 import kg.kuban.airport.entity.AirplanePart;
-import kg.kuban.airport.entity.PartInspection;
+import kg.kuban.airport.entity.AirplanePartInspection;
 import kg.kuban.airport.enums.AirplanePartStatus;
 import kg.kuban.airport.exception.*;
 import kg.kuban.airport.mapper.InspectionMapper;
-import kg.kuban.airport.repository.PartInspectionRepository;
+import kg.kuban.airport.repository.AirplanePartInspectionRepository;
 import kg.kuban.airport.service.PartInspectionService;
 import kg.kuban.airport.service.PartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +24,14 @@ import java.util.Objects;
 public class PartInspectionServiceImpl implements PartInspectionService {
     private static final Long MIN_INSPECTION_CODE_VALUE = 1L;
 
-    private final PartInspectionRepository partInspectionRepository;
+    private final AirplanePartInspectionRepository partInspectionRepository;
     private final PartService partsService;
 
     private Long currentMaxInspectionCode;
 
     @Autowired
     public PartInspectionServiceImpl(
-            PartInspectionRepository partInspectionRepository,
+            AirplanePartInspectionRepository partInspectionRepository,
             PartService partService
     ) {
         this.partInspectionRepository = partInspectionRepository;
@@ -59,7 +59,7 @@ public class PartInspectionServiceImpl implements PartInspectionService {
             throw new IllegalArgumentException("Список создаваемых осмотров деталей не может быть null!");
         }
 
-        List<PartInspection> partInspectionsEntities = new ArrayList<>();
+        List<AirplanePartInspection> partInspectionsEntities = new ArrayList<>();
         List<Long> partIdList = new ArrayList<>();
         Long airplaneId = requestDtoList.get(0).getAirplaneId();
 
@@ -113,7 +113,7 @@ public class PartInspectionServiceImpl implements PartInspectionService {
 //        }
 
         this.currentMaxInspectionCode += 1L;
-        for (PartInspection inspection : partInspectionsEntities) {
+        for (AirplanePartInspection inspection : partInspectionsEntities) {
             inspection.setInspectionCode(this.currentMaxInspectionCode);
         }
 
@@ -154,12 +154,12 @@ public class PartInspectionServiceImpl implements PartInspectionService {
     }
 
     @Override
-    public List<PartInspection> getLastAirplaneInspections(Long airplaneId) throws PartInspectionNotFoundException {
+    public List<AirplanePartInspection> getLastAirplaneInspections(Long airplaneId) throws PartInspectionNotFoundException {
         if (Objects.isNull(airplaneId)) {
             throw new IllegalArgumentException("ID самолета не может быть null!");
         }
 
-        List<PartInspection> lastInspection =
+        List<AirplanePartInspection> lastInspection =
                 this.partInspectionRepository.getLastAirplaneInspectionByAirplaneId(airplaneId);
         if(lastInspection.isEmpty()) {
             throw new PartInspectionNotFoundException(
@@ -173,10 +173,10 @@ public class PartInspectionServiceImpl implements PartInspectionService {
     public AirplanePartStatus getLastAirplaneInspectionResult(Long airplaneId)
             throws PartInspectionNotFoundException
     {
-        List<PartInspection> partInspectionsEntityList =
+        List<AirplanePartInspection> partInspectionsEntityList =
                 this.getLastAirplaneInspections(airplaneId);
 
-        for (PartInspection partInspection : partInspectionsEntityList) {
+        for (AirplanePartInspection partInspection : partInspectionsEntityList) {
             if(partInspection.getStatus().equals(AirplanePartStatus.MAINTENANCE)) {
                 return AirplanePartStatus.MAINTENANCE;
             }

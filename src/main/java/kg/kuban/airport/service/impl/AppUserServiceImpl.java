@@ -1,5 +1,7 @@
 package kg.kuban.airport.service.impl;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import kg.kuban.airport.controller.v1.AppUserController;
 import kg.kuban.airport.dto.AppUserRequestDto;
 import kg.kuban.airport.entity.*;
@@ -17,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -140,6 +143,27 @@ public class AppUserServiceImpl implements AppUserService {
             throw new UsernameNotFoundException("Нет пользователя с ID=" + username);
         }
         return userOptional.get();
+    }
+
+    public Predicate buildUsersCommonSearchPredicate(
+            LocalDate registeredBefore,
+            LocalDate registeredAfter,
+            Boolean isDeleted
+    ) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QAppUser root = QAppUser.appUser;
+
+        if(Objects.nonNull(registeredBefore)) {
+            booleanBuilder.and(root.dateBegin.goe(registeredAfter));
+        }
+        if(Objects.nonNull(registeredBefore)) {
+            booleanBuilder.and(root.dateBegin.loe(registeredBefore));
+        }
+        if(Objects.nonNull(isDeleted)) {
+            booleanBuilder.and(root.isEnabled.eq(isDeleted));
+        }
+
+        return booleanBuilder;
     }
 
 

@@ -23,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.net.URI;
@@ -121,33 +122,34 @@ class AppUserControllerTest {
         return tokenString;
     }
     @Test
+   // @WithUserDetails(value="ADMIN", userDetailsServiceBeanName="appUserDetailsService")
     void testGetUsers_OK()  throws InvalidCredentialsException {
-//        try {
-//            //TokenResponseDto authResponse = getAuthHeaderForUser2("ADMIN2", "ADMIN2");
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentType(MediaType.APPLICATION_JSON);
-//            //String token = getCreateToken();
-//            //String token = authResponse.getAccessToken();
-//            String token = generateToken("ADMIN", "ADMIN");
-//            headers.set("Authorization", "Bearer " + token);
-//
-//            URI uri = new URI("http://localhost:" + port + "/users/users");
-//
-//
-//            ResponseEntity<List<AppUserResponseDto>> entity = template.exchange(uri,
-//                    HttpMethod.GET,
-//                    new HttpEntity<>(headers),
-//                    new ParameterizedTypeReference<List<AppUserResponseDto>>() {}
-//            );
-//
-//            Assertions.assertEquals(HttpStatus.OK, entity.getStatusCode());
-//            Assertions.assertEquals(MediaType.APPLICATION_JSON, entity.getHeaders().getContentType());
-//
-//            List<AppUserResponseDto> users = entity.getBody();
-//            Assertions.assertTrue(users.size() >= 1);
-//        } catch(Exception ex) {
-//            Assertions.fail(ex);
-//        }
+        try {
+            //TokenResponseDto authResponse = getAuthHeaderForUser2("ADMIN2", "ADMIN2");
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            //String token = getCreateToken();
+            //String token = authResponse.getAccessToken();
+            String token = generateToken("ADMIN", "ADMIN");
+            headers.set("Authorization", "Bearer " + token);
+
+            URI uri = new URI("http://localhost:" + port + "/users/users");
+
+
+            ResponseEntity<List<AppUserResponseDto>> entity = template.exchange(uri,
+                    HttpMethod.GET,
+                    new HttpEntity<>(headers),
+                    new ParameterizedTypeReference<List<AppUserResponseDto>>() {}
+            );
+
+            Assertions.assertEquals(HttpStatus.OK, entity.getStatusCode());
+            Assertions.assertEquals(MediaType.APPLICATION_JSON, entity.getHeaders().getContentType());
+
+            List<AppUserResponseDto> users = entity.getBody();
+            Assertions.assertTrue(users.size() >= 1);
+        } catch(Exception ex) {
+            Assertions.fail(ex);
+        }
     }
 
     @Test

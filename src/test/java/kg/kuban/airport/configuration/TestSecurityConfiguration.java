@@ -47,32 +47,32 @@ public class TestSecurityConfiguration {
     public JwtTokenHandler jwtTokenHandler() {
         return new JwtTokenHandler();
     }
-    @Bean
-    public JwtTokenUtil jwtTokenUtil() {
-        return new JwtTokenUtil();
-    }
+//    @Bean
+//    public JwtTokenUtil jwtTokenUtil() {
+//        return new JwtTokenUtil();
+//    }
+//
+//    private String parseJwt(HttpServletRequest request) {
+//        final String authHeader = request.getHeader("Authorization");
+//        if (Objects.nonNull(authHeader) && authHeader.startsWith("Bearer ")) {
+//            return authHeader.substring(7);
+//        }
+//        return null;
+//    }
 
-    private String parseJwt(HttpServletRequest request) {
-        final String authHeader = request.getHeader("Authorization");
-        if (Objects.nonNull(authHeader) && authHeader.startsWith("Bearer ")) {
-            return authHeader.substring(7);
-        }
-        return null;
-    }
 
+//    @Bean
+//    @Primary
+//    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+//        UserDetails user = this.appUserDetailsService().loadUserByUsername("ADMIN");
+//        UsernamePasswordAuthenticationToken authToken =
+//                UsernamePasswordAuthenticationToken.authenticated(user, null, user.getAuthorities());
+//        SecurityContextHolder.getContext().setAuthentication(authToken);
+//        return new JwtAuthenticationFilter(this.jwtTokenHandler(), this.appUserDetailsServiceImpl());
+//    }
 
-    @Bean
-    @Primary
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        UserDetails user = this.appUserDetailsService().loadUserByUsername("ADMIN");
-        UsernamePasswordAuthenticationToken authToken =
-                UsernamePasswordAuthenticationToken.authenticated(user, null, user.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-        return new JwtAuthenticationFilter(this.jwtTokenHandler(), this.appUserDetailsServiceImpl());
-    }
-
-    @Bean
-    public AppUserDetailsService appUserDetailsServiceImpl() {
-        return new AppUserDetailsServiceImpl();
-    }
+//    @Bean
+//    public AppUserDetailsService appUserDetailsServiceImpl() {
+//        return new AppUserDetailsServiceImpl();
+//    }
 }

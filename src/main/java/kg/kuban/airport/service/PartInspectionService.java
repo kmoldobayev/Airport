@@ -4,7 +4,7 @@ import kg.kuban.airport.dto.PartInspectionsRequestDto;
 import kg.kuban.airport.dto.PartInspectionsResponseDto;
 import kg.kuban.airport.dto.PartStatesResponseDto;
 import kg.kuban.airport.entity.Airplane;
-import kg.kuban.airport.entity.PartInspection;
+import kg.kuban.airport.entity.AirplanePartInspection;
 import kg.kuban.airport.enums.AirplanePartStatus;
 import kg.kuban.airport.exception.*;
 
@@ -25,7 +25,7 @@ public interface PartInspectionService {
     List<PartInspectionsResponseDto> getPartInspectionsHistory(Long airplaneId)
             throws PartInspectionNotFoundException;
 
-    List<PartInspection> getLastAirplaneInspections(Long airplaneId)
+    List<AirplanePartInspection> getLastAirplaneInspections(Long airplaneId)
             throws PartInspectionNotFoundException;
 
     AirplanePartStatus getLastAirplaneInspectionResult(Long airplaneId)

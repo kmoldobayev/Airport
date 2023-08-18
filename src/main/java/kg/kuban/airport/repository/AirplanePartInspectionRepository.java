@@ -1,6 +1,6 @@
 package kg.kuban.airport.repository;
 
-import kg.kuban.airport.entity.PartInspection;
+import kg.kuban.airport.entity.AirplanePartInspection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PartInspectionRepository extends JpaRepository<PartInspection, Long>, QuerydslPredicateExecutor<PartInspection> {
+public interface AirplanePartInspectionRepository extends JpaRepository<AirplanePartInspection, Long>, QuerydslPredicateExecutor<AirplanePartInspection> {
     @Query(value = "SELECT MAX(inspection_code) FROM part_inspections", nativeQuery = true)
     Long getCurrentMaxInspectionCode();
 
@@ -21,7 +21,7 @@ public interface PartInspectionRepository extends JpaRepository<PartInspection, 
                     " where inspection_code = (select max(inspection_code) from airplane_inspections);",
             nativeQuery = true
     )
-    List<PartInspection> getLastAirplaneInspectionByAirplaneId(
+    List<AirplanePartInspection> getLastAirplaneInspectionByAirplaneId(
             @Param(value = "airplaneId") Long airplaneId
     );
 }

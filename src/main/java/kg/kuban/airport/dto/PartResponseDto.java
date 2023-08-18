@@ -1,7 +1,7 @@
 package kg.kuban.airport.dto;
 
 import kg.kuban.airport.enums.AirplaneType;
-import kg.kuban.airport.enums.PartType;
+import kg.kuban.airport.enums.AirplanePartType;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +9,7 @@ public class PartResponseDto {
     private Long id;
     private String title;
     private AirplaneType aircraftType;
-    private PartType partType;
+    private AirplanePartType partType;
     private LocalDateTime dateRegister;
 
     public PartResponseDto() {
@@ -42,11 +42,11 @@ public class PartResponseDto {
         return this;
     }
 
-    public PartType getPartType() {
+    public AirplanePartType getPartType() {
         return partType;
     }
 
-    public PartResponseDto setPartType(PartType partType) {
+    public PartResponseDto setPartType(AirplanePartType partType) {
         this.partType = partType;
         return this;
     }

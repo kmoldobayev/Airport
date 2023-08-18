@@ -1,5 +1,7 @@
 package kg.kuban.airport.controller.v1;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.AuthDto;
 import kg.kuban.airport.dto.TokenResponseDto;
@@ -37,6 +39,13 @@ public class AuthController {
         this.authServiceImpl = authServiceImpl;
     }
 
+    @Operation(
+            summary = "Метод логина пользователя в систему",
+            description = "Логин пользователя в систему",
+            parameters = {
+                    @Parameter(name = "AuthDto", description = "DTO аутентификации")
+            }
+    )
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(
             @RequestBody AuthDto authDto

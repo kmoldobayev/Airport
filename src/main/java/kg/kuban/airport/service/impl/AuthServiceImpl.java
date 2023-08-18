@@ -2,7 +2,6 @@ package kg.kuban.airport.service.impl;
 
 import kg.kuban.airport.dto.TokenResponseDto;
 import kg.kuban.airport.exception.InvalidCredentialsException;
-import kg.kuban.airport.exception.LogoutException;
 import kg.kuban.airport.security.JwtTokenHandler;
 import kg.kuban.airport.service.AppUserDetailsService;
 import kg.kuban.airport.service.AuthService;
@@ -93,16 +92,6 @@ public class AuthServiceImpl implements AuthService {
             logger.info(e.getMessage());
         }
 
-    }
-    @Override
-    public void logout() throws LogoutException {
-        // Проверяем, есть ли авторизированный пользователь
-        if (Objects.isNull(this.securityContext.getAuthentication())) {
-            throw new LogoutException("Нет залогированного пользователя!");
-        }
-
-        // Обнуляем Authentication в SecurityContext
-        this.securityContext.setAuthentication(null);
     }
     @Override
     public SecurityContext getSecurityContext() {

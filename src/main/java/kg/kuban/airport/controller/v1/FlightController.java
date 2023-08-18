@@ -47,6 +47,6 @@ public class FlightController {
     @PostMapping("/register")
     @PreAuthorize("hasAnyRole('DISPATCHER')")
     public ResponseEntity<?> registerNewFlight(@RequestBody FlightRequestDto flightRequestDto) {
-        return ResponseEntity.ok(this.flightService.registerFlight(flightRequestDto));
+        return ResponseEntity.ok(this.flightService.registerNewFlight(flightRequestDto));
     }
 }

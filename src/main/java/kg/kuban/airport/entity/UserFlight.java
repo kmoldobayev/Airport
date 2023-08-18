@@ -1,8 +1,8 @@
 package kg.kuban.airport.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import kg.kuban.airport.enums.AirplaneStatus;
+import kg.kuban.airport.enums.UserFlightsStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,7 +31,7 @@ public class UserFlight {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private AirplaneStatus status;                  // Статус самолета
+    private UserFlightsStatus status;                  // Статус самолета
 
     @Column(name = "date_register")
     private LocalDateTime dateRegister;            // Дата регистрации
@@ -46,11 +46,11 @@ public class UserFlight {
         this.dateRegister = LocalDateTime.now();
     }
 
-    public AirplaneStatus getStatus() {
+    public UserFlightsStatus getStatus() {
         return status;
     }
 
-    public UserFlight setStatus(AirplaneStatus status) {
+    public UserFlight setStatus(UserFlightsStatus status) {
         this.status = status;
         return this;
     }
@@ -99,4 +99,5 @@ public class UserFlight {
         this.dateRegister = dateRegister;
         return this;
     }
+
 }

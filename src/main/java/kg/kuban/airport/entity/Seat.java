@@ -26,7 +26,7 @@ public class Seat {
     private List<UserFlight> userFlights;
 
     @Column(name = "is_occupied")
-    private Boolean is_occupied;
+    private Boolean isOccupied;
 
     public Seat() {
         this.userFlights = new ArrayList<>();
@@ -59,12 +59,12 @@ public class Seat {
         return this;
     }
 
-    public Boolean getIs_occupied() {
-        return is_occupied;
+    public Boolean getOccupied() {
+        return isOccupied;
     }
 
-    public Seat setIs_occupied(Boolean is_occupied) {
-        this.is_occupied = is_occupied;
+    public Seat setOccupied(Boolean occupied) {
+        isOccupied = occupied;
         return this;
     }
 

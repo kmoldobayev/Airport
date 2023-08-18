@@ -2,7 +2,7 @@ package kg.kuban.airport.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import kg.kuban.airport.enums.AirplaneType;
-import kg.kuban.airport.enums.PartType;
+import kg.kuban.airport.enums.AirplanePartType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -26,7 +26,7 @@ public class AirplanePart {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "part_type")
-    private PartType partType;
+    private AirplanePartType partType;
 
     @Column(name = "date_register")
     private LocalDateTime dateRegister;
@@ -34,7 +34,7 @@ public class AirplanePart {
     @ManyToMany(mappedBy = "parts")
     private List<Airplane> airplanes;
     @OneToMany(mappedBy = "part")
-    private List<PartInspection> partInspections;
+    private List<AirplanePartInspection> partInspections;
 
     public AirplanePart() {
     }
@@ -57,11 +57,11 @@ public class AirplanePart {
         return this;
     }
 
-    public PartType getPartType() {
+    public AirplanePartType getPartType() {
         return partType;
     }
 
-    public AirplanePart setPartType(PartType partType) {
+    public AirplanePart setPartType(AirplanePartType partType) {
         this.partType = partType;
         return this;
     }
@@ -93,11 +93,11 @@ public class AirplanePart {
         return this;
     }
 
-    public List<PartInspection> getPartInspections() {
+    public List<AirplanePartInspection> getPartInspections() {
         return partInspections;
     }
 
-    public AirplanePart setPartInspections(List<PartInspection> partInspections) {
+    public AirplanePart setPartInspections(List<AirplanePartInspection> partInspections) {
         this.partInspections = partInspections;
         return this;
     }

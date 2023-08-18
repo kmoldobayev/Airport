@@ -3,18 +3,18 @@ package kg.kuban.airport.mapper;
 import kg.kuban.airport.dto.PartInspectionsRequestDto;
 import kg.kuban.airport.dto.PartInspectionsResponseDto;
 import kg.kuban.airport.dto.PartStatesResponseDto;
-import kg.kuban.airport.entity.PartInspection;
+import kg.kuban.airport.entity.AirplanePartInspection;
 import kg.kuban.airport.enums.AirplanePartStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class InspectionMapper {
-    public static PartInspection mapPartInspectionsRequestDtoToEntity(PartInspectionsRequestDto source) {
-        return new PartInspection().setStatus(source.getPartState());
+    public static AirplanePartInspection mapPartInspectionsRequestDtoToEntity(PartInspectionsRequestDto source) {
+        return new AirplanePartInspection().setStatus(source.getPartState());
     }
 
-    public static PartInspectionsResponseDto mapToPartInspectionsResponseDto(PartInspection source) {
+    public static PartInspectionsResponseDto mapToPartInspectionsResponseDto(AirplanePartInspection source) {
         return new PartInspectionsResponseDto()
                 .setId(source.getId())
                 .setPartId(source.getPart().getId())
@@ -28,7 +28,7 @@ public class InspectionMapper {
     }
 
     public static List<PartInspectionsResponseDto> mapToPartInspectionsResponseDtoList(
-            List<PartInspection> sourceList
+            List<AirplanePartInspection> sourceList
     ) {
         return sourceList
                 .stream()

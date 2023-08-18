@@ -1,7 +1,7 @@
 package kg.kuban.airport.dto;
 
 import kg.kuban.airport.enums.AirplanePartStatus;
-import kg.kuban.airport.enums.PartType;
+import kg.kuban.airport.enums.AirplanePartType;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +11,7 @@ public class PartInspectionsResponseDto {
     private AirplanePartStatus partStatus;
     private LocalDateTime dateRegister;
     private Long partId;
-    private PartType partType;
+    private AirplanePartType partType;
     private String partTitle;
     private Long airplaneId;
     private String airplaneTitle;
@@ -64,11 +64,11 @@ public class PartInspectionsResponseDto {
         return this;
     }
 
-    public PartType getPartType() {
+    public AirplanePartType getPartType() {
         return partType;
     }
 
-    public PartInspectionsResponseDto setPartType(PartType partType) {
+    public PartInspectionsResponseDto setPartType(AirplanePartType partType) {
         this.partType = partType;
         return this;
     }

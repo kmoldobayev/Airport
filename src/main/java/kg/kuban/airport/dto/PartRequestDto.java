@@ -1,12 +1,12 @@
 package kg.kuban.airport.dto;
 
 import kg.kuban.airport.enums.AirplaneType;
-import kg.kuban.airport.enums.PartType;
+import kg.kuban.airport.enums.AirplanePartType;
 
 public class PartRequestDto {
     private String title;
     private AirplaneType airplaneType;
-    private PartType partType;
+    private AirplanePartType partType;
 
     public PartRequestDto() {
     }
@@ -29,11 +29,11 @@ public class PartRequestDto {
         return this;
     }
 
-    public PartType getPartType() {
+    public AirplanePartType getPartType() {
         return partType;
     }
 
-    public PartRequestDto setPartType(PartType partType) {
+    public PartRequestDto setPartType(AirplanePartType partType) {
         this.partType = partType;
         return this;
     }

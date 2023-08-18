@@ -1,9 +1,16 @@
 package kg.kuban.airport.dto;
 
-import javax.persistence.Column;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(name = "DTO ответа Авиакомпания",
+        title = "AircompanyResponseDto",
+        description = "Описывает Data Transfer Object ответа авиакомпании в аэропорту",
+        implementation = AircompanyResponseDto.class
+)
 public class AircompanyResponseDto {
+    @Schema(description = "ID авиакомпании", required = true)
     private Long id;                     // Уникальный Идентификатор самолета числового типа
+    @Schema(description = "Наименование авиакомпании", example = "ОАО Аэрофлот", required = true)
     private String title;
 
     public AircompanyResponseDto() {
