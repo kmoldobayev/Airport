@@ -11,6 +11,8 @@ public class AirplaneResponseDto {
 
     private String boardNumber;
 
+    private Integer numberSeats;
+
     private LocalDateTime dateRegister;
 
     public Long getId() {
@@ -50,5 +52,12 @@ public class AirplaneResponseDto {
         return this;
     }
 
+    public Integer getNumberSeats() {
+        return numberSeats;
+    }
 
+    public AirplaneResponseDto setNumberSeats(Integer numberSeats) {
+        this.numberSeats = numberSeats;
+        return this;
+    }
 }

@@ -1,26 +1,25 @@
 package kg.kuban.airport.service.impl;
 
 import kg.kuban.airport.dto.AirplaneRequestDto;
-import kg.kuban.airport.entity.Aircompany;
-import kg.kuban.airport.entity.Airplane;
-import kg.kuban.airport.entity.AppUser;
+import kg.kuban.airport.entity.*;
 import kg.kuban.airport.enums.AirplaneStatus;
 import kg.kuban.airport.enums.AirplanePartStatus;
-import kg.kuban.airport.exception.AirplaneNotFoundException;
-import kg.kuban.airport.exception.EngineerException;
-import kg.kuban.airport.exception.PartInspectionNotFoundException;
-import kg.kuban.airport.exception.StatusChangeException;
+import kg.kuban.airport.exception.*;
 import kg.kuban.airport.mapper.AircompanyMapper;
 import kg.kuban.airport.repository.AircompanyRepository;
 import kg.kuban.airport.repository.AirplaneRepository;
 import kg.kuban.airport.repository.AppUserRepository;
+import kg.kuban.airport.repository.SeatRepository;
 import kg.kuban.airport.service.AirplaneService;
 import kg.kuban.airport.service.PartInspectionService;
+import kg.kuban.airport.service.PartService;
+import kg.kuban.airport.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -30,15 +29,21 @@ public class AirplaneServiceImpl implements AirplaneService {
     private final AppUserRepository appUserRepository;
     private final AircompanyRepository aircompanyRepository;
     private final AirplaneRepository airplaneRepository;
+    private final SeatRepository seatRepository;
 
     private final PartInspectionService partInspectionService;
+    private final SeatService seatService;
+    private final PartService partService;
 
     @Autowired
-    public AirplaneServiceImpl(AppUserRepository appUserRepository, AircompanyRepository aircompanyRepository, AirplaneRepository airplaneRepository, PartInspectionService partInspectionService) {
+    public AirplaneServiceImpl(AppUserRepository appUserRepository, AircompanyRepository aircompanyRepository, AirplaneRepository airplaneRepository, SeatRepository seatRepository, PartInspectionService partInspectionService, SeatService seatService, PartService partService) {
         this.appUserRepository = appUserRepository;
         this.aircompanyRepository = aircompanyRepository;
         this.airplaneRepository = airplaneRepository;
+        this.seatRepository = seatRepository;
         this.partInspectionService = partInspectionService;
+        this.seatService = seatService;
+        this.partService = partService;
     }
 
     /**
@@ -48,7 +53,10 @@ public class AirplaneServiceImpl implements AirplaneService {
      */
     @Override
     @Transactional
-    public Airplane registerNewAirplane(AirplaneRequestDto airplaneRequestDto) {
+    public Airplane registerNewAirplane(AirplaneRequestDto airplaneRequestDto)
+            throws PartNotFoundException,
+            IncompatiblePartException
+    {
 
         if (Objects.isNull(airplaneRequestDto)) {
             throw new IllegalArgumentException("Реквизиты самолета пустые! Заполните!");
@@ -72,7 +80,24 @@ public class AirplaneServiceImpl implements AirplaneService {
         airplane.setNumberSeats(airplaneRequestDto.getNumberSeats());
         airplane.setStatus(AirplaneStatus.TO_CHECKUP);
         airplane.setServicedBy(null);
-        airplane.setDateRegister(LocalDateTime.now());
+        //airplane.setDateRegister(LocalDateTime.now());
+
+        // Генерация мест в самолете в зависимости от макс количества вместимости самолета
+        List<Seat> airplaneSeats = this.seatService.generateSeats(airplaneRequestDto.getNumberSeats());
+        airplane.setAirplaneSeats(airplaneSeats);
+        for (Seat airplaneSeat : airplaneSeats) {
+            airplaneSeat.setAirplane(airplane);
+        }
+//        // Создание частей самолета по техосмотру в зависимости от марки самолета
+//        List<AirplanePart> airplaneParts = this.partService.getPartByPartsIdListAndAirplaneType(
+//                airplaneRequestDto.getPartIdList(),
+//                airplane.getMarka()
+//        );
+//        airplane.setParts(airplaneParts);
+//        for (AirplanePart part : airplaneParts) {
+//            part.getAirplanes().add(airplane);
+//        }
+
 
         this.airplaneRepository.save(airplane);
 
@@ -90,6 +115,24 @@ public class AirplaneServiceImpl implements AirplaneService {
             throw new AirplaneNotFoundException(String.format("Самолета с ID %d не найдено!", airplaneId));
         }
         return airplaneOptional.get();
+    }
+
+    @Override
+    @Transactional
+    public Boolean deleteNewAirplane(Long airplaneId)
+            throws IllegalArgumentException, AirplaneNotFoundException, AirplaneSeatNotFoundException
+    {
+        Airplane airplane = findAirplaneById(airplaneId);
+
+
+
+        this.airplaneRepository.delete(airplane);
+        //this.seatRepository.deleteSeatsByAirplane_Id(airplaneId);
+
+        List<Seat> seatsInAirplane = this.seatService.getAllSeats(airplaneId, false);
+
+        this.seatRepository.deleteAll();
+        return true;
     }
 
     /**

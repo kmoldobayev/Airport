@@ -9,5 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Long>, QuerydslPredicateExecutor<Seat> {
-    Optional<Seat> getSeatsById(Long seatId);
+    Optional<Seat> getSeatById(Long seatId);
+
+    void deleteSeatsByAirplane_Id(Long airplaneId);
 }

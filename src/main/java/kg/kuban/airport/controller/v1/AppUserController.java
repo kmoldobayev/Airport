@@ -10,11 +10,13 @@ import kg.kuban.airport.dto.AppUserResponseDto;
 import kg.kuban.airport.exception.InvalidCredentialsException;
 import kg.kuban.airport.mapper.AppRoleMapper;
 import kg.kuban.airport.mapper.AppUserMapper;
+import kg.kuban.airport.response.SuccessResponse;
 import kg.kuban.airport.service.AppRoleService;
 import kg.kuban.airport.service.AppUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +46,7 @@ public class AppUserController {
             summary = "Просмотр всех пользователей системы",
             description = "Просмотр всех пользователей системы!"
     )
-    @GetMapping("/users")
+    @GetMapping(value = "/users")
     @PreAuthorize("hasAnyRole('ADMIN', 'CHIEF')")
     public ResponseEntity<List<AppUserResponseDto>> getUsers(){
         logger.info("!!!!!!!!!!!!!!getUsers");
@@ -88,7 +90,7 @@ public class AppUserController {
     @PreAuthorize("hasAnyRole('ADMIN', 'CHIEF')")
     public ResponseEntity<AppUserResponseDto> updateUser(@RequestParam(value = "id") Long userId,
                            @RequestBody AppUserRequestDto user
-    ){
+    ) throws IllegalArgumentException, InvalidCredentialsException {
         return ResponseEntity.ok(AppUserMapper.mapAppUserEntityToDto(this.userService.updateUser(user, userId)));
     }
 
@@ -101,8 +103,13 @@ public class AppUserController {
     )
     @PostMapping(value = "/dismissUser/{id}")
     @PreAuthorize("hasAnyRole('CHIEF')")
-    public Boolean dismissUser(@PathVariable(value = "id") Long userId){
-        return userService.dismissUser(userId);
+    public ResponseEntity<?> dismissUser(@PathVariable Long userId){
+        boolean isDismissed = userService.dismissUser(userId);
+        if (isDismissed) {
+            return ResponseEntity.ok().body(new SuccessResponse(HttpStatus.OK, "Работник успешно уволен!."));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(
@@ -111,7 +118,7 @@ public class AppUserController {
     )
     @GetMapping(value = "/userRoles")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<List<AppRoleResponseDto>> getUserRoles() {
+    public ResponseEntity<?> getUserRoles() {
         logger.info("!!!!!!!!!!!!!!getUserRoles");
         // Логика получения ролей пользователей
         return ResponseEntity.ok(AppRoleMapper.mapAppRoleEntityListToDto(this.roleService.getRoles()));
@@ -121,9 +128,9 @@ public class AppUserController {
             summary = "Редактирование роли системы",
             description = "Редактирование роли системы!"
     )
-    @PutMapping(name = "/updateUserRole/{roleId}")
+    @PutMapping(value = "/updateUserRole/{roleId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<AppRoleResponseDto> updateUserRole(@RequestBody AppRoleRequestDto roleDto, @PathVariable("roleId") Long roleId) {
+    public ResponseEntity<?> updateUserRole(@RequestBody AppRoleRequestDto roleDto, @PathVariable("roleId") Long roleId) {
         // Логика обновления ролей пользователей
         return ResponseEntity.ok(AppRoleMapper.mapAppUserEntityToDto(this.roleService.updateRole(roleDto, roleId)));
     }
@@ -132,14 +139,23 @@ public class AppUserController {
             summary = "Создание новой роли системы",
             description = "Создание новой роли системы!"
     )
-    @PostMapping(name = "/createUserRole")
+    @PostMapping(value = "/createUserRole")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<AppRoleResponseDto> createUserRole(@RequestBody AppRoleRequestDto roleDto) {
+    public ResponseEntity<?> createUserRole(@RequestBody AppRoleRequestDto roleDto) {
         // Логика создания роли пользователя
         logger.info("createUserRole");
 
         return ResponseEntity.ok(AppRoleMapper.mapAppUserEntityToDto(this.roleService.createRole(roleDto)));
     }
 
+    @Operation(
+            summary = "Удаление роли системы",
+            description = "Удаление роли системы!"
+    )
+    @DeleteMapping(value = "/deleteUserRole/{roleId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<?> deleteUserRole(@PathVariable("roleId") Long roleId) {
+        return ResponseEntity.ok(AppRoleMapper.mapAppUserEntityToDto(this.roleService.deleteRole(roleId)));
+    }
 
 }

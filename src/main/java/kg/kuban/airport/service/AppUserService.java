@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 
 public interface AppUserService {
     AppUser createUser(AppUserRequestDto user) throws IllegalArgumentException, InvalidCredentialsException;
-    AppUser updateUser(AppUserRequestDto appUserDto, Long userId) throws NoSuchElementException;
+    AppUser updateUser(AppUserRequestDto appUserDto, Long userId) throws IllegalArgumentException, InvalidCredentialsException;
     AppUser getUserById(Long userId) throws NoSuchElementException;
     List<AppUser> getUsers(/*String token*/);
     Boolean dismissUser(Long userId) throws IllegalArgumentException;

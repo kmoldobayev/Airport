@@ -19,13 +19,13 @@ public interface UserFlightsService {
             throws FlightNotFoundException,
             NotRegisteredFlightException,
             AirplaneSeatNotFoundException,
-            SeatReservationException;
+            SeatBookingException;
 
     UserFlight cancelClientRegistration(Long registrationId) throws
             UserFlightNotFoundException,
             TicketCancelingException,
             AirplaneSeatNotFoundException,
-            SeatReservationException,
+            SeatBookingException,
             FlightNotFoundException;
 
     UserFlight checkClient(Long clientRegistrationId) throws UserFlightNotFoundException, StatusChangeException;

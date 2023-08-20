@@ -2,13 +2,17 @@ package kg.kuban.airport.service.impl;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
+
 import kg.kuban.airport.controller.v1.AppUserController;
 import kg.kuban.airport.dto.AppUserRequestDto;
 import kg.kuban.airport.entity.*;
 import kg.kuban.airport.exception.InvalidCredentialsException;
+
+
 import kg.kuban.airport.repository.AppRoleRepository;
 import kg.kuban.airport.repository.AppUserRepository;
 import kg.kuban.airport.repository.PositionRepository;
+
 import kg.kuban.airport.service.AppUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +71,7 @@ public class AppUserServiceImpl implements AppUserService {
             throw new InvalidCredentialsException("FullName must not be null or empty");
         }
 
-        AppUser possibleDuplicate = appUserRepository.findAll().stream()
+        AppUser possibleDuplicate = this.appUserRepository.findAll().stream()
                 .filter(x -> x.getUserLogin().equals(appUserDto.getUserLogin()))
                 .findFirst()
                 .orElse(null);
@@ -88,8 +92,6 @@ public class AppUserServiceImpl implements AppUserService {
                     this.appRoleRepository.getAppRolesByPosition(existingPosition);
             appUser.setAppRoles(userRolesEntityList);
 
-            //appUser.setAppRoles(Collections.singleton(new AppRole(1L, "ROLE_USER")));
-
 
             appUserRepository.save(appUser);
             logger.info("appUserRepository.save(appUser)");
@@ -102,10 +104,30 @@ public class AppUserServiceImpl implements AppUserService {
 
 
     @Override
-    public AppUser updateUser(AppUserRequestDto appUserDto, Long userId) throws NoSuchElementException {
-        AppUser findUser = this.getUsers().stream().
-                filter(x -> x.getId().equals(userId)).
-                findFirst().orElse(null);
+    public AppUser updateUser(AppUserRequestDto appUserDto, Long userId) throws IllegalArgumentException, InvalidCredentialsException {
+        if (Objects.isNull(appUserDto)) {
+            throw new IllegalArgumentException("Входящий appUserDto пустой!");
+        }
+
+        if (Objects.isNull(appUserDto.getUserLogin())) {
+            throw new InvalidCredentialsException("Login must not be null or empty");
+        }
+        if (Objects.nonNull(appUserDto.getUserPassword())) {
+            throw new InvalidCredentialsException("Пароль пользователя нельзя менять!!!");
+        }
+        if (Objects.isNull(appUserDto.getFullName()) || appUserDto.getFullName().isEmpty()) {
+            throw new InvalidCredentialsException("Полное имя не должен быть null или пустым!");
+        }
+        if (Objects.isNull(userId)) {
+            throw new IllegalArgumentException("ID пользователя не может быть null!");
+        }
+        if (userId < 1) {
+            throw new IllegalArgumentException("ID пользователя не может быть меньше 1!");
+        }
+
+        AppUser findUser = this.appUserRepository.findAll().stream()
+                                                .filter(x -> x.getId().equals(userId))
+                                                .findFirst().orElse(null);
 
         if (Objects.nonNull(findUser)){
 

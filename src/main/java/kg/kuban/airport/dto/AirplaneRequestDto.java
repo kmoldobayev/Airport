@@ -3,6 +3,7 @@ package kg.kuban.airport.dto;
 import kg.kuban.airport.enums.AirplaneType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AirplaneRequestDto {
 
@@ -12,6 +13,7 @@ public class AirplaneRequestDto {
 
     private AircompanyRequestDto aircompany;
     private Integer numberSeats;
+    private List<Long> partIdList;
 
     public AirplaneRequestDto() {
     }
@@ -48,6 +50,15 @@ public class AirplaneRequestDto {
 
     public AirplaneRequestDto setNumberSeats(Integer numberSeats) {
         this.numberSeats = numberSeats;
+        return this;
+    }
+
+    public List<Long> getPartIdList() {
+        return partIdList;
+    }
+
+    public AirplaneRequestDto setPartIdList(List<Long> partIdList) {
+        this.partIdList = partIdList;
         return this;
     }
 }

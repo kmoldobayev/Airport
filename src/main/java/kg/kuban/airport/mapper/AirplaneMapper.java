@@ -13,6 +13,8 @@ public class AirplaneMapper {
         AirplaneResponseDto airplaneResponseDto = new AirplaneResponseDto();
         airplaneResponseDto.setId(airplane.getId());
         airplaneResponseDto.setBoardNumber(airplane.getBoardNumber());
+        airplaneResponseDto.setMarka(airplane.getMarka());
+        airplaneResponseDto.setNumberSeats(airplane.getNumberSeats());
         airplaneResponseDto.setDateRegister(airplane.getDateRegister());
 
 

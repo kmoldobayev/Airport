@@ -2,7 +2,9 @@ package kg.kuban.airport.service.impl;
 
 import com.querydsl.core.BooleanBuilder;
 import kg.kuban.airport.controller.v1.AppUserController;
-import kg.kuban.airport.dto.*;
+import kg.kuban.airport.dto.CustomerRequestDto;
+import kg.kuban.airport.dto.CustomerReviewRequestDto;
+import kg.kuban.airport.dto.CustomerReviewResponseDto;
 import kg.kuban.airport.entity.*;
 import kg.kuban.airport.enums.UserFlightsStatus;
 import kg.kuban.airport.exception.*;
@@ -69,20 +71,20 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-//    @Override
-//    public List<UserFlight> getMyPastFlights(UserFlightsStatus status) throws IllegalArgumentException {
-//        return this.userFlightsService.getCustomersFlightRegistrationHistory(status);
-//    }
-//
-//    @Override
-//    public List<UserFlight> getAvailableFlights(Long customerId) throws IllegalArgumentException {
-//        return this.flightRepository.findAvailableFlights();
-//    }
+    @Override
+    public List<UserFlight> getMyPastFlights(UserFlightsStatus status) throws IllegalArgumentException, UserFlightNotFoundException {
+        return this.userFlightsService.getCustomersFlightRegistrationHistory(status);
+    }
 
-//    @Override
-//    public UserFlight getCurrentFlight() throws IllegalArgumentException, UserFlightNotFoundException {
-//        return this.userFlightsService.getCurrentFlight();
-//    }
+    @Override
+    public List<UserFlight> getAvailableFlights() throws IllegalArgumentException, UserFlightNotFoundException {
+        return this.flightRepository.findAvailableFlights();
+    }
+
+    @Override
+    public UserFlight getCurrentFlight() throws IllegalArgumentException, UserFlightNotFoundException {
+        return this.userFlightsService.getCurrentFlight();
+    }
 
     @Override
     public List<AppUser> getAllClients(LocalDate dateRegisterBegin,

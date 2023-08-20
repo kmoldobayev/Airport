@@ -97,4 +97,24 @@ public class AppRoleServiceImpl implements AppRoleService {
 
         return this.appRoleRepository.findAll();
     }
+
+    @Override
+    public AppRole deleteRole(Long roleId) throws NoSuchElementException {
+        AppRole findRole = this.getRoles().stream().
+                filter(x -> x.getId().equals(roleId)).
+                findFirst().orElse(null);
+
+        if (Objects.nonNull(findRole)){
+
+            if (findRole.getTitle().equals("ADMIN")) {
+                throw new NoSuchElementException("Удалять роль ADMIN нельзя!");
+            }
+
+            AppRole appRole = this.getRoleById(roleId);
+            this.appRoleRepository.delete(appRole);
+            return appRole;
+        } else {
+            throw new NoSuchElementException("Такой ID роли не существует!");
+        }
+    }
 }

@@ -11,6 +11,8 @@ import java.util.NoSuchElementException;
 public interface AppRoleService {
     AppRole createRole(AppRoleRequestDto appRoleDto) throws IllegalArgumentException;
     AppRole updateRole(AppRoleRequestDto appRoleDto, Long roleId) throws NoSuchElementException;
+    AppRole deleteRole(Long roleId) throws NoSuchElementException;
+
     AppRole getRoleById(Long roleId) throws NoSuchElementException;
     List<AppRole> getRoles();
 }

@@ -4,15 +4,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.AirplaneRequestDto;
-import kg.kuban.airport.exception.AirplaneNotFoundException;
-import kg.kuban.airport.exception.EngineerException;
-import kg.kuban.airport.exception.PartInspectionNotFoundException;
-import kg.kuban.airport.exception.StatusChangeException;
+import kg.kuban.airport.exception.*;
 import kg.kuban.airport.mapper.AirplaneMapper;
+import kg.kuban.airport.response.SuccessResponse;
 import kg.kuban.airport.service.AirplaneService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -41,9 +40,33 @@ public class AirplaneController {
     )
     @PostMapping("/register")
     @PreAuthorize("hasAnyRole('DISPATCHER')")
-    public ResponseEntity<?> registerNewAirplane(@RequestBody AirplaneRequestDto airplaneRequestDto) {
+    public ResponseEntity<?> registerNewAirplane(@RequestBody AirplaneRequestDto airplaneRequestDto)
+            throws PartNotFoundException,
+            IncompatiblePartException
+    {
         logger.info("registerNewAirplane");
         return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.registerNewAirplane(airplaneRequestDto)));
+    }
+
+    @Operation(
+            summary = "Метод удаления самолета Диспетчером",
+            description = "Удаление нового самолета выполняется работником банка с ролью Диспетчер",
+            parameters = {
+                    @Parameter(name = "airplaneId", description = "ID самолета")
+            }
+    )
+    @DeleteMapping(value = "/deleteAirplane/{id}")
+    @PreAuthorize("hasAnyRole('DISPATCHER')")
+    public ResponseEntity<?> deleteNewAirplane(@PathVariable(value = "id") Long airplaneId)
+            throws IllegalArgumentException, AirplaneNotFoundException, AirplaneSeatNotFoundException
+    {
+        boolean isDeleted = this.airplaneService.deleteNewAirplane(airplaneId);
+        if (isDeleted) {
+            return ResponseEntity.ok().body(new SuccessResponse(HttpStatus.OK, "Самолет успешно удален!."));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     @Operation(

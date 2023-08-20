@@ -5,7 +5,9 @@ import kg.kuban.airport.enums.AirplaneStatus;
 import kg.kuban.airport.enums.AirplaneType;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Schema(name = "Сущность Самолета", description = "Описывает сущность самолета в аэропорту")
@@ -42,15 +44,12 @@ public class Airplane {
     @Column(name = "status")
     private AirplaneStatus status;          // Статус самолета
 
-    @Column(name = "is_available")
-    private Boolean isAvailable;
-
-//    @OneToMany(mappedBy = "userFlights", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-//    private List<Seat> airplaneSeats;
-//    @OneToMany(mappedBy = "airplanes", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-//    private List<PartInspection> partInspections;
-//    @OneToMany(mappedBy = "airplanes")
-//    private List<Flight> flights;
+    @OneToMany(mappedBy = "airplane", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    private List<Seat> airplaneSeats;
+    @OneToMany(mappedBy = "part", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    private List<AirplanePartInspection> airplanePartInspections;
+    @OneToMany(mappedBy = "airplane")
+    private List<Flight> flights;
 
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinTable(
@@ -60,7 +59,19 @@ public class Airplane {
     )
     private List<AirplanePart> parts;
 
+    @OneToMany(mappedBy = "airplane", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+    private List<AirplanePartInspection> partInspections;
+
+    @PrePersist
+    public void init() {
+        dateRegister = LocalDateTime.now();
+    }
+
     public Airplane() {
+        this.parts = new ArrayList<>();
+        this.airplaneSeats = new ArrayList<>();
+        this.partInspections = new ArrayList<>();
+        this.flights = new ArrayList<>();
     }
 
     public Long getId() {
@@ -110,15 +121,6 @@ public class Airplane {
         return this;
     }
 
-    public Boolean getAvailable() {
-        return isAvailable;
-    }
-
-    public Airplane setAvailable(Boolean available) {
-        isAvailable = available;
-        return this;
-    }
-
     public Aircompany getAirCompany() {
         return airCompany;
     }
@@ -137,12 +139,12 @@ public class Airplane {
         return this;
     }
 
-    public Boolean getIsAvailable() {
-        return isAvailable;
+    public List<AirplanePart> getParts() {
+        return parts;
     }
 
-    public Airplane setIsAvailable(Boolean isAvailable) {
-        this.isAvailable = isAvailable;
+    public Airplane setParts(List<AirplanePart> parts) {
+        this.parts = parts;
         return this;
     }
 
@@ -155,30 +157,39 @@ public class Airplane {
         return this;
     }
 
-//    public List<Seat> getAirplaneSeats() {
-//        return airplaneSeats;
-//    }
-//
-//    public Airplane setAirplaneSeats(List<Seat> airplaneSeats) {
-//        this.airplaneSeats = airplaneSeats;
-//        return this;
-//    }
-//
-//    public List<PartInspection> getPartInspections() {
-//        return partInspections;
-//    }
-//
-//    public Airplane setPartInspections(List<PartInspection> partInspections) {
-//        this.partInspections = partInspections;
-//        return this;
-//    }
-//
-//    public List<Flight> getFlights() {
-//        return flights;
-//    }
-//
-//    public Airplane setFlights(List<Flight> flights) {
-//        this.flights = flights;
-//        return this;
-//    }
+    public List<Seat> getAirplaneSeats() {
+        return airplaneSeats;
+    }
+
+    public Airplane setAirplaneSeats(List<Seat> airplaneSeats) {
+        this.airplaneSeats = airplaneSeats;
+        return this;
+    }
+
+    public List<AirplanePartInspection> getAirplanePartInspections() {
+        return airplanePartInspections;
+    }
+
+    public Airplane setAirplanePartInspections(List<AirplanePartInspection> airplanePartInspections) {
+        this.airplanePartInspections = airplanePartInspections;
+        return this;
+    }
+
+    public List<Flight> getFlights() {
+        return flights;
+    }
+
+    public Airplane setFlights(List<Flight> flights) {
+        this.flights = flights;
+        return this;
+    }
+
+    public List<AirplanePartInspection> getPartInspections() {
+        return partInspections;
+    }
+
+    public Airplane setPartInspections(List<AirplanePartInspection> partInspections) {
+        this.partInspections = partInspections;
+        return this;
+    }
 }
