@@ -58,9 +58,8 @@ public class AirplaneServiceImpl implements AirplaneService {
     @Override
     @Transactional
     public Airplane registerNewAirplane(AirplaneRequestDto airplaneRequestDto)
-            throws PartNotFoundException,
-            IncompatiblePartException
-    {
+            throws AirplanePartNotFoundException,
+            IncompatiblePartException {
 
         if (Objects.isNull(airplaneRequestDto)) {
             throw new IllegalArgumentException("Реквизиты самолета пустые! Заполните!");
@@ -92,16 +91,17 @@ public class AirplaneServiceImpl implements AirplaneService {
         for (Seat airplaneSeat : airplaneSeats) {
             airplaneSeat.setAirplane(airplane);
         }
-//        // Создание частей самолета по техосмотру в зависимости от марки самолета
-//        List<AirplanePart> airplaneParts = this.partService.getPartByPartsIdListAndAirplaneType(
-//                airplaneRequestDto.getPartIdList(),
-//                airplane.getMarka()
-//        );
-//        airplane.setParts(airplaneParts);
-//        for (AirplanePart part : airplaneParts) {
-//            part.getAirplanes().add(airplane);
-//        }
-
+        // Создание частей самолета по техосмотру в зависимости от марки самолета
+        List<AirplanePart> airplaneParts = this.partService.getPartByPartsIdListAndAirplaneType(
+                airplaneRequestDto.getPartIdList(),
+                airplane.getMarka()
+        );
+        if (airplaneParts.size() > 0) {
+            airplane.setParts(airplaneParts);
+            for (AirplanePart part : airplaneParts) {
+                part.getAirplanes().add(airplane);
+            }
+        }
 
         this.airplaneRepository.save(airplane);
 
@@ -155,7 +155,7 @@ public class AirplaneServiceImpl implements AirplaneService {
                 StatusChangeException,
                 WrongEngineerException,
                 AirplaneIsNotOnServiceException,
-                PartNotFoundException,
+            AirplanePartNotFoundException,
                 IllegalAirplaneException,
                 IncompatiblePartException {
         if (partCheckupsRequestDtoList.isEmpty()) {

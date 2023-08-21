@@ -15,7 +15,7 @@ import java.util.List;
 
 public interface AirplaneService{
     Airplane registerNewAirplane(AirplaneRequestDto airplaneRequestDto)
-            throws PartNotFoundException, IncompatiblePartException;
+            throws AirplanePartNotFoundException, IncompatiblePartException;
     Airplane assignAirplaneCheckup(Long airplaneId, Long userId)
             throws AirplaneNotFoundException, StatusChangeException, EngineerIsBusyException;
 
@@ -27,7 +27,7 @@ public interface AirplaneService{
             StatusChangeException,
             WrongEngineerException,
             AirplaneIsNotOnServiceException,
-            PartNotFoundException,
+            AirplanePartNotFoundException,
             IllegalAirplaneException,
             IncompatiblePartException;
 

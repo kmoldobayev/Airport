@@ -1,9 +1,7 @@
 package kg.kuban.airport.service.impl;
 
 import kg.kuban.airport.dto.AirplanePartCheckupRequestDto;
-import kg.kuban.airport.dto.AirplanePartCheckupResponseDto;
 import kg.kuban.airport.dto.AirplanePartStatusResponseDto;
-import kg.kuban.airport.dto.PartStatesResponseDto;
 import kg.kuban.airport.entity.Airplane;
 import kg.kuban.airport.entity.AirplanePart;
 import kg.kuban.airport.entity.AirplanePartCheckup;
@@ -49,7 +47,7 @@ public class PartCheckupServiceImpl implements PartCheckupService {
             Airplane airplane,
             List<AirplanePartCheckupRequestDto> requestDtoList
     )
-            throws  PartNotFoundException,
+            throws AirplanePartNotFoundException,
                     IncompatiblePartException,
                     AirplaneIsNotOnServiceException,
                     IllegalAirplaneException {

@@ -45,7 +45,7 @@ public class AirplaneController {
     @PostMapping("/register")
     @PreAuthorize("hasAnyRole('DISPATCHER')")
     public ResponseEntity<?> registerNewAirplane(@RequestBody AirplaneRequestDto airplaneRequestDto)
-            throws PartNotFoundException,
+            throws AirplanePartNotFoundException,
             IncompatiblePartException
     {
         logger.info("registerNewAirplane");
@@ -107,7 +107,7 @@ public class AirplaneController {
             StatusChangeException,
             WrongEngineerException,
             AirplaneIsNotOnServiceException,
-            PartNotFoundException,
+            AirplanePartNotFoundException,
             IllegalAirplaneException,
             IncompatiblePartException
     {
