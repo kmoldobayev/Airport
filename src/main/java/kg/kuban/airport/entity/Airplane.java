@@ -5,7 +5,6 @@ import kg.kuban.airport.enums.AirplaneStatus;
 import kg.kuban.airport.enums.AirplaneType;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +46,7 @@ public class Airplane {
     @OneToMany(mappedBy = "airplane", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     private List<Seat> airplaneSeats;
     @OneToMany(mappedBy = "part", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-    private List<AirplanePartInspection> airplanePartInspections;
+    private List<AirplanePartCheckup> airplanePartInspections;
     @OneToMany(mappedBy = "airplane")
     private List<Flight> flights;
 
@@ -60,7 +59,7 @@ public class Airplane {
     private List<AirplanePart> parts;
 
     @OneToMany(mappedBy = "airplane", cascade = { CascadeType.MERGE, CascadeType.PERSIST })
-    private List<AirplanePartInspection> partInspections;
+    private List<AirplanePartCheckup> partInspections;
 
     @PrePersist
     public void init() {
@@ -166,11 +165,11 @@ public class Airplane {
         return this;
     }
 
-    public List<AirplanePartInspection> getAirplanePartInspections() {
+    public List<AirplanePartCheckup> getAirplanePartInspections() {
         return airplanePartInspections;
     }
 
-    public Airplane setAirplanePartInspections(List<AirplanePartInspection> airplanePartInspections) {
+    public Airplane setAirplanePartInspections(List<AirplanePartCheckup> airplanePartInspections) {
         this.airplanePartInspections = airplanePartInspections;
         return this;
     }
@@ -184,11 +183,11 @@ public class Airplane {
         return this;
     }
 
-    public List<AirplanePartInspection> getPartInspections() {
+    public List<AirplanePartCheckup> getPartInspections() {
         return partInspections;
     }
 
-    public Airplane setPartInspections(List<AirplanePartInspection> partInspections) {
+    public Airplane setPartInspections(List<AirplanePartCheckup> partInspections) {
         this.partInspections = partInspections;
         return this;
     }

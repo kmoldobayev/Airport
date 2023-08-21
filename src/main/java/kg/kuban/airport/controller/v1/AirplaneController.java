@@ -4,8 +4,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.AirplaneRequestDto;
+import kg.kuban.airport.dto.AirplanePartCheckupRequestDto;
 import kg.kuban.airport.exception.*;
 import kg.kuban.airport.mapper.AirplaneMapper;
+import kg.kuban.airport.mapper.PartCheckupMapper;
 import kg.kuban.airport.response.SuccessResponse;
 import kg.kuban.airport.service.AirplaneService;
 import org.slf4j.Logger;
@@ -15,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/airplanes")
@@ -76,21 +80,37 @@ public class AirplaneController {
                     @Parameter(name = "AirplaneRequestDto", description = "DTO самолета")
             }
     )
-    @PostMapping("/assignInspection{id}")
+    @PostMapping("/assignCheckup/{id}")
     @PreAuthorize(value = "hasAnyRole('CHIEF_ENGINEER')")
-    public ResponseEntity<?> assignAirplaneToInspection( @PathVariable Long airplaneId, @RequestParam Long userId) throws AirplaneNotFoundException, StatusChangeException, EngineerException {
-        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.assignInspection(airplaneId, userId)));
+    public ResponseEntity<?> assignAirplaneToInspection( @PathVariable Long airplaneId, @RequestParam Long userId)
+            throws AirplaneNotFoundException, StatusChangeException, EngineerIsBusyException {
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.assignAirplaneCheckup(airplaneId, userId)));
     }
 
-    @PutMapping(value = "/confirmServiceability{id}")
+    @PutMapping(value = "/confirmServiceability/{id}")
     @PreAuthorize(value = "hasRole('CHIEF_ENGINEER')")
-    public ResponseEntity<?> confirmAircraftServiceability(
-            @PathVariable Long airplaneId
-    )
+    public ResponseEntity<?> confirmAircraftServiceability(@PathVariable Long airplaneId)
             throws AirplaneNotFoundException,
-            PartInspectionNotFoundException,
+            PartCheckupNotFoundException,
             StatusChangeException
     {
         return ResponseEntity.ok(this.airplaneService.confirmAirplaneServiceAbility(airplaneId));
+    }
+
+    @PreAuthorize(value = "hasRole('ENGINEER')")
+    @PostMapping(value = "/checkup/{id}")
+    public ResponseEntity<?> checkupAirplane(
+            @PathVariable Long airplaneId,
+            @RequestBody List<AirplanePartCheckupRequestDto> partInspectionsRequestDtoList
+    )
+            throws AirplaneNotFoundException,
+            StatusChangeException,
+            WrongEngineerException,
+            AirplaneIsNotOnServiceException,
+            PartNotFoundException,
+            IllegalAirplaneException,
+            IncompatiblePartException
+    {
+        return ResponseEntity.ok(PartCheckupMapper.mapToPartCheckupResponseDtoList(this.airplaneService.checkupAirplane(airplaneId, partInspectionsRequestDtoList)));
     }
 }

@@ -5,9 +5,9 @@ import kg.kuban.airport.enums.AirplanePartType;
 
 import java.time.LocalDateTime;
 
-public class PartInspectionsResponseDto {
+public class AirplanePartCheckupResponseDto {
     private Long id;
-    private Long inspectionCode;
+    private Long checkupCode;
     private AirplanePartStatus partStatus;
     private LocalDateTime dateRegister;
     private Long partId;
@@ -16,24 +16,33 @@ public class PartInspectionsResponseDto {
     private Long airplaneId;
     private String airplaneTitle;
 
-    public PartInspectionsResponseDto() {
+    public AirplanePartCheckupResponseDto() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public PartInspectionsResponseDto setId(Long id) {
+    public AirplanePartCheckupResponseDto setId(Long id) {
         this.id = id;
         return this;
     }
 
-    public Long getInspectionCode() {
-        return inspectionCode;
+    public Long getCheckupCode() {
+        return checkupCode;
     }
 
-    public PartInspectionsResponseDto setInspectionCode(Long inspectionCode) {
-        this.inspectionCode = inspectionCode;
+    public AirplanePartCheckupResponseDto setCheckupCode(Long checkupCode) {
+        this.checkupCode = checkupCode;
+        return this;
+    }
+
+    public AirplanePartStatus getPartStatus() {
+        return partStatus;
+    }
+
+    public AirplanePartCheckupResponseDto setPartStatus(AirplanePartStatus partStatus) {
+        this.partStatus = partStatus;
         return this;
     }
 
@@ -41,7 +50,7 @@ public class PartInspectionsResponseDto {
         return partStatus;
     }
 
-    public PartInspectionsResponseDto setPartState(AirplanePartStatus partStatus) {
+    public AirplanePartCheckupResponseDto setPartState(AirplanePartStatus partStatus) {
         this.partStatus = partStatus;
         return this;
     }
@@ -50,7 +59,7 @@ public class PartInspectionsResponseDto {
         return dateRegister;
     }
 
-    public PartInspectionsResponseDto setDateRegister(LocalDateTime dateRegister) {
+    public AirplanePartCheckupResponseDto setDateRegister(LocalDateTime dateRegister) {
         this.dateRegister = dateRegister;
         return this;
     }
@@ -59,7 +68,7 @@ public class PartInspectionsResponseDto {
         return partId;
     }
 
-    public PartInspectionsResponseDto setPartId(Long partId) {
+    public AirplanePartCheckupResponseDto setPartId(Long partId) {
         this.partId = partId;
         return this;
     }
@@ -68,7 +77,7 @@ public class PartInspectionsResponseDto {
         return partType;
     }
 
-    public PartInspectionsResponseDto setPartType(AirplanePartType partType) {
+    public AirplanePartCheckupResponseDto setPartType(AirplanePartType partType) {
         this.partType = partType;
         return this;
     }
@@ -77,7 +86,7 @@ public class PartInspectionsResponseDto {
         return partTitle;
     }
 
-    public PartInspectionsResponseDto setPartTitle(String partTitle) {
+    public AirplanePartCheckupResponseDto setPartTitle(String partTitle) {
         this.partTitle = partTitle;
         return this;
     }
@@ -86,7 +95,7 @@ public class PartInspectionsResponseDto {
         return airplaneId;
     }
 
-    public PartInspectionsResponseDto setAirplaneId(Long airplaneId) {
+    public AirplanePartCheckupResponseDto setAirplaneId(Long airplaneId) {
         this.airplaneId = airplaneId;
         return this;
     }
@@ -95,7 +104,7 @@ public class PartInspectionsResponseDto {
         return airplaneTitle;
     }
 
-    public PartInspectionsResponseDto setAirplaneTitle(String airplaneTitle) {
+    public AirplanePartCheckupResponseDto setAirplaneTitle(String airplaneTitle) {
         this.airplaneTitle = airplaneTitle;
         return this;
     }

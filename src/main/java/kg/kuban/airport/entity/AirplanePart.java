@@ -34,7 +34,7 @@ public class AirplanePart {
     @ManyToMany(mappedBy = "parts")
     private List<Airplane> airplanes;
     @OneToMany(mappedBy = "part")
-    private List<AirplanePartInspection> partInspections;
+    private List<AirplanePartCheckup> partInspections;
 
     public AirplanePart() {
     }
@@ -93,11 +93,11 @@ public class AirplanePart {
         return this;
     }
 
-    public List<AirplanePartInspection> getPartInspections() {
+    public List<AirplanePartCheckup> getPartInspections() {
         return partInspections;
     }
 
-    public AirplanePart setPartInspections(List<AirplanePartInspection> partInspections) {
+    public AirplanePart setPartInspections(List<AirplanePartCheckup> partInspections) {
         this.partInspections = partInspections;
         return this;
     }

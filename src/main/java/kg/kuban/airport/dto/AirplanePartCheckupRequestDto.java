@@ -2,20 +2,20 @@ package kg.kuban.airport.dto;
 
 import kg.kuban.airport.enums.AirplanePartStatus;
 
-public class PartInspectionsRequestDto {
+public class AirplanePartCheckupRequestDto {
 
     private AirplanePartStatus partStatus;
     private Long partId;
     private Long airplaneId;
 
-    public PartInspectionsRequestDto() {
+    public AirplanePartCheckupRequestDto() {
     }
 
     public AirplanePartStatus getPartState() {
         return partStatus;
     }
 
-    public PartInspectionsRequestDto setPartState(AirplanePartStatus partStatus) {
+    public AirplanePartCheckupRequestDto setPartState(AirplanePartStatus partStatus) {
         this.partStatus = partStatus;
         return this;
     }
@@ -24,7 +24,7 @@ public class PartInspectionsRequestDto {
         return partId;
     }
 
-    public PartInspectionsRequestDto setPartId(Long partId) {
+    public AirplanePartCheckupRequestDto setPartId(Long partId) {
         this.partId = partId;
         return this;
     }
@@ -33,7 +33,7 @@ public class PartInspectionsRequestDto {
         return airplaneId;
     }
 
-    public PartInspectionsRequestDto setAirplaneId(Long airplaneId) {
+    public AirplanePartCheckupRequestDto setAirplaneId(Long airplaneId) {
         this.airplaneId = airplaneId;
         return this;
     }

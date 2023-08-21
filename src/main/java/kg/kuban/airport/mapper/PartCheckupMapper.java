@@ -2,19 +2,19 @@ package kg.kuban.airport.mapper;
 
 import kg.kuban.airport.dto.AirplanePartCheckupRequestDto;
 import kg.kuban.airport.dto.AirplanePartCheckupResponseDto;
-import kg.kuban.airport.dto.PartStatesResponseDto;
+import kg.kuban.airport.dto.AirplanePartStatusResponseDto;
 import kg.kuban.airport.entity.AirplanePartCheckup;
 import kg.kuban.airport.enums.AirplanePartStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class InspectionMapper {
-    public static AirplanePartCheckup mapPartInspectionsRequestDtoToEntity(AirplanePartCheckupRequestDto source) {
+public class PartCheckupMapper {
+    public static AirplanePartCheckup mapAirplanePartCheckupRequestDtoToEntity(AirplanePartCheckupRequestDto source) {
         return new AirplanePartCheckup().setStatus(source.getPartState());
     }
 
-    public static AirplanePartCheckupResponseDto mapToPartInspectionsResponseDto(AirplanePartCheckup source) {
+    public static AirplanePartCheckupResponseDto mapToPartCheckupResponseDto(AirplanePartCheckup source) {
         return new AirplanePartCheckupResponseDto()
                 .setId(source.getId())
                 .setPartId(source.getPart().getId())
@@ -27,16 +27,16 @@ public class InspectionMapper {
                 .setDateRegister(source.getDateRegister());
     }
 
-    public static List<AirplanePartCheckupResponseDto> mapToPartInspectionsResponseDtoList(
+    public static List<AirplanePartCheckupResponseDto> mapToPartCheckupResponseDtoList(
             List<AirplanePartCheckup> sourceList
     ) {
         return sourceList
                 .stream()
-                .map(InspectionMapper::mapToPartInspectionsResponseDto)
+                .map(PartCheckupMapper::mapToPartCheckupResponseDto)
                 .collect(Collectors.toList());
     }
 
-    public static PartStatesResponseDto mapToPartStatesResponseDto(List<AirplanePartStatus> partStates) {
-        return new PartStatesResponseDto().setPartStates(partStates);
+    public static AirplanePartStatusResponseDto mapToPartStatesResponseDto(List<AirplanePartStatus> partStatusList) {
+        return new AirplanePartStatusResponseDto().setPartStatusList(partStatusList);
     }
 }

@@ -1,16 +1,17 @@
 package kg.kuban.airport.service.impl;
 
-import kg.kuban.airport.dto.PartInspectionsRequestDto;
-import kg.kuban.airport.dto.PartInspectionsResponseDto;
+import kg.kuban.airport.dto.AirplanePartCheckupRequestDto;
+import kg.kuban.airport.dto.AirplanePartCheckupResponseDto;
+import kg.kuban.airport.dto.AirplanePartStatusResponseDto;
 import kg.kuban.airport.dto.PartStatesResponseDto;
 import kg.kuban.airport.entity.Airplane;
 import kg.kuban.airport.entity.AirplanePart;
-import kg.kuban.airport.entity.AirplanePartInspection;
+import kg.kuban.airport.entity.AirplanePartCheckup;
 import kg.kuban.airport.enums.AirplanePartStatus;
 import kg.kuban.airport.exception.*;
-import kg.kuban.airport.mapper.InspectionMapper;
-import kg.kuban.airport.repository.AirplanePartInspectionRepository;
-import kg.kuban.airport.service.PartInspectionService;
+import kg.kuban.airport.mapper.PartCheckupMapper;
+import kg.kuban.airport.repository.AirplanePartCheckupRepository;
+import kg.kuban.airport.service.PartCheckupService;
 import kg.kuban.airport.service.PartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,35 +22,32 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class PartInspectionServiceImpl implements PartInspectionService {
-    private static final Long MIN_INSPECTION_CODE_VALUE = 1L;
+public class PartCheckupServiceImpl implements PartCheckupService {
+    private static final Long MIN_Checkup_CODE_VALUE = 1L;
 
-    private final AirplanePartInspectionRepository partInspectionRepository;
+    private final AirplanePartCheckupRepository airplanePartCheckupRepository;
     private final PartService partsService;
 
-    private Long currentMaxInspectionCode;
+    private Long currentMaxCheckupCode;
 
     @Autowired
-    public PartInspectionServiceImpl(
-            AirplanePartInspectionRepository partInspectionRepository,
-            PartService partService
-    ) {
-        this.partInspectionRepository = partInspectionRepository;
-        this.partsService = partService;
+    public PartCheckupServiceImpl(AirplanePartCheckupRepository airplanePartCheckupRepository, PartService partsService) {
+        this.airplanePartCheckupRepository = airplanePartCheckupRepository;
+        this.partsService = partsService;
     }
 
     @PostConstruct
     private void init() {
-        this.currentMaxInspectionCode = this.partInspectionRepository.getCurrentMaxInspectionCode();
-        if(Objects.isNull(this.currentMaxInspectionCode)) {
-            this.currentMaxInspectionCode = MIN_INSPECTION_CODE_VALUE;
+        this.currentMaxCheckupCode = this.airplanePartCheckupRepository.getCurrentMaxCheckupCode();
+        if(Objects.isNull(this.currentMaxCheckupCode)) {
+            this.currentMaxCheckupCode = MIN_Checkup_CODE_VALUE;
         }
     }
 
     @Override
-    public List<PartInspectionsResponseDto> registerPartInspections(
+    public List<AirplanePartCheckup> registerPartCheckups(
             Airplane airplane,
-            List<PartInspectionsRequestDto> requestDtoList
+            List<AirplanePartCheckupRequestDto> requestDtoList
     )
             throws  PartNotFoundException,
                     IncompatiblePartException,
@@ -59,18 +57,18 @@ public class PartInspectionServiceImpl implements PartInspectionService {
             throw new IllegalArgumentException("Список создаваемых осмотров деталей не может быть null!");
         }
 
-        List<AirplanePartInspection> partInspectionsEntities = new ArrayList<>();
+        List<AirplanePartCheckup> partCheckupsEntities = new ArrayList<>();
         List<Long> partIdList = new ArrayList<>();
         Long airplaneId = requestDtoList.get(0).getAirplaneId();
 
-        for (PartInspectionsRequestDto requestDto : requestDtoList) {
+        for (AirplanePartCheckupRequestDto requestDto : requestDtoList) {
             Long requestDtoAirplaneId = requestDto.getAirplaneId();
             if (!airplaneId.equals(requestDtoAirplaneId)) {
                 throw new IllegalAirplaneException(
                         "Недопустимый ID самолета! ID самолета для всех деталей техосмотра должен быть одинаковым"
                 );
             }
-            partInspectionsEntities.add(InspectionMapper.mapPartInspectionsRequestDtoToEntity(requestDto));
+            partCheckupsEntities.add(PartCheckupMapper.mapAirplanePartCheckupRequestDtoToEntity(requestDto));
             partIdList.add(requestDto.getPartId());
         }
         if (!airplane.getId().equals(airplaneId)) {
@@ -105,79 +103,79 @@ public class PartInspectionServiceImpl implements PartInspectionService {
 //                );
 //            }
 //
-//            partInspectionsEntities.get(i)
+//            partCheckupsEntities.get(i)
 //                    .setPart(part)
 //                    .setDateRegister(localDateTimeNow)
 //                    .setAirplane(airplane)
 //                    .setAppUser(airplane.getServicedBy());
 //        }
 
-        this.currentMaxInspectionCode += 1L;
-        for (AirplanePartInspection inspection : partInspectionsEntities) {
-            inspection.setInspectionCode(this.currentMaxInspectionCode);
+        this.currentMaxCheckupCode += 1L;
+        for (AirplanePartCheckup airplanePartCheckup : partCheckupsEntities) {
+            airplanePartCheckup.setCheckupCode(this.currentMaxCheckupCode);
         }
 
-        partInspectionsEntities = this.partInspectionRepository.saveAll(partInspectionsEntities);
-        return InspectionMapper.mapToPartInspectionsResponseDtoList(partInspectionsEntities);
+        this.airplanePartCheckupRepository.saveAll(partCheckupsEntities);
+        return partCheckupsEntities;
     }
 
     @Override
-    public List<PartInspectionsResponseDto> getPartInspectionsHistory(Long airplaneId) throws PartInspectionNotFoundException
+    public List<AirplanePartCheckup> getPartCheckupsHistory(Long airplaneId) throws PartCheckupNotFoundException
     {
 //        if(Objects.isNull(airplaneId)) {
 //            throw new IllegalArgumentException("ID самолета не может быть null!");
 //        }
 //
 //        BooleanBuilder booleanBuilder = new BooleanBuilder();
-//        QPartInspection root = QPartInspection.partInspection;
+//        QPartCheckup root = QPartCheckup.partCheckup;
 //
 //        booleanBuilder.and(root.airplane.id.eq(airplaneId));
 //
-//        Iterable<PartInspection> partInspectionsIterable =
-//                this.partInspectionRepository.findAll(booleanBuilder.getValue());
-//        List<PartInspectionsResponseDto> partInspectionsResponseDtoList =
+//        Iterable<PartCheckup> partCheckupsIterable =
+//                this.partCheckupRepository.findAll(booleanBuilder.getValue());
+//        List<PartCheckupsResponseDto> partCheckupsResponseDtoList =
 //                StreamSupport
-//                        .stream(partInspectionsIterable.spliterator(), false)
-//                        .map(InspectionMapper::mapToPartInspectionsResponseDto)
+//                        .stream(partCheckupsIterable.spliterator(), false)
+//                        .map(CheckupMapper::mapToPartCheckupsResponseDto)
 //                        .collect(Collectors.toList());
 //
-//        if(partInspectionsResponseDtoList.isEmpty()) {
-//            throw new PartInspectionsNotFoundException(
+//        if(partCheckupsResponseDtoList.isEmpty()) {
+//            throw new PartCheckupsNotFoundException(
 //                    String.format(
 //                            "По ID[%d] самолета технических осмотров не найдено!",
 //                            airplaneId
 //                    )
 //            );
 //        }
-//        return partInspectionsResponseDtoList;
+//        return partCheckupsResponseDtoList;
         return null;
     }
 
     @Override
-    public List<AirplanePartInspection> getLastAirplaneInspections(Long airplaneId) throws PartInspectionNotFoundException {
+    public List<AirplanePartCheckup> getLastAirplaneCheckups(Long airplaneId) throws PartCheckupNotFoundException {
         if (Objects.isNull(airplaneId)) {
             throw new IllegalArgumentException("ID самолета не может быть null!");
         }
 
-        List<AirplanePartInspection> lastInspection =
-                this.partInspectionRepository.getLastAirplaneInspectionByAirplaneId(airplaneId);
-        if(lastInspection.isEmpty()) {
-            throw new PartInspectionNotFoundException(
+        List<AirplanePartCheckup> lastCheckup =
+                this.airplanePartCheckupRepository.getLastAirplaneCheckupByAirplaneId(airplaneId);
+        if(lastCheckup.isEmpty()) {
+            throw new PartCheckupNotFoundException(
                     String.format("Для самолета с ID[%d] не найдено ни одного техосмотра!", airplaneId)
             );
         }
-        return lastInspection;
+        return lastCheckup;
     }
 
     @Override
-    public AirplanePartStatus getLastAirplaneInspectionResult(Long airplaneId)
-            throws PartInspectionNotFoundException
+    public AirplanePartStatus getLastAirplaneCheckupResult(Long airplaneId)
+            throws PartCheckupNotFoundException
     {
-        List<AirplanePartInspection> partInspectionsEntityList =
-                this.getLastAirplaneInspections(airplaneId);
+        List<AirplanePartCheckup> partCheckupsEntityList =
+                this.getLastAirplaneCheckups(airplaneId);
 
-        for (AirplanePartInspection partInspection : partInspectionsEntityList) {
-            if(partInspection.getStatus().equals(AirplanePartStatus.MAINTENANCE)) {
+        for (AirplanePartCheckup partCheckup : partCheckupsEntityList) {
+            if(partCheckup.getStatus().equals(AirplanePartStatus.MAINTENANCE)) {
                 return AirplanePartStatus.MAINTENANCE;
             }
         }
@@ -185,7 +183,9 @@ public class PartInspectionServiceImpl implements PartInspectionService {
     }
 
     @Override
-    public PartStatesResponseDto getAllPartStates() {
-        return InspectionMapper.mapToPartStatesResponseDto(List.of(AirplanePartStatus.values()));
+    public AirplanePartStatusResponseDto getAllPartStates() {
+        return PartCheckupMapper.mapToPartStatesResponseDto(List.of(AirplanePartStatus.values()));
     }
+
+
 }

@@ -1,9 +1,12 @@
 package kg.kuban.airport.service.impl;
 
 import kg.kuban.airport.dto.AirplaneRequestDto;
+import kg.kuban.airport.dto.AirplaneResponseDto;
+import kg.kuban.airport.dto.AirplanePartCheckupRequestDto;
 import kg.kuban.airport.entity.*;
 import kg.kuban.airport.enums.AirplaneStatus;
 import kg.kuban.airport.enums.AirplanePartStatus;
+import kg.kuban.airport.enums.AirplaneType;
 import kg.kuban.airport.exception.*;
 import kg.kuban.airport.mapper.AircompanyMapper;
 import kg.kuban.airport.repository.AircompanyRepository;
@@ -11,10 +14,11 @@ import kg.kuban.airport.repository.AirplaneRepository;
 import kg.kuban.airport.repository.AppUserRepository;
 import kg.kuban.airport.repository.SeatRepository;
 import kg.kuban.airport.service.AirplaneService;
-import kg.kuban.airport.service.PartInspectionService;
+import kg.kuban.airport.service.PartCheckupService;
 import kg.kuban.airport.service.PartService;
 import kg.kuban.airport.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,17 +35,17 @@ public class AirplaneServiceImpl implements AirplaneService {
     private final AirplaneRepository airplaneRepository;
     private final SeatRepository seatRepository;
 
-    private final PartInspectionService partInspectionService;
+    private final PartCheckupService partCheckupService;
     private final SeatService seatService;
     private final PartService partService;
 
     @Autowired
-    public AirplaneServiceImpl(AppUserRepository appUserRepository, AircompanyRepository aircompanyRepository, AirplaneRepository airplaneRepository, SeatRepository seatRepository, PartInspectionService partInspectionService, SeatService seatService, PartService partService) {
+    public AirplaneServiceImpl(AppUserRepository appUserRepository, AircompanyRepository aircompanyRepository, AirplaneRepository airplaneRepository, SeatRepository seatRepository, PartCheckupService partCheckupService, SeatService seatService, PartService partService) {
         this.appUserRepository = appUserRepository;
         this.aircompanyRepository = aircompanyRepository;
         this.airplaneRepository = airplaneRepository;
         this.seatRepository = seatRepository;
-        this.partInspectionService = partInspectionService;
+        this.partCheckupService = partCheckupService;
         this.seatService = seatService;
         this.partService = partService;
     }
@@ -49,7 +53,7 @@ public class AirplaneServiceImpl implements AirplaneService {
     /**
      * Регистрация нового самолета (задача Диспетчера)
      * @param airplaneRequestDto
-     * @return
+     * @return Airplane
      */
     @Override
     @Transactional
@@ -104,6 +108,88 @@ public class AirplaneServiceImpl implements AirplaneService {
         return airplane;
     }
 
+    /**
+     * Выдача на осмотр инженеру (задача Главного инженера )
+     * Главный инженер записывает в поле user_id ссылку на инженера
+     * @param airplaneId
+     * @param userId
+     * @return
+     */
+
+    @Override
+    @Transactional
+    public Airplane assignAirplaneCheckup(Long airplaneId, Long userId)
+            throws AirplaneNotFoundException, StatusChangeException, EngineerIsBusyException
+    {
+        Airplane airplane = this.findAirplaneById(airplaneId);
+        if (!airplane.getStatus().equals(AirplaneStatus.ON_CHECKUP)) {
+            throw new StatusChangeException(
+                    "Для назначения техосмотра самолет должен быть передан на техосмотр диспетчером!"
+            );
+        }
+
+        AppUser engineer = this.appUserRepository.getReferenceById(userId);
+        if(Objects.nonNull(engineer.getServicedAirplane())) {
+            throw new EngineerIsBusyException(
+                    String.format(
+                            "Невозможно назначить инженера с ID[%d] на техосмотр." +
+                                    " В данный момент инженер обслуживает другой самолет!",
+                            userId
+                    )
+            );
+        }
+
+        engineer.setServicedAirplane(airplane);
+        airplane.setServicedBy(engineer);
+        airplane.setStatus(AirplaneStatus.ON_CHECKUP);
+
+        this.airplaneRepository.save(airplane);
+        return airplane;
+    }
+
+    @Override
+    public List<AirplanePartCheckup> checkupAirplane(Long airplaneId,
+                                                     List<AirplanePartCheckupRequestDto> partCheckupsRequestDtoList)
+            throws
+                AirplaneNotFoundException,
+                StatusChangeException,
+                WrongEngineerException,
+                AirplaneIsNotOnServiceException,
+                PartNotFoundException,
+                IllegalAirplaneException,
+                IncompatiblePartException {
+        if (partCheckupsRequestDtoList.isEmpty()) {
+            throw new IllegalArgumentException("Список осмотров деталей не может быть null!");
+        }
+
+        Airplane airplane = this.findAirplaneById(airplaneId);
+        if (!airplane.getStatus().equals(AirplaneStatus.TO_CHECKUP) && !airplane.getStatus().equals(AirplaneStatus.ON_REPAIRS)) {
+            throw new StatusChangeException(
+                    "Для проведения техосмотра самолета он должен быть назначен главным инжененром!"
+            );
+        }
+
+        AppUser engineer = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!engineer.getId().equals(airplane.getServicedBy().getId())) {
+            throw new WrongEngineerException(
+                    String.format(
+                            "Ошибка! Технический осмотр самолета с ID[%d] был назначен другому инженеру!",
+                            airplane.getId()
+                    )
+            );
+        }
+
+        List<AirplanePartCheckup> airplanePartCheckupList =
+                this.partCheckupService.registerPartCheckups(airplane, partCheckupsRequestDtoList);
+
+        airplane.getServicedBy().setServicedAirplane(null);
+        airplane.setServicedBy(null);
+        airplane.setStatus(AirplaneStatus.INSPECTED);
+
+        this.airplaneRepository.save(airplane);
+        return airplanePartCheckupList;
+    }
+
     public Airplane findAirplaneById(Long airplaneId) throws AirplaneNotFoundException
     {
         if(Objects.isNull(airplaneId)) {
@@ -135,39 +221,7 @@ public class AirplaneServiceImpl implements AirplaneService {
         return true;
     }
 
-    /**
-     * Выдача на осмотр инженеру (задача Главного инженера )
-     * Главный инженер записывает в поле user_id ссылку на инженера
-     * @param airplaneId
-     * @param userId
-     * @return
-     */
 
-    @Override
-    @Transactional
-    public Airplane assignInspection(Long airplaneId, Long userId) throws AirplaneNotFoundException, StatusChangeException, EngineerException {
-        Airplane airplane = this.findAirplaneById(airplaneId);
-        if (!airplane.getStatus().equals(AirplaneStatus.ON_CHECKUP)) {
-            throw new StatusChangeException(
-                    "Для назначения техосмотра самолет должен быть передан на техосмотр диспетчером!"
-            );
-        }
-
-        AppUser engineer = this.appUserRepository.getReferenceById(userId);
-        if(Objects.nonNull(engineer.getServicedAirplane())) {
-            throw new EngineerException(
-                    String.format(
-                            "Невозможно назначить инженера с ID[%d] на техосмотр." +
-                                    " В данный момент инженер обслуживает другой самолет!",
-                            userId
-                    )
-            );
-        }
-
-        airplane.setServicedBy(engineer);
-
-        return airplane;
-    }
 
     /**
      * Составляет технический осмотр деталей
@@ -175,16 +229,17 @@ public class AirplaneServiceImpl implements AirplaneService {
      * @param appUser
      * @return
      */
+//    @Override
+//    public Airplane registerNewCheckup(Airplane airplane, AppUser appUser) {
+//
+//        airplane.setServicedBy(appUser);
+//
+//        return airplane;
+//    }
+
     @Override
-    public Airplane registerNewInspection(Airplane airplane, AppUser appUser) {
-
-        airplane.setServicedBy(appUser);
-
-        return airplane;
-    }
-
-    @Override
-    public Airplane confirmAirplaneServiceAbility(Long airplaneId) throws AirplaneNotFoundException, PartInspectionNotFoundException, StatusChangeException {
+    public Airplane confirmAirplaneServiceAbility(Long airplaneId)
+            throws AirplaneNotFoundException, PartCheckupNotFoundException, StatusChangeException {
 
         Airplane airplane = this.findAirplaneById(airplaneId);
         if (!airplane.getStatus().equals(AirplaneStatus.INSPECTED)) {
@@ -193,7 +248,7 @@ public class AirplaneServiceImpl implements AirplaneService {
             );
         }
 
-        if (!this.partInspectionService.getLastAirplaneInspectionResult(airplaneId).equals(AirplanePartStatus.OK)) {
+        if (!this.partCheckupService.getLastAirplaneCheckupResult(airplaneId).equals(AirplanePartStatus.OK)) {
             throw new StatusChangeException(
                     String.format(
                             "Чтобы подтвердить исправность самолета все детали самолета должны быть исправны!" +
@@ -215,5 +270,44 @@ public class AirplaneServiceImpl implements AirplaneService {
         airplane.setServicedBy(appUser);
 
         return airplane;
+    }
+    @Override
+    public Airplane sendAirplaneToRegistrationConfirmation(Long AirplaneId) throws AirplaneNotFoundException, StatusChangeException {
+        return null;
+    }
+
+    @Override
+    public Airplane confirmAirplaneRegistration(Long AirplaneId) throws AirplaneNotFoundException, StatusChangeException {
+        return null;
+    }
+
+    @Override
+    public Airplane refuelAirplane(Long AirplaneId) throws AirplaneNotFoundException, StatusChangeException, EngineerIsBusyException {
+        return null;
+    }
+
+    @Override
+    public Airplane assignAirplaneRefueling(Long AirplaneId, Long engineerId) throws AirplaneNotFoundException, StatusChangeException, AppUserNotFoundException, EngineerIsBusyException {
+        return null;
+    }
+
+    @Override
+    public List<AirplaneResponseDto> getAllAirplanes(AirplaneType AirplaneType, AirplaneStatus AirplaneStatus, LocalDateTime registeredBefore, LocalDateTime registeredAfter) throws IncorrectFiltersException, AirplaneNotFoundException {
+        return null;
+    }
+
+    @Override
+    public List<AirplaneResponseDto> getAirplanesForRepairs(AirplaneType AirplaneType, LocalDateTime registeredBefore, LocalDateTime registeredAfter) throws IncorrectFiltersException, AirplaneNotFoundException {
+        return null;
+    }
+
+    @Override
+    public List<AirplaneResponseDto> getNewAirplanes(AirplaneType airplaneType, LocalDateTime registeredBefore, LocalDateTime registeredAfter) throws IncorrectFiltersException, AirplaneNotFoundException {
+        return null;
+    }
+
+    @Override
+    public List<AirplaneResponseDto> getAirplanesForRefueling(AirplaneType AirplaneType, LocalDateTime registeredBefore, LocalDateTime registeredAfter) throws IncorrectFiltersException, AirplaneNotFoundException {
+        return null;
     }
 }

@@ -36,7 +36,7 @@ import java.time.LocalDateTime;
 @Schema(name = "Сущность История техосмотра самолета", description = "Описывает сущность Истории техосмотра самолета")
 @Entity
 @Table(name = "part_inspections")
-public class AirplanePartInspection {
+public class AirplanePartCheckup {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,18 +61,18 @@ public class AirplanePartInspection {
     @Column(name = "status")
     private AirplanePartStatus status;            // Статус тех осмотра
     @Column(name = "inspection_code")
-    private Long inspectionCode;            //
+    private Long checkupCode;            //
 
 
 
-    public AirplanePartInspection() {
+    public AirplanePartCheckup() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public AirplanePartInspection setId(Long id) {
+    public AirplanePartCheckup setId(Long id) {
         this.id = id;
         return this;
     }
@@ -82,7 +82,7 @@ public class AirplanePartInspection {
         return status;
     }
 
-    public AirplanePartInspection setStatus(AirplanePartStatus status) {
+    public AirplanePartCheckup setStatus(AirplanePartStatus status) {
         this.status = status;
         return this;
     }
@@ -91,7 +91,7 @@ public class AirplanePartInspection {
         return appUser;
     }
 
-    public AirplanePartInspection setAppUser(AppUser appUser) {
+    public AirplanePartCheckup setAppUser(AppUser appUser) {
         this.appUser = appUser;
         return this;
     }
@@ -100,7 +100,7 @@ public class AirplanePartInspection {
         return dateRegister;
     }
 
-    public AirplanePartInspection setDateRegister(LocalDateTime dateRegister) {
+    public AirplanePartCheckup setDateRegister(LocalDateTime dateRegister) {
         this.dateRegister = dateRegister;
         return this;
     }
@@ -109,7 +109,7 @@ public class AirplanePartInspection {
         return part;
     }
 
-    public AirplanePartInspection setPart(AirplanePart part) {
+    public AirplanePartCheckup setPart(AirplanePart part) {
         this.part = part;
         return this;
     }
@@ -118,17 +118,17 @@ public class AirplanePartInspection {
         return airplane;
     }
 
-    public AirplanePartInspection setAirplane(Airplane airplane) {
+    public AirplanePartCheckup setAirplane(Airplane airplane) {
         this.airplane = airplane;
         return this;
     }
 
-    public Long getInspectionCode() {
-        return inspectionCode;
+    public Long getCheckupCode() {
+        return checkupCode;
     }
 
-    public AirplanePartInspection setInspectionCode(Long inspectionCode) {
-        this.inspectionCode = inspectionCode;
+    public AirplanePartCheckup setCheckupCode(Long checkupCode) {
+        this.checkupCode = checkupCode;
         return this;
     }
 }
