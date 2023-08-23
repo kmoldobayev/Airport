@@ -50,6 +50,11 @@ public class AirplaneServiceImpl implements AirplaneService {
         this.partService = partService;
     }
 
+    @Override
+    public Airplane assignAirplaneRepairs(Long airplaneId, Long userId) {
+        return null;
+    }
+
     /**
      * Регистрация нового самолета (задача Диспетчера)
      * @param airplaneRequestDto
@@ -147,6 +152,12 @@ public class AirplaneServiceImpl implements AirplaneService {
         return airplane;
     }
 
+    /**
+     * Составляет технический осмотр деталей
+     * @param airplaneId
+     * @param partCheckupsRequestDtoList
+     * @return List<AirplanePartCheckup>
+     */
     @Override
     public List<AirplanePartCheckup> checkupAirplane(Long airplaneId,
                                                      List<AirplanePartCheckupRequestDto> partCheckupsRequestDtoList)
@@ -221,25 +232,9 @@ public class AirplaneServiceImpl implements AirplaneService {
         return true;
     }
 
-
-
-    /**
-     * Составляет технический осмотр деталей
-     * @param airplane
-     * @param appUser
-     * @return
-     */
-//    @Override
-//    public Airplane registerNewCheckup(Airplane airplane, AppUser appUser) {
-//
-//        airplane.setServicedBy(appUser);
-//
-//        return airplane;
-//    }
-
     @Override
     public Airplane confirmAirplaneServiceAbility(Long airplaneId)
-            throws AirplaneNotFoundException, PartCheckupNotFoundException, StatusChangeException {
+            throws AirplaneNotFoundException, AirplanePartCheckupNotFoundException, StatusChangeException {
 
         Airplane airplane = this.findAirplaneById(airplaneId);
         if (!airplane.getStatus().equals(AirplaneStatus.INSPECTED)) {
@@ -264,13 +259,13 @@ public class AirplaneServiceImpl implements AirplaneService {
         return airplane;
     }
 
-    @Override
-    public Airplane assignAirplaneRepairs(Airplane airplane, AppUser appUser) {
-
-        airplane.setServicedBy(appUser);
-
-        return airplane;
-    }
+//    @Override
+//    public Airplane assignAirplaneRepairs(Airplane airplane, AppUser appUser) {
+//
+//        airplane.setServicedBy(appUser);
+//
+//        return airplane;
+//    }
     @Override
     public Airplane sendAirplaneToRegistrationConfirmation(Long AirplaneId) throws AirplaneNotFoundException, StatusChangeException {
         return null;

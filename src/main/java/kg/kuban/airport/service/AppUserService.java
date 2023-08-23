@@ -3,6 +3,7 @@ package kg.kuban.airport.service;
 import com.querydsl.core.types.Predicate;
 import kg.kuban.airport.dto.AppUserRequestDto;
 import kg.kuban.airport.entity.AppUser;
+import kg.kuban.airport.exception.AppUserNotFoundException;
 import kg.kuban.airport.exception.InvalidCredentialsException;
 
 import java.time.LocalDate;
@@ -22,4 +23,7 @@ public interface AppUserService {
             LocalDate registeredAfter,
             Boolean isDeleted
     );
+
+    List<AppUser> getUserEntitiesByIdList(List<Long> userIdList) throws AppUserNotFoundException;
+
 }

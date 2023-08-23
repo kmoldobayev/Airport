@@ -6,6 +6,7 @@ import com.querydsl.core.types.Predicate;
 import kg.kuban.airport.controller.v1.AppUserController;
 import kg.kuban.airport.dto.AppUserRequestDto;
 import kg.kuban.airport.entity.*;
+import kg.kuban.airport.exception.AppUserNotFoundException;
 import kg.kuban.airport.exception.InvalidCredentialsException;
 
 
@@ -17,13 +18,11 @@ import kg.kuban.airport.service.AppUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -197,5 +196,25 @@ public class AppUserServiceImpl implements AppUserService {
         return booleanBuilder;
     }
 
+    @Override
+    public List<AppUser> getUserEntitiesByIdList(List<Long> userIdList) throws AppUserNotFoundException
+    {
+        if(Objects.isNull(userIdList) || userIdList.isEmpty()) {
+            throw new IllegalArgumentException("Список ID пользователей не может быть null или пустым!");
+        }
+        for (Long userId : userIdList) {
+            if (userId < 1) {
+                throw new IllegalArgumentException("ID пользователя не может быть меньше 1!");
+            }
+        }
+
+        List<AppUser> applicationUsersEntities =
+                this.appUserRepository.getAppUserByIdIn(userIdList);
+
+        if(applicationUsersEntities.isEmpty()) {
+            throw new AppUserNotFoundException("Пользователей по заданному списку ID не найдено!");
+        }
+        return applicationUsersEntities;
+    }
 
 }

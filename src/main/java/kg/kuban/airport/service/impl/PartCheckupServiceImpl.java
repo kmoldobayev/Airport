@@ -118,7 +118,7 @@ public class PartCheckupServiceImpl implements PartCheckupService {
     }
 
     @Override
-    public List<AirplanePartCheckup> getPartCheckupsHistory(Long airplaneId) throws PartCheckupNotFoundException
+    public List<AirplanePartCheckup> getPartCheckupsHistory(Long airplaneId) throws AirplanePartCheckupNotFoundException
     {
 //        if(Objects.isNull(airplaneId)) {
 //            throw new IllegalArgumentException("ID самолета не может быть null!");
@@ -150,7 +150,7 @@ public class PartCheckupServiceImpl implements PartCheckupService {
     }
 
     @Override
-    public List<AirplanePartCheckup> getLastAirplaneCheckups(Long airplaneId) throws PartCheckupNotFoundException {
+    public List<AirplanePartCheckup> getLastAirplaneCheckups(Long airplaneId) throws AirplanePartCheckupNotFoundException {
         if (Objects.isNull(airplaneId)) {
             throw new IllegalArgumentException("ID самолета не может быть null!");
         }
@@ -158,7 +158,7 @@ public class PartCheckupServiceImpl implements PartCheckupService {
         List<AirplanePartCheckup> lastCheckup =
                 this.airplanePartCheckupRepository.getLastAirplaneCheckupByAirplaneId(airplaneId);
         if(lastCheckup.isEmpty()) {
-            throw new PartCheckupNotFoundException(
+            throw new AirplanePartCheckupNotFoundException(
                     String.format("Для самолета с ID[%d] не найдено ни одного техосмотра!", airplaneId)
             );
         }
@@ -167,7 +167,7 @@ public class PartCheckupServiceImpl implements PartCheckupService {
 
     @Override
     public AirplanePartStatus getLastAirplaneCheckupResult(Long airplaneId)
-            throws PartCheckupNotFoundException
+            throws AirplanePartCheckupNotFoundException
     {
         List<AirplanePartCheckup> partCheckupsEntityList =
                 this.getLastAirplaneCheckups(airplaneId);

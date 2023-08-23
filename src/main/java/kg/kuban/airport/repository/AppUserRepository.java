@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -14,4 +15,10 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long>, Queryds
 
     @Query(value = "select count(*) from app_users", nativeQuery = true)
     Integer countUsers();
+
+    Optional<AppUser> getAppUserById(Long userId);
+
+    Optional<AppUser> getAppUserByUserLoginAndIsEnabledTrue(String username);
+
+    List<AppUser> getAppUserByIdIn(List<Long> userIdList);
 }

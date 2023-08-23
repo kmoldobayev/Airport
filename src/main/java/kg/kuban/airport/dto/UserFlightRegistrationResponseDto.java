@@ -1,13 +1,13 @@
 package kg.kuban.airport.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import kg.kuban.airport.enums.UserFlightsStatus;
+import kg.kuban.airport.enums.UserFlightStatus;
 
 import java.time.LocalDateTime;
 
 public class UserFlightRegistrationResponseDto {
     private Long id;
-    private UserFlightsStatus userStatus;
+    private UserFlightStatus userStatus;
     private LocalDateTime registeredAt;
     private Long employeeId;
     private String employeeFullName;
@@ -29,11 +29,11 @@ public class UserFlightRegistrationResponseDto {
         return this;
     }
 
-    public UserFlightsStatus getUserStatus() {
+    public UserFlightStatus getUserStatus() {
         return userStatus;
     }
 
-    public UserFlightRegistrationResponseDto setUserStatus(UserFlightsStatus userStatus) {
+    public UserFlightRegistrationResponseDto setUserStatus(UserFlightStatus userStatus) {
         this.userStatus = userStatus;
         return this;
     }

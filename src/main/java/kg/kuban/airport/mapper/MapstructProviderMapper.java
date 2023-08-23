@@ -2,6 +2,7 @@ package kg.kuban.airport.mapper;
 
 import kg.kuban.airport.dto.*;
 import kg.kuban.airport.entity.*;
+import kg.kuban.airport.enums.AirplaneType;
 import org.mapstruct.*;
 import org.mapstruct.Mapper;
 
@@ -26,6 +27,10 @@ public interface MapstructProviderMapper {
      * @return новый эксземпляр AircompanyResponseDto полученный из Aircompany
      */
     AircompanyResponseDto mapAircompanyToDto(Aircompany aircompany);
+
+    AirplaneTypesResponseDto mapAirplaneTypeToDto(AirplaneType airplaneType);
+
+    List<AirplaneTypesResponseDto> mapListAirplaneTypeToListDto(List<AirplaneType> airplaneTypes);
 
     AppUserResponseDto mapAppUserToDto(AppUser appUser);
     @IterableMapping(nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)

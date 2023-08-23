@@ -3,20 +3,23 @@ package kg.kuban.airport.response;
 import org.springframework.http.HttpStatus;
 
 public class ErrorResponse {
-    private HttpStatus status;
+    private HttpStatus httpStatus;
     private String message;
 
-    public ErrorResponse(HttpStatus status, String message) {
-        this.status = status;
+    public ErrorResponse() {
+    }
+
+    public ErrorResponse(HttpStatus httpStatus, String message) {
+        this.httpStatus = httpStatus;
         this.message = message;
     }
 
-    public HttpStatus getStatus() {
-        return status;
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
     }
 
-    public ErrorResponse setStatus(HttpStatus status) {
-        this.status = status;
+    public ErrorResponse setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
         return this;
     }
 

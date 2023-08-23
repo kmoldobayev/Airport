@@ -6,14 +6,14 @@ import kg.kuban.airport.dto.CustomerRequestDto;
 import kg.kuban.airport.dto.CustomerReviewRequestDto;
 import kg.kuban.airport.dto.CustomerReviewResponseDto;
 import kg.kuban.airport.entity.*;
-import kg.kuban.airport.enums.UserFlightsStatus;
+import kg.kuban.airport.enums.UserFlightStatus;
 import kg.kuban.airport.exception.*;
 import kg.kuban.airport.mapper.CustomerReviewMapper;
 import kg.kuban.airport.repository.*;
 import kg.kuban.airport.service.AppUserService;
 import kg.kuban.airport.service.CustomerService;
 import kg.kuban.airport.service.FlightService;
-import kg.kuban.airport.service.UserFlightsService;
+import kg.kuban.airport.service.UserFlightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,7 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
     private PositionRepository positionRepository;
     private AppUserService appUserService;
     private FlightService flightService;
-    private UserFlightsService userFlightsService;
+    private UserFlightService userFlightsService;
     private FlightRepository flightRepository;
     private UserFlightRepository userFlightRepository;
     private CustomerReviewRepository customerReviewRepository;
@@ -72,8 +72,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<UserFlight> getMyPastFlights(UserFlightsStatus status) throws IllegalArgumentException, UserFlightNotFoundException {
-        return this.userFlightsService.getCustomersFlightRegistrationHistory(status);
+    public List<UserFlight> getMyPastFlights(UserFlightStatus status) throws IllegalArgumentException, UserFlightNotFoundException {
+        return this.userFlightsService.getCustomersFlightBookingHistory(status);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class CustomerServiceImpl implements CustomerService {
         CustomerReview review = CustomerReviewMapper.mapCustomerDtoToEntity(requestDto);
         AppUser currentUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        UserFlight registration = this.userFlightsService.getCustomerFlightRegistrationById(requestDto.getFlightId());
+        UserFlight registration = this.userFlightsService.getCustomerFlightBookingById(requestDto.getFlightId());
         Flight flight = this.flightService.getFlightEntityByFlightId(registration.getFlight().getId());
 
         review.setAppUser(currentUser);

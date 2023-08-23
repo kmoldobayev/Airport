@@ -35,15 +35,6 @@ public class EmployeeController {
 
     private FlightRepository flightRepository;
     private EmployeeService employeeService;
-    /*
-        Главный диспетчер:
-    1.	Просмотр доступных рейсов.
-    2.	Подтверждение нового рейса.
-    3.	Просмотр всех зарегистрированных самолетов.
-    4.	Подтверждение регистрации нового самолета.
-    5.	Подтверждение отправки рейса.
-    6.	Подтверждение принятия рейса.
-    */
 
 //    @GetMapping("/available-flights")
 //    public List<FlightResponseDto> getAvailableFlights() {

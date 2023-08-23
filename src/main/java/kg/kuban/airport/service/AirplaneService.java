@@ -5,7 +5,6 @@ import kg.kuban.airport.dto.AirplaneResponseDto;
 import kg.kuban.airport.dto.AirplanePartCheckupRequestDto;
 import kg.kuban.airport.entity.Airplane;
 import kg.kuban.airport.entity.AirplanePartCheckup;
-import kg.kuban.airport.entity.AppUser;
 import kg.kuban.airport.enums.AirplaneStatus;
 import kg.kuban.airport.enums.AirplaneType;
 import kg.kuban.airport.exception.*;
@@ -75,8 +74,8 @@ public interface AirplaneService{
 
     Boolean deleteNewAirplane(Long airplaneId) throws IllegalArgumentException, AirplaneNotFoundException, AirplaneSeatNotFoundException;
     //Airplane registerNewInspection(Airplane airplane, AppUser appUser);
-    Airplane confirmAirplaneServiceAbility(Long airplaneId) throws AirplaneNotFoundException, PartCheckupNotFoundException, StatusChangeException ;
-    Airplane assignAirplaneRepairs(Airplane airplane, AppUser appUser);
+    Airplane confirmAirplaneServiceAbility(Long airplaneId) throws AirplaneNotFoundException, AirplanePartCheckupNotFoundException, StatusChangeException ;
+    Airplane assignAirplaneRepairs(Long airplaneId, Long userId);
 
     List<AirplaneResponseDto> getNewAirplanes(
             AirplaneType airplaneType,

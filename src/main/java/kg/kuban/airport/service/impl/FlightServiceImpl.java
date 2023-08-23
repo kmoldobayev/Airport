@@ -8,7 +8,7 @@ import kg.kuban.airport.dto.FlightResponseDto;
 import kg.kuban.airport.entity.*;
 import kg.kuban.airport.enums.AirplaneStatus;
 import kg.kuban.airport.enums.FlightStatus;
-import kg.kuban.airport.enums.UserFlightsStatus;
+import kg.kuban.airport.enums.UserFlightStatus;
 import kg.kuban.airport.exception.AirplaneNotReadyException;
 import kg.kuban.airport.exception.FlightNotFoundException;
 import kg.kuban.airport.exception.IncorrectFiltersException;
@@ -22,7 +22,6 @@ import kg.kuban.airport.service.AirplaneService;
 import kg.kuban.airport.service.FlightService;
 import kg.kuban.airport.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -88,7 +87,7 @@ public class FlightServiceImpl implements FlightService {
             throws FlightNotFoundException, StatusChangeException
     {
         Flight flight = this.getFlightEntityByFlightId(flightId);
-        if (!flight.getStatus().equals(FlightStatus.CLIENTS_READY)) {
+        if (!flight.getStatus().equals(FlightStatus.CUSTOMERS_READY)) {
             throw new StatusChangeException(
                     "Перед проверкой готовности членов экипажа необходимо проверить готовность пассажиров!"
             );
@@ -100,24 +99,24 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public void informThatAllClientsAreChecked(Long flightId) throws FlightNotFoundException, StatusChangeException {
         Flight flightsEntity = this.getFlightEntityByFlightId(flightId);
-        if(!flightsEntity.getStatus().equals(FlightStatus.CLIENT_CHECK)) {
+        if(!flightsEntity.getStatus().equals(FlightStatus.CUSTOMER_CHECK)) {
             throw new StatusChangeException(
                     "Чтобы провести проверку готовности пассажиров, она должна быть назначена диспетчером!"
             );
         }
-        flightsEntity.setStatus(FlightStatus.CLIENTS_CHECKED);
+        flightsEntity.setStatus(FlightStatus.CUSTOMERS_CHECKED);
         this.flightRepository.save(flightsEntity);
     }
 
     @Override
     public void informThatAllClientsAreBriefed(Long flightId) throws FlightNotFoundException, StatusChangeException {
         Flight flightsEntity = this.getFlightEntityByFlightId(flightId);
-        if(!flightsEntity.getStatus().equals(FlightStatus.CLIENTS_BRIEFING)) {
+        if(!flightsEntity.getStatus().equals(FlightStatus.CUSTOMERS_BRIEFED)) {
             throw new StatusChangeException(
                     "Чтобы провести инструктаж пассажиров он должен быть назначен главным стюардом!"
             );
         }
-        flightsEntity.setStatus(FlightStatus.CLIENTS_BRIEFED);
+        flightsEntity.setStatus(FlightStatus.CUSTOMERS_BRIEFED);
         this.flightRepository.save(flightsEntity);
     }
 
@@ -180,7 +179,7 @@ public class FlightServiceImpl implements FlightService {
             );
         }
 
-        flightsEntity.setStatus(FlightStatus.CLIENT_CHECK);
+        flightsEntity.setStatus(FlightStatus.CUSTOMER_CHECK);
         this.flightRepository.save(flightsEntity);
 
         return flightsEntity;
@@ -214,13 +213,13 @@ public class FlightServiceImpl implements FlightService {
     public Flight assignBriefing(Long flightId) throws FlightNotFoundException, StatusChangeException
     {
         Flight flightsEntity = this.getFlightEntityByFlightId(flightId);
-        if (!flightsEntity.getStatus().equals(FlightStatus.CLIENTS_CHECKED)) {
+        if (!flightsEntity.getStatus().equals(FlightStatus.CUSTOMERS_CHECKED)) {
             throw new StatusChangeException(
                     "Перед проведением инструктажа необходимо проверить правильность занимаемых клиентами мест!"
             );
         }
 
-        flightsEntity.setStatus(FlightStatus.CLIENTS_BRIEFING);
+        flightsEntity.setStatus(FlightStatus.CUSTOMERS_BRIEFING);
         this.flightRepository.save(flightsEntity);
 
         return flightsEntity;
@@ -230,13 +229,13 @@ public class FlightServiceImpl implements FlightService {
     public Flight confirmClientReadiness(Long flightId) throws FlightNotFoundException, StatusChangeException
     {
         Flight flightsEntity = this.getFlightEntityByFlightId(flightId);
-        if (!flightsEntity.getStatus().equals(FlightStatus.CLIENTS_BRIEFED)) {
+        if (!flightsEntity.getStatus().equals(FlightStatus.CUSTOMERS_BRIEFED)) {
             throw new StatusChangeException(
                     "Для подтверждения инструктажа необходимо чтобы все клиенты были проинструктированы!"
             );
         }
 
-        flightsEntity.setStatus(FlightStatus.CLIENTS_READY);
+        flightsEntity.setStatus(FlightStatus.CUSTOMERS_READY);
         this.flightRepository.save(flightsEntity);
 
         return flightsEntity;
@@ -372,7 +371,7 @@ public class FlightServiceImpl implements FlightService {
         flightsEntity.setStatus(FlightStatus.ARRIVED);
         flightsEntity.getAirplane().setStatus(AirplaneStatus.TO_CHECKUP);
         for (UserFlight userFlightsEntity : flightsEntity.getUserFlights()) {
-            userFlightsEntity.setStatus(UserFlightsStatus.ARRIVED);
+            userFlightsEntity.setStatus(UserFlightStatus.ARRIVED);
             if (userFlightsEntity.getAppUser().getPosition().getTitle().equals("CUSTOMER")) {
                 userFlightsEntity.getSeat().setOccupied(Boolean.FALSE);
             }
