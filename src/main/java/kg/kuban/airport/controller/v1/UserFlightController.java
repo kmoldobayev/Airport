@@ -2,7 +2,6 @@ package kg.kuban.airport.controller.v1;
 
 import kg.kuban.airport.dto.UserFlightRegistrationResponseDto;
 import kg.kuban.airport.dto.UserFlightRequestDto;
-import kg.kuban.airport.entity.UserFlight;
 import kg.kuban.airport.enums.UserFlightStatus;
 import kg.kuban.airport.exception.*;
 import kg.kuban.airport.mapper.FlightMapper;
@@ -13,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/flights/registrations")
@@ -94,7 +91,7 @@ public class UserFlightController {
                         UserFlightStatus.CUSTOMER_BRIEFED
                 )
         ) {
-            this.flightService.informThatAllClientsAreBriefed(responseDto.getFlightId());
+            this.flightService.informThatAllCustomersAreBriefed(responseDto.getFlightId());
         }
         return responseDto;
     }
@@ -134,7 +131,7 @@ public class UserFlightController {
                         UserFlightStatus.CUSTOMER_FOOD_DISTRIBUTED
                 )
         ) {
-            this.flightService.informThatAllClientsAreBriefed(responseDto.getFlightId());
+            this.flightService.informThatAllCustomersAreBriefed(responseDto.getFlightId());
         }
         return responseDto;
     }

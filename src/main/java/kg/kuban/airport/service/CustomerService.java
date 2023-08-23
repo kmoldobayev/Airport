@@ -14,10 +14,10 @@ import java.util.List;
 public interface CustomerService {
     AppUser createCustomer(CustomerRequestDto user) throws IllegalArgumentException;
     List<UserFlight> getMyPastFlights(UserFlightStatus status) throws IllegalArgumentException, UserFlightNotFoundException;
-    List<UserFlight> getAvailableFlights() throws IllegalArgumentException, UserFlightNotFoundException;
+//    List<UserFlight> getAvailableFlights() throws IllegalArgumentException, UserFlightNotFoundException;
     UserFlight getCurrentFlight() throws IllegalArgumentException, UserFlightNotFoundException;
 
-    List<AppUser> getAllClients(
+    List<AppUser> getAllCustomers(
             LocalDate dateRegisterBegin,
             LocalDate dateRegisterEnd,
             Boolean isDeleted

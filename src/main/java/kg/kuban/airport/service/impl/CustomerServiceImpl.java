@@ -76,10 +76,10 @@ public class CustomerServiceImpl implements CustomerService {
         return this.userFlightsService.getCustomersFlightBookingHistory(status);
     }
 
-    @Override
-    public List<UserFlight> getAvailableFlights() throws IllegalArgumentException, UserFlightNotFoundException {
-        return this.flightRepository.findAvailableFlights();
-    }
+//    @Override
+//    public List<UserFlight> getAvailableFlights() throws IllegalArgumentException, UserFlightNotFoundException {
+//        return this.flightRepository.findAvailableFlights();
+//    }
 
     @Override
     public UserFlight getCurrentFlight() throws IllegalArgumentException, UserFlightNotFoundException {
@@ -87,7 +87,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<AppUser> getAllClients(LocalDate dateRegisterBegin,
+    public List<AppUser> getAllCustomers(LocalDate dateRegisterBegin,
                                                   LocalDate dateRegisterEnd,
                                                   Boolean isDeleted) throws AppUserNotFoundException {
         BooleanBuilder booleanBuilder = new BooleanBuilder(
@@ -174,4 +174,6 @@ public class CustomerServiceImpl implements CustomerService {
         }
         return customerReviewResponseDtoList;
     }
+
+
 }

@@ -1,18 +1,18 @@
 package kg.kuban.airport.dto;
 
-public class SeatResponseDto {
+public class AirplaneSeatResponseDto {
     private Long id;
     private Integer seatNumber;
     private Boolean isOccupied;
 
-    public SeatResponseDto() {
+    public AirplaneSeatResponseDto() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public SeatResponseDto setId(Long id) {
+    public AirplaneSeatResponseDto setId(Long id) {
         this.id = id;
         return this;
     }
@@ -21,7 +21,7 @@ public class SeatResponseDto {
         return seatNumber;
     }
 
-    public SeatResponseDto setSeatNumber(Integer seatNumber) {
+    public AirplaneSeatResponseDto setSeatNumber(Integer seatNumber) {
         this.seatNumber = seatNumber;
         return this;
     }
@@ -30,7 +30,7 @@ public class SeatResponseDto {
         return isOccupied;
     }
 
-    public SeatResponseDto setOccupied(Boolean occupied) {
+    public AirplaneSeatResponseDto setOccupied(Boolean occupied) {
         isOccupied = occupied;
         return this;
     }

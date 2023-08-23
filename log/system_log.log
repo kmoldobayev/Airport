@@ -432,3 +432,131 @@ Caused by: java.lang.IllegalArgumentException: Unable to locate Attribute  with 
 2023-08-23 18:12:21.867  INFO 6404 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2023-08-23 18:12:21.871  INFO 6404 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2023-08-23 18:12:21.896  INFO 6404 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-08-23 18:13:54.392  INFO 12528 --- [main] kg.kuban.airport.AirportApplication      : Starting AirportApplication using Java 11.0.18 on DESKTOP-BPTJB0E with PID 12528 (D:\Сourses\Java\Airport\target\classes started by Admin in D:\Сourses\Java\Airport)
+2023-08-23 18:13:54.397  INFO 12528 --- [main] kg.kuban.airport.AirportApplication      : No active profile set, falling back to 1 default profile: "default"
+2023-08-23 18:13:56.158  INFO 12528 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-08-23 18:13:56.405  INFO 12528 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 229 ms. Found 12 JPA repository interfaces.
+2023-08-23 18:13:57.341  INFO 12528 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-08-23 18:13:57.353  INFO 12528 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-08-23 18:13:57.354  INFO 12528 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2023-08-23 18:13:57.518  INFO 12528 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-08-23 18:13:57.519  INFO 12528 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3044 ms
+2023-08-23 18:13:57.759  INFO 12528 --- [main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 8.5.13 by Redgate
+2023-08-23 18:13:57.759  INFO 12528 --- [main] o.f.c.internal.license.VersionPrinter    : See what's new here: https://flywaydb.org/documentation/learnmore/releaseNotes#8.5.13
+2023-08-23 18:13:57.759  INFO 12528 --- [main] o.f.c.internal.license.VersionPrinter    : 
+2023-08-23 18:13:57.775  INFO 12528 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-08-23 18:13:57.918  INFO 12528 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-08-23 18:13:57.942  INFO 12528 --- [main] o.f.c.i.database.base.BaseDatabaseType   : Database: jdbc:postgresql://localhost:5432/airport (PostgreSQL 10.23)
+2023-08-23 18:13:58.033  INFO 12528 --- [main] o.f.core.internal.command.DbValidate     : Successfully validated 4 migrations (execution time 00:00.064s)
+2023-08-23 18:13:58.053  INFO 12528 --- [main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 1.1691442505
+2023-08-23 18:13:58.055  WARN 12528 --- [main] o.f.core.internal.command.DbMigrate      : outOfOrder mode is active. Migration of schema "public" may not be reproducible.
+2023-08-23 18:13:58.056  INFO 12528 --- [main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2023-08-23 18:13:58.304  INFO 12528 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-08-23 18:13:58.378  INFO 12528 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2023-08-23 18:13:58.869  INFO 12528 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+2023-08-23 18:13:59.883  INFO 12528 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-08-23 18:13:59.900  INFO 12528 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-08-23 18:14:01.377 DEBUG 12528 --- [main] org.hibernate.SQL                        : SELECT MAX(inspection_code) FROM part_inspections
+2023-08-23 18:14:02.484  WARN 12528 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-08-23 18:14:03.564  INFO 12528 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@75c45c4b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7202009e, org.springframework.security.web.context.SecurityContextPersistenceFilter@eb09112, org.springframework.security.web.header.HeaderWriterFilter@5afa0b1a, org.springframework.web.filter.CorsFilter@133d0471, org.springframework.security.web.authentication.logout.LogoutFilter@5003c114, kg.kuban.airport.security.JwtAuthenticationFilter@28d7bd6b, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@76efa2b7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2b06c388, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4c9bed65, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@33cec966, org.springframework.security.web.session.SessionManagementFilter@1256925b, org.springframework.security.web.access.ExceptionTranslationFilter@522f74a1, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@59172d2]
+2023-08-23 18:14:04.088  INFO 12528 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-08-23 18:14:04.106  INFO 12528 --- [main] kg.kuban.airport.AirportApplication      : Started AirportApplication in 10.509 seconds (JVM running for 12.631)
+2023-08-23 19:17:52.321  INFO 12528 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-08-23 19:17:52.351  INFO 12528 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-08-23 19:17:52.367  INFO 12528 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-08-23 19:18:04.422  INFO 2320 --- [main] kg.kuban.airport.AirportApplication      : Starting AirportApplication using Java 11.0.18 on DESKTOP-BPTJB0E with PID 2320 (D:\Сourses\Java\Airport\target\classes started by Admin in D:\Сourses\Java\Airport)
+2023-08-23 19:18:04.428  INFO 2320 --- [main] kg.kuban.airport.AirportApplication      : No active profile set, falling back to 1 default profile: "default"
+2023-08-23 19:18:06.210  INFO 2320 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-08-23 19:18:06.437  INFO 2320 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 212 ms. Found 12 JPA repository interfaces.
+2023-08-23 19:18:07.356  INFO 2320 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-08-23 19:18:07.367  INFO 2320 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-08-23 19:18:07.368  INFO 2320 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2023-08-23 19:18:07.542  INFO 2320 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-08-23 19:18:07.543  INFO 2320 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3038 ms
+2023-08-23 19:18:07.788  INFO 2320 --- [main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 8.5.13 by Redgate
+2023-08-23 19:18:07.788  INFO 2320 --- [main] o.f.c.internal.license.VersionPrinter    : See what's new here: https://flywaydb.org/documentation/learnmore/releaseNotes#8.5.13
+2023-08-23 19:18:07.789  INFO 2320 --- [main] o.f.c.internal.license.VersionPrinter    : 
+2023-08-23 19:18:07.805  INFO 2320 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-08-23 19:18:07.949  INFO 2320 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-08-23 19:18:07.972  INFO 2320 --- [main] o.f.c.i.database.base.BaseDatabaseType   : Database: jdbc:postgresql://localhost:5432/airport (PostgreSQL 10.23)
+2023-08-23 19:18:08.042  INFO 2320 --- [main] o.f.core.internal.command.DbValidate     : Successfully validated 4 migrations (execution time 00:00.045s)
+2023-08-23 19:18:08.059  INFO 2320 --- [main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 1.1691442505
+2023-08-23 19:18:08.059  WARN 2320 --- [main] o.f.core.internal.command.DbMigrate      : outOfOrder mode is active. Migration of schema "public" may not be reproducible.
+2023-08-23 19:18:08.061  INFO 2320 --- [main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2023-08-23 19:18:08.291  INFO 2320 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-08-23 19:18:08.383  INFO 2320 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2023-08-23 19:18:08.897  INFO 2320 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+2023-08-23 19:18:09.933  INFO 2320 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-08-23 19:18:09.946  INFO 2320 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-08-23 19:18:11.335 DEBUG 2320 --- [main] org.hibernate.SQL                        : SELECT MAX(inspection_code) FROM part_inspections
+2023-08-23 19:18:12.245  WARN 2320 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-08-23 19:18:13.289  INFO 2320 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3328db4f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4f9e9c21, org.springframework.security.web.context.SecurityContextPersistenceFilter@59700156, org.springframework.security.web.header.HeaderWriterFilter@3e5ed0d4, org.springframework.web.filter.CorsFilter@1390a43a, org.springframework.security.web.authentication.logout.LogoutFilter@2267b0bb, kg.kuban.airport.security.JwtAuthenticationFilter@3ab70d34, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@45e68fac, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7359f3ac, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5afa0b1a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7bf2e475, org.springframework.security.web.session.SessionManagementFilter@3d0f4ac4, org.springframework.security.web.access.ExceptionTranslationFilter@73e63b4d, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@2eb0932c]
+2023-08-23 19:18:13.871  INFO 2320 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-08-23 19:18:13.898  INFO 2320 --- [main] kg.kuban.airport.AirportApplication      : Started AirportApplication in 10.238 seconds (JVM running for 12.008)
+2023-08-23 19:57:15.339  INFO 2320 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-08-23 19:57:15.345  INFO 2320 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-08-23 19:57:15.374  INFO 2320 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-08-23 20:00:59.373  INFO 5672 --- [main] kg.kuban.airport.AirportApplication      : Starting AirportApplication using Java 11.0.18 on DESKTOP-BPTJB0E with PID 5672 (D:\Сourses\Java\Airport\target\classes started by Admin in D:\Сourses\Java\Airport)
+2023-08-23 20:00:59.378  INFO 5672 --- [main] kg.kuban.airport.AirportApplication      : No active profile set, falling back to 1 default profile: "default"
+2023-08-23 20:01:01.130  INFO 5672 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-08-23 20:01:01.372  INFO 5672 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 224 ms. Found 12 JPA repository interfaces.
+2023-08-23 20:01:02.296  INFO 5672 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-08-23 20:01:02.306  INFO 5672 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-08-23 20:01:02.307  INFO 5672 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2023-08-23 20:01:02.520  INFO 5672 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-08-23 20:01:02.520  INFO 5672 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3061 ms
+2023-08-23 20:01:02.727  INFO 5672 --- [main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 8.5.13 by Redgate
+2023-08-23 20:01:02.728  INFO 5672 --- [main] o.f.c.internal.license.VersionPrinter    : See what's new here: https://flywaydb.org/documentation/learnmore/releaseNotes#8.5.13
+2023-08-23 20:01:02.728  INFO 5672 --- [main] o.f.c.internal.license.VersionPrinter    : 
+2023-08-23 20:01:02.752  INFO 5672 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-08-23 20:01:02.897  INFO 5672 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-08-23 20:01:02.921  INFO 5672 --- [main] o.f.c.i.database.base.BaseDatabaseType   : Database: jdbc:postgresql://localhost:5432/airport (PostgreSQL 10.23)
+2023-08-23 20:01:02.997  INFO 5672 --- [main] o.f.core.internal.command.DbValidate     : Successfully validated 4 migrations (execution time 00:00.050s)
+2023-08-23 20:01:03.013  INFO 5672 --- [main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 1.1691442505
+2023-08-23 20:01:03.014  WARN 5672 --- [main] o.f.core.internal.command.DbMigrate      : outOfOrder mode is active. Migration of schema "public" may not be reproducible.
+2023-08-23 20:01:03.016  INFO 5672 --- [main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2023-08-23 20:01:03.243  INFO 5672 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-08-23 20:01:03.334  INFO 5672 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2023-08-23 20:01:03.832  INFO 5672 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+2023-08-23 20:01:04.904  INFO 5672 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-08-23 20:01:04.923  INFO 5672 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-08-23 20:01:06.339 DEBUG 5672 --- [main] org.hibernate.SQL                        : SELECT MAX(inspection_code) FROM part_inspections
+2023-08-23 20:01:07.198  WARN 5672 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-08-23 20:01:08.202  INFO 5672 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@65b07b9, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7dbe858f, org.springframework.security.web.context.SecurityContextPersistenceFilter@8eeb4c5, org.springframework.security.web.header.HeaderWriterFilter@202d1424, org.springframework.web.filter.CorsFilter@387ef6a7, org.springframework.security.web.authentication.logout.LogoutFilter@643a73fa, kg.kuban.airport.security.JwtAuthenticationFilter@d641499, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@7151dd9d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@32bae609, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@106b476a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2330c995, org.springframework.security.web.session.SessionManagementFilter@590f806a, org.springframework.security.web.access.ExceptionTranslationFilter@6eb332d1, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@75c45c4b]
+2023-08-23 20:01:08.739  INFO 5672 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-08-23 20:01:08.759  INFO 5672 --- [main] kg.kuban.airport.AirportApplication      : Started AirportApplication in 10.179 seconds (JVM running for 11.972)
+2023-08-23 20:01:53.795  INFO 5672 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-08-23 20:01:53.799  INFO 5672 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-08-23 20:01:53.815  INFO 5672 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-08-23 20:04:22.800  INFO 1108 --- [main] kg.kuban.airport.AirportApplication      : Starting AirportApplication using Java 11.0.18 on DESKTOP-BPTJB0E with PID 1108 (D:\Сourses\Java\Airport\target\classes started by Admin in D:\Сourses\Java\Airport)
+2023-08-23 20:04:22.804  INFO 1108 --- [main] kg.kuban.airport.AirportApplication      : No active profile set, falling back to 1 default profile: "default"
+2023-08-23 20:04:24.523  INFO 1108 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-08-23 20:04:24.768  INFO 1108 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 229 ms. Found 12 JPA repository interfaces.
+2023-08-23 20:04:25.637  INFO 1108 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2023-08-23 20:04:25.648  INFO 1108 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-08-23 20:04:25.648  INFO 1108 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2023-08-23 20:04:25.857  INFO 1108 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-08-23 20:04:25.858  INFO 1108 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2974 ms
+2023-08-23 20:04:26.063  INFO 1108 --- [main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 8.5.13 by Redgate
+2023-08-23 20:04:26.063  INFO 1108 --- [main] o.f.c.internal.license.VersionPrinter    : See what's new here: https://flywaydb.org/documentation/learnmore/releaseNotes#8.5.13
+2023-08-23 20:04:26.064  INFO 1108 --- [main] o.f.c.internal.license.VersionPrinter    : 
+2023-08-23 20:04:26.087  INFO 1108 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-08-23 20:04:26.232  INFO 1108 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-08-23 20:04:26.256  INFO 1108 --- [main] o.f.c.i.database.base.BaseDatabaseType   : Database: jdbc:postgresql://localhost:5432/airport (PostgreSQL 10.23)
+2023-08-23 20:04:26.330  INFO 1108 --- [main] o.f.core.internal.command.DbValidate     : Successfully validated 4 migrations (execution time 00:00.044s)
+2023-08-23 20:04:26.347  INFO 1108 --- [main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 1.1691442505
+2023-08-23 20:04:26.348  WARN 1108 --- [main] o.f.core.internal.command.DbMigrate      : outOfOrder mode is active. Migration of schema "public" may not be reproducible.
+2023-08-23 20:04:26.350  INFO 1108 --- [main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2023-08-23 20:04:26.553  INFO 1108 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-08-23 20:04:26.661  INFO 1108 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2023-08-23 20:04:27.186  INFO 1108 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+2023-08-23 20:04:28.227  INFO 1108 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-08-23 20:04:28.245  INFO 1108 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-08-23 20:04:29.659 DEBUG 1108 --- [main] org.hibernate.SQL                        : SELECT MAX(inspection_code) FROM part_inspections
+2023-08-23 20:04:30.579  WARN 1108 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-08-23 20:04:31.674  INFO 1108 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2a738d47, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6939f18a, org.springframework.security.web.context.SecurityContextPersistenceFilter@3b28ab9b, org.springframework.security.web.header.HeaderWriterFilter@17873842, org.springframework.web.filter.CorsFilter@8bd9d08, org.springframework.security.web.authentication.logout.LogoutFilter@59700156, kg.kuban.airport.security.JwtAuthenticationFilter@3ab70d34, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@261b27db, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@278cbf5a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1c41931a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@189f3ccd, org.springframework.security.web.session.SessionManagementFilter@11678469, org.springframework.security.web.access.ExceptionTranslationFilter@7833407, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1bcdd302]
+2023-08-23 20:04:32.198  INFO 1108 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2023-08-23 20:04:32.216  INFO 1108 --- [main] kg.kuban.airport.AirportApplication      : Started AirportApplication in 10.177 seconds (JVM running for 11.86)
+2023-08-23 20:25:06.752  INFO 1108 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-08-23 20:25:06.760  INFO 1108 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-08-23 20:25:06.812  INFO 1108 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

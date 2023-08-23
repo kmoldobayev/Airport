@@ -22,11 +22,11 @@ public interface FlightService {
 
     void informThatAllCrewMembersIsReadyForFlight(Long flightId) throws FlightNotFoundException, StatusChangeException;
 
-    void informThatAllClientsAreChecked(Long flightId) throws FlightNotFoundException, StatusChangeException;
+    void informThatAllCustomersAreChecked(Long flightId) throws FlightNotFoundException, StatusChangeException;
 
-    void informThatAllClientsAreBriefed(Long flightId) throws FlightNotFoundException, StatusChangeException;
+    void informThatAllCustomersAreBriefed(Long flightId) throws FlightNotFoundException, StatusChangeException;
 
-    void informThatAllClientsFoodIsDistributed(Long flightId) throws FlightNotFoundException, StatusChangeException;
+    void informThatAllCustomersFoodIsDistributed(Long flightId) throws FlightNotFoundException, StatusChangeException;
 
     Flight confirmFlightRegistration(Long flightId) throws FlightNotFoundException, StatusChangeException;
 
@@ -34,11 +34,11 @@ public interface FlightService {
 
     Flight initiateCrewPreparation(Long flightId) throws FlightNotFoundException, StatusChangeException;
 
-    Flight confirmAircraftRefueling(Long flightId) throws FlightNotFoundException, StatusChangeException, AirplaneNotReadyException;
+    Flight confirmAirplaneRefueling(Long flightId) throws FlightNotFoundException, StatusChangeException, AirplaneNotReadyException;
 
     Flight assignBriefing(Long flightId) throws FlightNotFoundException, StatusChangeException;
 
-    Flight confirmClientReadiness(Long flightId) throws FlightNotFoundException, StatusChangeException;
+    Flight confirmCustomerReadiness(Long flightId) throws FlightNotFoundException, StatusChangeException;
 
     Flight initiateDeparture(Long flightId) throws FlightNotFoundException, StatusChangeException;
 
@@ -62,15 +62,15 @@ public interface FlightService {
             throws FlightNotFoundException,
             StatusChangeException;
 
-    List<Flight> getAllFLights(
-            LocalDateTime registeredAfter,
-            LocalDateTime registeredBefore,
+    List<Flight> getAvailableFlights(
+            LocalDateTime dateRegisterBeg,
+            LocalDateTime dateRegisterEnd,
             FlightStatus flightStatus
     ) throws IncorrectFiltersException, FlightNotFoundException;
 
-    List<FlightResponseDto> getFlightsForTicketReservation(
-            LocalDateTime createdAfter,
-            LocalDateTime createdBefore,
+    List<Flight> getFlightsForTicketBooking(
+            LocalDateTime dateCreateBeg,
+            LocalDateTime dateCreateEnd,
             AirportRequestDto flightDestination
     ) throws FlightNotFoundException, IncorrectFiltersException;
 

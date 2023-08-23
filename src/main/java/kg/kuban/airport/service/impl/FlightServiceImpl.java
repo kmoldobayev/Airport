@@ -97,7 +97,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public void informThatAllClientsAreChecked(Long flightId) throws FlightNotFoundException, StatusChangeException {
+    public void informThatAllCustomersAreChecked(Long flightId) throws FlightNotFoundException, StatusChangeException {
         Flight flightsEntity = this.getFlightEntityByFlightId(flightId);
         if(!flightsEntity.getStatus().equals(FlightStatus.CUSTOMER_CHECK)) {
             throw new StatusChangeException(
@@ -109,7 +109,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public void informThatAllClientsAreBriefed(Long flightId) throws FlightNotFoundException, StatusChangeException {
+    public void informThatAllCustomersAreBriefed(Long flightId) throws FlightNotFoundException, StatusChangeException {
         Flight flightsEntity = this.getFlightEntityByFlightId(flightId);
         if(!flightsEntity.getStatus().equals(FlightStatus.CUSTOMERS_BRIEFED)) {
             throw new StatusChangeException(
@@ -121,7 +121,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public void informThatAllClientsFoodIsDistributed(Long flightId) throws FlightNotFoundException, StatusChangeException {
+    public void informThatAllCustomersFoodIsDistributed(Long flightId) throws FlightNotFoundException, StatusChangeException {
         Flight flightsEntity = this.getFlightEntityByFlightId(flightId);
         if (!flightsEntity.getStatus().equals(FlightStatus.FLIGHT_FOOD_DISTRIBUTION)) {
             throw new StatusChangeException(
@@ -186,18 +186,18 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public Flight confirmAircraftRefueling(Long flightId)
+    public Flight confirmAirplaneRefueling(Long flightId)
             throws FlightNotFoundException,
             StatusChangeException,
             AirplaneNotReadyException
     {
         Flight flightsEntity = this.getFlightEntityByFlightId(flightId);
-        if(!flightsEntity.getStatus().equals(FlightStatus.DEPARTURE_INITIATED)) {
+        if (!flightsEntity.getStatus().equals(FlightStatus.DEPARTURE_INITIATED)) {
             throw new StatusChangeException(
                     "Чтобы провести заправку самолета должна быть инициировона отправка рейса!"
             );
         }
-        if(!flightsEntity.getAirplane().getStatus().equals(AirplaneStatus.REFUELED)) {
+        if (!flightsEntity.getAirplane().getStatus().equals(AirplaneStatus.REFUELED)) {
             throw new AirplaneNotReadyException(
                     "Ошибка подтверждения заправки самолета! Заправка не была проведена!"
             );
@@ -226,7 +226,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public Flight confirmClientReadiness(Long flightId) throws FlightNotFoundException, StatusChangeException
+    public Flight confirmCustomerReadiness(Long flightId) throws FlightNotFoundException, StatusChangeException
     {
         Flight flightsEntity = this.getFlightEntityByFlightId(flightId);
         if (!flightsEntity.getStatus().equals(FlightStatus.CUSTOMERS_BRIEFED)) {
@@ -330,7 +330,7 @@ public class FlightServiceImpl implements FlightService {
         Flight flightsEntity = this.getFlightEntityByFlightId(flightId);
         if (!flightsEntity.getStatus().equals(FlightStatus.LANDING_REQUESTED)) {
             throw new StatusChangeException(
-                    "Для назначения посадки она должна быть запрошема пилотом!!"
+                    "Для назначения посадки она должна быть запрошена пилотом!!"
             );
         }
 
@@ -383,22 +383,17 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public List<Flight> getAllFLights(
-            LocalDateTime registeredAfter,
-            LocalDateTime registeredBefore,
+    public List<Flight> getAvailableFlights(
+            LocalDateTime dateRegisterBeg,
+            LocalDateTime dateRegisterEnd,
             FlightStatus flightStatus
     )
             throws IncorrectFiltersException, FlightNotFoundException {
         BooleanBuilder booleanBuilder = new BooleanBuilder(
-                this.createCommonFlightsSearchPredicate(registeredAfter, registeredBefore, flightStatus)
+                this.createCommonFlightsSearchPredicate(dateRegisterBeg, dateRegisterEnd, flightStatus)
         );
 
-        Iterable<Flight> flightsEntityIterable =
-                this.flightRepository.findAll(booleanBuilder.getValue());
-        List<Flight> flightList =
-                StreamSupport
-                        .stream(flightsEntityIterable.spliterator(), false)
-                        .collect(Collectors.toList());
+        List<Flight> flightList = this.flightRepository.findAvailableFlights();
         if (flightList.isEmpty()) {
             throw new FlightNotFoundException("Рейсы по заданным параметрам не найдены!");
         }
@@ -406,16 +401,16 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public List<FlightResponseDto> getFlightsForTicketReservation(
-            LocalDateTime createdAfter,
-            LocalDateTime createdBefore,
+    public List<Flight> getFlightsForTicketBooking(
+            LocalDateTime dateCreateBeg,
+            LocalDateTime dateCreateEnd,
             AirportRequestDto flightDestination
     )
             throws FlightNotFoundException,
             IncorrectFiltersException
     {
         BooleanBuilder booleanBuilder = new BooleanBuilder(
-                this.createCommonFlightsSearchPredicate(createdAfter, createdBefore, FlightStatus.SELLING_TICKETS)
+                this.createCommonFlightsSearchPredicate(dateCreateBeg, dateCreateEnd, FlightStatus.SELLING_TICKETS)
         );
         QFlight root = QFlight.flight;
 
@@ -424,17 +419,16 @@ public class FlightServiceImpl implements FlightService {
 
         Iterable<Flight> flightsEntityIterable =
                 this.flightRepository.findAll(booleanBuilder.getValue());
-        List<FlightResponseDto> flightResponseDtoList =
+        List<Flight> flightList =
                 StreamSupport
                         .stream(flightsEntityIterable.spliterator(), false)
-                        .map(FlightMapper::mapFlightEntityToDto)
                         .collect(Collectors.toList());
-        if(flightResponseDtoList.isEmpty()) {
+        if (flightList.isEmpty()) {
             throw new FlightNotFoundException(
                     "Рейсы, на которые продвются билеты, по заданным параметрам не найдены!"
             );
         }
-        return flightResponseDtoList;
+        return flightList;
     }
 
     @Override

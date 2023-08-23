@@ -96,14 +96,14 @@ public class CustomerController {
     )
     @PreAuthorize(value = "hasAnyRole('CHIEF')")
     @GetMapping(value = "/report")
-    public ResponseEntity<?> getAllClients(
+    public ResponseEntity<?> getAllCustomers(
             @RequestParam(required = false) LocalDate registeredBefore,
             @RequestParam(required = false) LocalDate registeredAfter,
             @RequestParam(required = false) Boolean isDeleted
     )
             throws AppUserNotFoundException
     {
-        return ResponseEntity.ok(AppUserMapper.mapAppUserEntityListToDto(this.customerService.getAllClients(registeredBefore, registeredAfter, isDeleted)));
+        return ResponseEntity.ok(AppUserMapper.mapAppUserEntityListToDto(this.customerService.getAllCustomers(registeredBefore, registeredAfter, isDeleted)));
     }
 
     @PreAuthorize(value = "hasRole('CUSTOMER')")

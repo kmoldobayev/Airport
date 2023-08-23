@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface FlightRepository extends JpaRepository<Flight, Long>, QuerydslPredicateExecutor<Flight> {
 
     @Query(value = "SELECT t FROM public.flights t WHERE t.is_available = true;", nativeQuery = true)
-    List<UserFlight> findAvailableFlights();
+    List<Flight> findAvailableFlights();
 
     List<Flight> getFlightsByStatus(FlightStatus status);
 

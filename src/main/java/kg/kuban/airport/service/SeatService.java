@@ -1,11 +1,8 @@
 package kg.kuban.airport.service;
 
-import kg.kuban.airport.dto.SeatResponseDto;
 import kg.kuban.airport.entity.Seat;
 import kg.kuban.airport.exception.AirplaneSeatNotFoundException;
 import kg.kuban.airport.exception.SeatBookingException;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
