@@ -54,8 +54,9 @@ public class SecurityConfiguration {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/users/**").hasAnyRole("ADMIN", "CHIEF")
                 .antMatchers("/user-roles/**").hasRole("ADMIN")
-                .antMatchers("/airplanes/**").hasRole("DISPATCHER")
+                .antMatchers("/airplanes/**").hasAnyRole("DISPATCHER", "CHIEF", "ENGINEER", "CHIEF_ENGINEER", "CHIEF_DISPATCHER")
                 .anyRequest().authenticated()
+//                .anyRequest().permitAll()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

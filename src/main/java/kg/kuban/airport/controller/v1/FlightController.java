@@ -168,6 +168,16 @@ public class FlightController {
         return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.confirmLanding(flightId)));
     }
 
+    @PreAuthorize(value = "hasRole('PILOT')")
+    @PutMapping(value = "/startFlight")
+    public ResponseEntity<?> startFlight(
+            @RequestParam Long flightId
+    )
+            throws StatusChangeException, FlightNotFoundException
+    {
+        return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.startFlight(flightId)));
+    }
+
     @Operation(
             summary = "Окончание рейса.",
             description = "Пользователь с ролью Пилот выполняет окончание рейса",
@@ -239,5 +249,13 @@ public class FlightController {
     {
         Flight flight = this.flightService.getFlightEntityByFlightId(flightId);
         return ResponseEntity.ok(AirplaneMapper.mapToAirplaneSeatResponseDtoList(this.seatService.getAllSeats(flight.getAirplane().getId(), isOccupied)));
+    }
+
+    @PreAuthorize(value = "hasRole('CHIEF_STEWARD')")
+    @PutMapping(value = "/assignFoodDistribution")
+    public ResponseEntity<?> assignFoodDistributionDuringFlight(@RequestParam Long flightId)
+            throws StatusChangeException, FlightNotFoundException
+    {
+        return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.assignFoodDistribution(flightId)));
     }
 }

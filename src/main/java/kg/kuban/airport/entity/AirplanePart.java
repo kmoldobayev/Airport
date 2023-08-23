@@ -36,6 +36,11 @@ public class AirplanePart {
     @OneToMany(mappedBy = "part")
     private List<AirplanePartCheckup> partInspections;
 
+    @PrePersist
+    public void init() {
+        this.dateRegister = LocalDateTime.now();
+    }
+
     public AirplanePart() {
     }
 

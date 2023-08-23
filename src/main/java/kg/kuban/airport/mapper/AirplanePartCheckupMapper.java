@@ -9,7 +9,7 @@ import kg.kuban.airport.enums.AirplanePartStatus;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PartCheckupMapper {
+public class AirplanePartCheckupMapper {
     public static AirplanePartCheckup mapAirplanePartCheckupRequestDtoToEntity(AirplanePartCheckupRequestDto source) {
         return new AirplanePartCheckup().setStatus(source.getPartState());
     }
@@ -32,7 +32,7 @@ public class PartCheckupMapper {
     ) {
         return sourceList
                 .stream()
-                .map(PartCheckupMapper::mapToPartCheckupResponseDto)
+                .map(AirplanePartCheckupMapper::mapToPartCheckupResponseDto)
                 .collect(Collectors.toList());
     }
 

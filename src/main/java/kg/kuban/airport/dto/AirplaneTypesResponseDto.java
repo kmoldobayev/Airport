@@ -5,17 +5,17 @@ import kg.kuban.airport.enums.AirplaneType;
 import java.util.List;
 
 public class AirplaneTypesResponseDto {
-    private List<AirplaneType> aircraftTypes;
+    private List<AirplaneType> airplaneTypes;
 
     public AirplaneTypesResponseDto() {
     }
 
-    public List<AirplaneType> getAircraftTypes() {
-        return aircraftTypes;
+    public List<AirplaneType> getAirplaneTypes() {
+        return airplaneTypes;
     }
 
-    public AirplaneTypesResponseDto setAircraftTypes(List<AirplaneType> aircraftTypes) {
-        this.aircraftTypes = aircraftTypes;
+    public AirplaneTypesResponseDto setAirplaneTypes(List<AirplaneType> airplaneTypes) {
+        this.airplaneTypes = airplaneTypes;
         return this;
     }
 }

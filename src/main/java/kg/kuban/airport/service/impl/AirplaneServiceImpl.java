@@ -3,12 +3,14 @@ package kg.kuban.airport.service.impl;
 import kg.kuban.airport.dto.AirplaneRequestDto;
 import kg.kuban.airport.dto.AirplaneResponseDto;
 import kg.kuban.airport.dto.AirplanePartCheckupRequestDto;
+import kg.kuban.airport.dto.AirplaneTypesResponseDto;
 import kg.kuban.airport.entity.*;
 import kg.kuban.airport.enums.AirplaneStatus;
 import kg.kuban.airport.enums.AirplanePartStatus;
 import kg.kuban.airport.enums.AirplaneType;
 import kg.kuban.airport.exception.*;
 import kg.kuban.airport.mapper.AircompanyMapper;
+import kg.kuban.airport.mapper.AirplaneMapper;
 import kg.kuban.airport.repository.AircompanyRepository;
 import kg.kuban.airport.repository.AirplaneRepository;
 import kg.kuban.airport.repository.AppUserRepository;
@@ -305,4 +307,10 @@ public class AirplaneServiceImpl implements AirplaneService {
     public List<AirplaneResponseDto> getAirplanesForRefueling(AirplaneType AirplaneType, LocalDateTime registeredBefore, LocalDateTime registeredAfter) throws IncorrectFiltersException, AirplaneNotFoundException {
         return null;
     }
+
+    @Override
+    public AirplaneTypesResponseDto getAllAirplaneTypes() {
+        return AirplaneMapper.mapToAirplaneTypesResponseDto(List.of(AirplaneType.values()));
+    }
+
 }

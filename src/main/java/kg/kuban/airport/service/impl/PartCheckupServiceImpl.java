@@ -7,7 +7,7 @@ import kg.kuban.airport.entity.AirplanePart;
 import kg.kuban.airport.entity.AirplanePartCheckup;
 import kg.kuban.airport.enums.AirplanePartStatus;
 import kg.kuban.airport.exception.*;
-import kg.kuban.airport.mapper.PartCheckupMapper;
+import kg.kuban.airport.mapper.AirplanePartCheckupMapper;
 import kg.kuban.airport.repository.AirplanePartCheckupRepository;
 import kg.kuban.airport.service.PartCheckupService;
 import kg.kuban.airport.service.PartService;
@@ -66,7 +66,7 @@ public class PartCheckupServiceImpl implements PartCheckupService {
                         "Недопустимый ID самолета! ID самолета для всех деталей техосмотра должен быть одинаковым"
                 );
             }
-            partCheckupsEntities.add(PartCheckupMapper.mapAirplanePartCheckupRequestDtoToEntity(requestDto));
+            partCheckupsEntities.add(AirplanePartCheckupMapper.mapAirplanePartCheckupRequestDtoToEntity(requestDto));
             partIdList.add(requestDto.getPartId());
         }
         if (!airplane.getId().equals(airplaneId)) {
@@ -182,7 +182,7 @@ public class PartCheckupServiceImpl implements PartCheckupService {
 
     @Override
     public AirplanePartStatusResponseDto getAllPartStates() {
-        return PartCheckupMapper.mapToPartStatesResponseDto(List.of(AirplanePartStatus.values()));
+        return AirplanePartCheckupMapper.mapToPartStatesResponseDto(List.of(AirplanePartStatus.values()));
     }
 
 

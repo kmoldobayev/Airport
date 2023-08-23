@@ -3,9 +3,11 @@ package kg.kuban.airport.mapper;
 import kg.kuban.airport.dto.AircompanyResponseDto;
 import kg.kuban.airport.dto.AirplaneResponseDto;
 import kg.kuban.airport.dto.AirplaneSeatResponseDto;
+import kg.kuban.airport.dto.AirplaneTypesResponseDto;
 import kg.kuban.airport.entity.Aircompany;
 import kg.kuban.airport.entity.Airplane;
 import kg.kuban.airport.entity.Seat;
+import kg.kuban.airport.enums.AirplaneType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,5 +52,9 @@ public class AirplaneMapper {
                 .stream()
                 .map(AirplaneMapper::mapToAirplaneSeatResponseDto)
                 .collect(Collectors.toList());
+    }
+
+    public static AirplaneTypesResponseDto mapToAirplaneTypesResponseDto(List<AirplaneType> airplaneTypes) {
+        return new AirplaneTypesResponseDto().setAirplaneTypes(airplaneTypes);
     }
 }

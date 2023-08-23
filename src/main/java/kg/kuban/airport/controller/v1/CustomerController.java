@@ -116,7 +116,7 @@ public class CustomerController {
         return ResponseEntity.ok(CustomerReviewMapper.mapCustomerReviewToDto(this.customerService.registerNewReview(requestDto)));
     }
 
-    @PreAuthorize(value = "hasAnyRole('MANAGER', 'PILOT')")
+    @PreAuthorize(value = "hasAnyRole('CHIEF', 'PILOT')")
     @GetMapping(value = "/allReviews")
     public List<CustomerReviewResponseDto> getAllReviews(
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

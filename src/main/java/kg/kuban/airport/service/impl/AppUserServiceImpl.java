@@ -88,7 +88,8 @@ public class AppUserServiceImpl implements AppUserService {
             appUser.setUserPassword(bCryptPasswordEncoder.encode(appUserDto.getUserPassword()));
 
             List<AppRole> userRolesEntityList =
-                    this.appRoleRepository.getAppRolesByPosition(existingPosition);
+                    //this.appRoleRepository.getAppRolesByPosition(existingPosition);
+                    this.appRoleRepository.getAppRolesByTitle(existingPosition.getTitle());
             appUser.setAppRoles(userRolesEntityList);
 
 

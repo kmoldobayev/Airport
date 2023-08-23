@@ -3,6 +3,7 @@ package kg.kuban.airport.service;
 import kg.kuban.airport.dto.AirplaneRequestDto;
 import kg.kuban.airport.dto.AirplaneResponseDto;
 import kg.kuban.airport.dto.AirplanePartCheckupRequestDto;
+import kg.kuban.airport.dto.AirplaneTypesResponseDto;
 import kg.kuban.airport.entity.Airplane;
 import kg.kuban.airport.entity.AirplanePartCheckup;
 import kg.kuban.airport.enums.AirplaneStatus;
@@ -95,5 +96,5 @@ public interface AirplaneService{
 
     Airplane findAirplaneById(Long airplaneId) throws AirplaneNotFoundException;
 
-//    AirplaneTypesResponseDto getAllAirplaneTypes();
+    AirplaneTypesResponseDto getAllAirplaneTypes();
 }

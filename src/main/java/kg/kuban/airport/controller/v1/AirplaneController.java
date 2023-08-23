@@ -10,8 +10,7 @@ import kg.kuban.airport.enums.AirplaneStatus;
 import kg.kuban.airport.enums.AirplaneType;
 import kg.kuban.airport.exception.*;
 import kg.kuban.airport.mapper.AirplaneMapper;
-import kg.kuban.airport.mapper.AirplaneTypeMapper;
-import kg.kuban.airport.mapper.PartCheckupMapper;
+import kg.kuban.airport.mapper.AirplanePartCheckupMapper;
 import kg.kuban.airport.response.SuccessResponse;
 import kg.kuban.airport.service.AirplaneService;
 import org.slf4j.Logger;
@@ -77,20 +76,20 @@ public class AirplaneController {
         }
     }
 
-//    @Operation(
-//            summary = "Метод выдачи самолета на техосмотр",
-//            description = "Выдача самолета на техосмотр выполняется работником банка с ролью Главный инженер",
-//            parameters = {
-//                    @Parameter(name = "airplaneId", description = "ID самолета"),
-//                    @Parameter(name = "userId", description = "ID инженера")
-//            }
-//    )
-//    @PostMapping("/assignCheckup/{id}")
-//    @PreAuthorize(value = "hasAnyRole('CHIEF_ENGINEER')")
-//    public ResponseEntity<?> assignAirplaneToCheckup( @PathVariable Long airplaneId, @RequestParam Long userId)
-//            throws AirplaneNotFoundException, StatusChangeException, EngineerIsBusyException {
-//        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.assignAirplaneCheckup(airplaneId, userId)));
-//    }
+    @Operation(
+            summary = "Метод выдачи самолета на техосмотр",
+            description = "Выдача самолета на техосмотр выполняется работником банка с ролью Главный инженер",
+            parameters = {
+                    @Parameter(name = "airplaneId", description = "ID самолета"),
+                    @Parameter(name = "userId", description = "ID инженера")
+            }
+    )
+    @PostMapping("/assignCheckup/{id}")
+    @PreAuthorize(value = "hasAnyRole('CHIEF_ENGINEER')")
+    public ResponseEntity<?> assignAirplaneToCheckup( @PathVariable(value = "id") Long airplaneId, @RequestParam Long userId)
+            throws AirplaneNotFoundException, StatusChangeException, EngineerIsBusyException {
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.assignAirplaneCheckup(airplaneId, userId)));
+    }
 
     @Operation(
             summary = "Метод составление технического осмотра самолета.",
@@ -114,7 +113,7 @@ public class AirplaneController {
             IllegalAirplaneException,
             IncompatiblePartException
     {
-        return ResponseEntity.ok(PartCheckupMapper.mapToPartCheckupResponseDtoList(this.airplaneService.checkupAirplane(airplaneId, partInspectionsRequestDtoList)));
+        return ResponseEntity.ok(AirplanePartCheckupMapper.mapToPartCheckupResponseDtoList(this.airplaneService.checkupAirplane(airplaneId, partInspectionsRequestDtoList)));
     }
 
     @Operation(
@@ -217,7 +216,7 @@ public class AirplaneController {
         return ResponseEntity.ok(this.airplaneService.refuelAirplane(airplaneId));
     }
 
-    @PreAuthorize(value = "hasAnyRole('MANAGER', 'CHIEF_DISPATCHER', 'DISPATCHER', 'CHIEF_ENGINEER', 'ENGINEER')")
+    @PreAuthorize(value = "hasAnyRole('CHIEF', 'CHIEF_DISPATCHER', 'DISPATCHER', 'CHIEF_ENGINEER', 'ENGINEER')")
     @GetMapping(value = "/all")
     public List<AirplaneResponseDto> getAllAirplanes(
             @RequestParam(required = false) AirplaneType AirplaneType,
@@ -269,9 +268,9 @@ public class AirplaneController {
         return this.airplaneService.getAirplanesForRefueling(AirplaneType, registeredBefore, registeredAfter);
     }
 
-//    @PreAuthorize(value = "hasAnyRole('DISPATCHER', 'CHIEF', 'ENGINEER', 'CHIEF_ENGINEER', 'CHIEF_DISPATCHER')")
-//    @GetMapping(value = "/airplaneTypes")
-//    public ResponseEntity<?> getAirplaneTypes() {
-//        return ResponseEntity.ok(AirplaneTypeMapper.mapAirplaneTypeToDto(this.airplaneService.getAllAirplaneTypes());
-//    }
+    @PreAuthorize(value = "hasAnyRole('DISPATCHER', 'CHIEF', 'ENGINEER', 'CHIEF_ENGINEER', 'CHIEF_DISPATCHER')")
+    @GetMapping(value = "/airplaneTypes")
+    public ResponseEntity<?> getAirplaneTypes() {
+        return ResponseEntity.ok(this.airplaneService.getAllAirplaneTypes());
+    }
 }

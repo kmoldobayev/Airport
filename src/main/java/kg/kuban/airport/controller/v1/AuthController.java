@@ -54,8 +54,10 @@ public class AuthController {
 
         logger.info("authDto login=" + authDto.getLogin());
         logger.info("authDto password=" + authDto.getPassword());
-        this.authServiceImpl.login(authDto.getLogin(), authDto.getPassword());
+        //this.authServiceImpl.login(authDto.getLogin(), authDto.getPassword());
+        logger.info("before loginUser");
         tokenResponseDto = authServiceImpl.loginUser(authDto.getLogin(), authDto.getPassword());
+        logger.info("Token: " + tokenResponseDto.getAccessToken());
         return ResponseEntity.ok(tokenResponseDto);
 
     }
