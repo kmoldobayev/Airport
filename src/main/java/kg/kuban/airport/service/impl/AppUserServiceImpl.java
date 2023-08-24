@@ -218,4 +218,31 @@ public class AppUserServiceImpl implements AppUserService {
         return applicationUsersEntities;
     }
 
+    @Override
+    public AppUser getEngineerAppUserById(Long engineerId)
+            throws AppUserNotFoundException
+    {
+        if(Objects.isNull(engineerId)) {
+            throw new IllegalArgumentException("ID инженера не может быть null!");
+        }
+        if(engineerId < 1L) {
+            throw new IllegalArgumentException("ID инженера не может быть меньше 1!");
+        }
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QAppUser root = QAppUser.appUser;
+
+        booleanBuilder.and(root.appRoles.any().title.eq("ENGINEER"));
+        booleanBuilder.and(root.id.eq(engineerId));
+
+        Optional<AppUser> AppUserOptional =
+                this.appUserRepository.findOne(booleanBuilder.getValue());
+        if(AppUserOptional.isEmpty()) {
+            throw new AppUserNotFoundException(
+                    String.format("Инженера с ID[%d] не найдено!", engineerId)
+            );
+        }
+        return AppUserOptional.get();
+    }
+
 }

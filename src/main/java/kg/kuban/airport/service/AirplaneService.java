@@ -56,7 +56,7 @@ public interface AirplaneService{
 
 
 
-    List<AirplaneResponseDto> getAllAirplanes(
+    List<Airplane> getAllAirplanes(
             AirplaneType AirplaneType,
             AirplaneStatus AirplaneStatus,
             LocalDateTime registeredBefore,
@@ -65,7 +65,7 @@ public interface AirplaneService{
             throws IncorrectFiltersException,
             AirplaneNotFoundException;
 
-    List<AirplaneResponseDto> getAirplanesForRepairs(
+    List<Airplane> getAirplanesForRepairs(
             AirplaneType AirplaneType,
             LocalDateTime registeredBefore,
             LocalDateTime registeredAfter
@@ -76,9 +76,14 @@ public interface AirplaneService{
     Boolean deleteNewAirplane(Long airplaneId) throws IllegalArgumentException, AirplaneNotFoundException, AirplaneSeatNotFoundException;
     //Airplane registerNewInspection(Airplane airplane, AppUser appUser);
     Airplane confirmAirplaneServiceAbility(Long airplaneId) throws AirplaneNotFoundException, AirplanePartCheckupNotFoundException, StatusChangeException ;
-    Airplane assignAirplaneRepairs(Long airplaneId, Long userId);
+    Airplane assignAirplaneRepairs(Long airplaneId, Long userId)
+            throws EngineerIsBusyException,
+            StatusChangeException,
+            AppUserNotFoundException,
+            AirplaneNotFoundException,
+            AirplanePartCheckupNotFoundException;
 
-    List<AirplaneResponseDto> getNewAirplanes(
+    List<Airplane> getNewAirplanes(
             AirplaneType airplaneType,
             LocalDateTime registeredBefore,
             LocalDateTime registeredAfter
@@ -86,7 +91,7 @@ public interface AirplaneService{
             throws IncorrectFiltersException,
             AirplaneNotFoundException;
 
-    List<AirplaneResponseDto> getAirplanesForRefueling(
+    List<Airplane> getAirplanesForRefueling(
             AirplaneType AirplaneType,
             LocalDateTime registeredBefore,
             LocalDateTime registeredAfter

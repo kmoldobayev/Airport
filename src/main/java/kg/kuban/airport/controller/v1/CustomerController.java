@@ -2,6 +2,7 @@ package kg.kuban.airport.controller.v1;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.*;
@@ -49,46 +50,6 @@ public class CustomerController {
         return  ResponseEntity.ok(CustomerMapper.mapAppUserEntityToDto(this.customerService.createCustomer(user)));
     }
 
-//    @Operation(
-//            summary = "Метод просмотра доступных рейсов",
-//            description = "Регистрация нового клиента выполняется с ролью Клиент",
-//            parameters = {
-//                    @Parameter(name = "CustomerRequestDto", description = "DTO клиента")
-//            }
-//    )
-//    @GetMapping(value = "/customer{id}/pastFlights")
-//    @PreAuthorize("hasAnyRole('CUSTOMER')")
-//    public ResponseEntity<?> getMyPastFlights(@PathVariable(value = "id") Long customerId) throws InvalidCredentialsException {
-//        return ResponseEntity.ok(UserFlightMapper.mapFlightEntityListToDto(this.customerService.getMyPastFlights(customerId)));
-//    }
-
-//    @Operation(
-//            summary = "Метод просмотра доступных рейсов",
-//            description = "Просмотр доступных рейсов выполняется с ролью Клиент",
-//            parameters = {
-//                    @Parameter(name = "customerId", description = "ID клиента")
-//            }
-//    )
-//    @ApiResponse(description = "DTO рейсов")
-//    @GetMapping(value = "/availableFlights")
-//    @PreAuthorize("hasAnyRole('CUSTOMER')")
-//    public ResponseEntity<?> getAvailableFlights(@PathVariable(value = "id") Long customerId) throws InvalidCredentialsException {
-//        return  ResponseEntity.ok(FlightMapper.mapFlightEntityListToDto(this.customerService.getAvailableFlights(customerId)));
-//    }
-
-//    @Operation(
-//            summary = "Метод просмотр текущего рейса",
-//            description = "Просмотр текущего рейса с ролью Клиент",
-//            parameters = {
-//                    @Parameter(name = "customerId", description = "ID клиента")
-//            }
-//    )
-//    @GetMapping(value = "/customer{id}/currentFlight")
-//    @PreAuthorize("hasAnyRole('CUSTOMER')")
-//    public ResponseEntity<?> getCurrentFlight(@PathVariable(value = "id") Long customerId) throws InvalidCredentialsException {
-//        return  ResponseEntity.ok(UserFlightMapper.mapToUserFlightRegistrationResponseDto(this.customerService.getCurrentFlight(customerId)));
-//    }
-
     @Operation(
             summary = "Формирование отчета по поиску клиентов по дате регистрации и статусу аккаунта. Роль : CHIEF",
             description = "Поиск клиентов по дате регистрации (date_register) и" +
@@ -106,6 +67,13 @@ public class CustomerController {
         return ResponseEntity.ok(AppUserMapper.mapAppUserEntityListToDto(this.customerService.getAllCustomers(registeredBefore, registeredAfter, isDeleted)));
     }
 
+    @Operation(
+            summary = "Регистрация нового отзыва клиента по рейсу",
+            description = "Пользователь с ролью Клиент выполняет Регистрацию нового отзыва",
+            parameters = {
+                    @Parameter(name = "requestDto", description = "DTO отзыва", schema = @Schema(type = "CustomerReviewRequestDtoLong"), required = true)
+            }
+    )
     @PreAuthorize(value = "hasRole('CUSTOMER')")
     @PostMapping(value = "/registerReview")
     public ResponseEntity<?> registerNewReview(@RequestBody CustomerReviewRequestDto requestDto)
@@ -116,6 +84,24 @@ public class CustomerController {
         return ResponseEntity.ok(CustomerReviewMapper.mapCustomerReviewToDto(this.customerService.registerNewReview(requestDto)));
     }
 
+    @Operation(
+            summary = "Просмотр отзывов клиентов по рейсу",
+            description = "Пользователь с ролью (Пилот, Управляющий директорв) выполняет Просмотр отзывов клиентов по рейсу",
+            parameters = {
+                    @Parameter(name = "dateBegin",
+                                description = "Дата начала регистрации",
+                                schema = @Schema(type = "LocalDateTime"),
+                                required = false),
+                    @Parameter(name = "dateEnd",
+                            description = "Дата окончания регистрации",
+                            schema = @Schema(type = "LocalDateTime"),
+                            required = false),
+                    @Parameter(name = "flightId",
+                            description = "ID рейса",
+                            schema = @Schema(type = "Long"),
+                            required = false)
+            }
+    )
     @PreAuthorize(value = "hasAnyRole('CHIEF', 'PILOT')")
     @GetMapping(value = "/allReviews")
     public List<CustomerReviewResponseDto> getAllReviews(

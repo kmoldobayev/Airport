@@ -1,5 +1,6 @@
 package kg.kuban.airport.controller.v1;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.exception.AirplanePartCheckupNotFoundException;
 import kg.kuban.airport.mapper.AirplanePartCheckupMapper;
 import kg.kuban.airport.service.PartCheckupService;
@@ -13,6 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/checkups")
+@Tag(
+        name = "Контроллер просмотра истории тех осмотра самолетов",
+        description = "Описывает точки доступа по истории тех осмотра"
+)
 public class CheckupsController {
     private final PartCheckupService partCheckupService;
 

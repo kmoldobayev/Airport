@@ -2,10 +2,12 @@ package kg.kuban.airport.controller.v1;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.AirplaneRequestDto;
 import kg.kuban.airport.dto.AirplanePartCheckupRequestDto;
 import kg.kuban.airport.dto.AirplaneResponseDto;
+import kg.kuban.airport.entity.Airplane;
 import kg.kuban.airport.enums.AirplaneStatus;
 import kg.kuban.airport.enums.AirplaneType;
 import kg.kuban.airport.exception.*;
@@ -43,7 +45,10 @@ public class AirplaneController {
             summary = "Метод регистрации самолета Диспетчером",
             description = "Регистрация нового самолета выполняется работником банка с ролью Диспетчер",
             parameters = {
-                    @Parameter(name = "AirplaneRequestDto", description = "DTO самолета")
+                    @Parameter(name = "AirplaneRequestDto",
+                                description = "DTO самолета",
+                                schema = @Schema(type = "AirplaneRequestDto"),
+                                required = true)
             }
     )
     @PostMapping(value = "/register")
@@ -60,7 +65,10 @@ public class AirplaneController {
             summary = "Метод удаления самолета Диспетчером",
             description = "Удаление нового самолета выполняется работником банка с ролью Диспетчер",
             parameters = {
-                    @Parameter(name = "airplaneId", description = "ID самолета")
+                    @Parameter(name = "airplaneId",
+                                description = "ID самолета",
+                                schema = @Schema(type = "Long"),
+                                required = true)
             }
     )
     @DeleteMapping(value = "/deleteAirplane/{id}")
@@ -80,8 +88,14 @@ public class AirplaneController {
             summary = "Метод выдачи самолета на техосмотр",
             description = "Выдача самолета на техосмотр выполняется работником банка с ролью Главный инженер",
             parameters = {
-                    @Parameter(name = "airplaneId", description = "ID самолета"),
-                    @Parameter(name = "userId", description = "ID инженера")
+                    @Parameter(name = "airplaneId",
+                            description = "ID самолета",
+                            schema = @Schema(type = "Long"),
+                            required = true),
+                    @Parameter(name = "userId",
+                                description = "ID инженера",
+                                schema = @Schema(type = "Long"),
+                                required = true)
             }
     )
     @PostMapping("/assignCheckup/{id}")
@@ -95,14 +109,20 @@ public class AirplaneController {
             summary = "Метод составление технического осмотра самолета.",
             description = "Составление технического осмотра самолета выполняется работником банка с ролью Инженер",
             parameters = {
-                    @Parameter(name = "airplaneId", description = "ID самолета"),
-                    @Parameter(name = "List<AirplanePartCheckupRequestDto>", description = "DTO запроса списка частей самолета ")
+                    @Parameter(name = "airplaneId",
+                                description = "ID самолета",
+                                schema = @Schema(type = "Long"),
+                                required = true),
+                    @Parameter(name = "List<AirplanePartCheckupRequestDto>",
+                                description = "Список DTO запроса списка частей самолета ",
+                                schema = @Schema(type = "List<AirplanePartCheckupRequestDto>"),
+                                required = true)
             }
     )
     @PreAuthorize(value = "hasRole('ENGINEER')")
     @PostMapping(value = "/checkup/{id}")
     public ResponseEntity<?> checkupAirplane(
-            @PathVariable Long airplaneId,
+            @PathVariable(value = "id") Long airplaneId,
             @RequestBody List<AirplanePartCheckupRequestDto> partInspectionsRequestDtoList
     )
             throws AirplaneNotFoundException,
@@ -218,7 +238,7 @@ public class AirplaneController {
 
     @PreAuthorize(value = "hasAnyRole('CHIEF', 'CHIEF_DISPATCHER', 'DISPATCHER', 'CHIEF_ENGINEER', 'ENGINEER')")
     @GetMapping(value = "/all")
-    public List<AirplaneResponseDto> getAllAirplanes(
+    public List<Airplane> getAllAirplanes(
             @RequestParam(required = false) AirplaneType AirplaneType,
             @RequestParam(required = false) AirplaneStatus AirplaneStatus,
             @RequestParam(required = false) LocalDateTime registeredAfter,
@@ -232,19 +252,19 @@ public class AirplaneController {
 
     @PreAuthorize(value = "hasAnyRole('CHEIF', 'ENGINEER')")
     @GetMapping(value = "/new")
-    public List<AirplaneResponseDto> getNewAirplanes(
+    public ResponseEntity<?> getNewAirplanes(
             @RequestParam(required = false) AirplaneType AirplaneType,
             @RequestParam(required = false) LocalDateTime registeredAfter,
             @RequestParam(required = false) LocalDateTime registeredBefore
     )
             throws AirplaneNotFoundException, IncorrectFiltersException
     {
-        return this.airplaneService.getNewAirplanes(AirplaneType, registeredBefore, registeredAfter);
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityListToDto(this.airplaneService.getNewAirplanes(AirplaneType, registeredBefore, registeredAfter))); //List<AirplaneResponseDto>
     }
 
     @PreAuthorize(value = "hasAnyRole('CHIEF', 'ENGINEER')")
     @GetMapping(value = "/forRepairs")
-    public List<AirplaneResponseDto> getAirplanesForRepairs(
+    public ResponseEntity<?> getAirplanesForRepairs(
             @RequestParam(required = false) AirplaneType AirplaneType,
             @RequestParam(required = false) LocalDateTime registeredAfter,
             @RequestParam(required = false) LocalDateTime registeredBefore
@@ -252,12 +272,12 @@ public class AirplaneController {
             throws AirplaneNotFoundException,
             IncorrectFiltersException
     {
-        return this.airplaneService.getAirplanesForRepairs(AirplaneType, registeredBefore, registeredAfter);
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityListToDto(this.airplaneService.getAirplanesForRepairs(AirplaneType, registeredBefore, registeredAfter)));
     }
 
     @PreAuthorize(value = "hasAnyRole('CHIEF', 'ENGINEER')")
     @GetMapping(value = "/forRefueling")
-    public List<AirplaneResponseDto> getAirplaneForRefueling(
+    public ResponseEntity<?> getAirplaneForRefueling(
             @RequestParam(required = false) AirplaneType AirplaneType,
             @RequestParam(required = false) LocalDateTime registeredBefore,
             @RequestParam(required = false) LocalDateTime registeredAfter
@@ -265,7 +285,7 @@ public class AirplaneController {
             throws AirplaneNotFoundException,
             IncorrectFiltersException
     {
-        return this.airplaneService.getAirplanesForRefueling(AirplaneType, registeredBefore, registeredAfter);
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityListToDto(this.airplaneService.getAirplanesForRefueling(AirplaneType, registeredBefore, registeredAfter)));
     }
 
     @PreAuthorize(value = "hasAnyRole('DISPATCHER', 'CHIEF', 'ENGINEER', 'CHIEF_ENGINEER', 'CHIEF_DISPATCHER')")

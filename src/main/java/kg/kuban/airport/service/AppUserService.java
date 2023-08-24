@@ -26,4 +26,6 @@ public interface AppUserService {
 
     List<AppUser> getUserEntitiesByIdList(List<Long> userIdList) throws AppUserNotFoundException;
 
+    AppUser getEngineerAppUserById(Long engineerId) throws AppUserNotFoundException;
+
 }

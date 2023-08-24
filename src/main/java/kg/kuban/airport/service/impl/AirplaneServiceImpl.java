@@ -1,5 +1,7 @@
 package kg.kuban.airport.service.impl;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import kg.kuban.airport.dto.AirplaneRequestDto;
 import kg.kuban.airport.dto.AirplaneResponseDto;
 import kg.kuban.airport.dto.AirplanePartCheckupRequestDto;
@@ -8,6 +10,7 @@ import kg.kuban.airport.entity.*;
 import kg.kuban.airport.enums.AirplaneStatus;
 import kg.kuban.airport.enums.AirplanePartStatus;
 import kg.kuban.airport.enums.AirplaneType;
+import kg.kuban.airport.enums.FlightStatus;
 import kg.kuban.airport.exception.*;
 import kg.kuban.airport.mapper.AircompanyMapper;
 import kg.kuban.airport.mapper.AirplaneMapper;
@@ -15,11 +18,10 @@ import kg.kuban.airport.repository.AircompanyRepository;
 import kg.kuban.airport.repository.AirplaneRepository;
 import kg.kuban.airport.repository.AppUserRepository;
 import kg.kuban.airport.repository.SeatRepository;
-import kg.kuban.airport.service.AirplaneService;
-import kg.kuban.airport.service.PartCheckupService;
-import kg.kuban.airport.service.PartService;
-import kg.kuban.airport.service.SeatService;
+import kg.kuban.airport.service.*;
+import kg.kuban.airport.util.AppUserRoleUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class AirplaneServiceImpl implements AirplaneService {
@@ -37,24 +41,66 @@ public class AirplaneServiceImpl implements AirplaneService {
     private final AirplaneRepository airplaneRepository;
     private final SeatRepository seatRepository;
 
+    private final AppUserService appUserService;
     private final PartCheckupService partCheckupService;
     private final SeatService seatService;
     private final PartService partService;
-
+    
     @Autowired
-    public AirplaneServiceImpl(AppUserRepository appUserRepository, AircompanyRepository aircompanyRepository, AirplaneRepository airplaneRepository, SeatRepository seatRepository, PartCheckupService partCheckupService, SeatService seatService, PartService partService) {
+    public AirplaneServiceImpl(AppUserRepository appUserRepository, AircompanyRepository aircompanyRepository, AirplaneRepository airplaneRepository, SeatRepository seatRepository, AppUserService appUserService, PartCheckupService partCheckupService, SeatService seatService, PartService partService) {
         this.appUserRepository = appUserRepository;
         this.aircompanyRepository = aircompanyRepository;
         this.airplaneRepository = airplaneRepository;
         this.seatRepository = seatRepository;
+        this.appUserService = appUserService;
         this.partCheckupService = partCheckupService;
         this.seatService = seatService;
         this.partService = partService;
     }
 
     @Override
-    public Airplane assignAirplaneRepairs(Long airplaneId, Long userId) {
-        return null;
+    public Airplane assignAirplaneRepairs(Long airplaneId, Long engineersId)
+            throws EngineerIsBusyException,
+                    StatusChangeException,
+                    AppUserNotFoundException,
+                    AirplaneNotFoundException,
+                    AirplanePartCheckupNotFoundException
+    {
+
+        Airplane airplane = this.findAirplaneById(airplaneId);
+        if (!airplane.getStatus().equals(AirplaneStatus.INSPECTED)) {
+            throw new StatusChangeException(
+                    "Чтобы отправить самолет на ремонт самолет должен быть осмотрен инженером!"
+            );
+        }
+        if (!this.partCheckupService.getLastAirplaneCheckupResult(airplaneId).equals(AirplanePartStatus.MAINTENANCE)) {
+            throw new StatusChangeException(
+                    String.format(
+                            "Чтобы отправить самолет на ремонт хотя бы одна деталь самолета должны быть неисправна!" +
+                                    "Результат последнего техосмотра: %s",
+                            AirplanePartStatus.OK.toString()
+                    )
+            );
+        }
+
+        AppUser engineer = this.appUserService.getEngineerAppUserById(engineersId);
+        if (Objects.nonNull(engineer.getServicedAirplane())) {
+            throw new EngineerIsBusyException(
+                    String.format(
+                            "Невозможно назначить инженера с ID[%d] на ремонт самолета." +
+                                    " В данный момент инженер обслуживает другой самолет!",
+                            engineersId
+                    )
+            );
+        }
+
+        airplane.setStatus(AirplaneStatus.ON_REPAIRS);
+        engineer.setServicedAirplane(airplane);
+        airplane.setServicedBy(engineer);
+
+        this.airplaneRepository.save(airplane);
+        //"Самолет отправлен на ремонт! Текущий статус самолета:[%s]"
+        return airplane;
     }
 
     /**
@@ -65,8 +111,8 @@ public class AirplaneServiceImpl implements AirplaneService {
     @Override
     @Transactional
     public Airplane registerNewAirplane(AirplaneRequestDto airplaneRequestDto)
-            throws AirplanePartNotFoundException,
-            IncompatiblePartException {
+            throws AirplanePartNotFoundException, IncompatiblePartException
+    {
 
         if (Objects.isNull(airplaneRequestDto)) {
             throw new IllegalArgumentException("Реквизиты самолета пустые! Заполните!");
@@ -90,7 +136,6 @@ public class AirplaneServiceImpl implements AirplaneService {
         airplane.setNumberSeats(airplaneRequestDto.getNumberSeats());
         airplane.setStatus(AirplaneStatus.TO_CHECKUP);
         airplane.setServicedBy(null);
-        //airplane.setDateRegister(LocalDateTime.now());
 
         // Генерация мест в самолете в зависимости от макс количества вместимости самолета
         List<Seat> airplaneSeats = this.seatService.generateSeats(airplaneRequestDto.getNumberSeats());
@@ -257,60 +302,214 @@ public class AirplaneServiceImpl implements AirplaneService {
 
         airplane.setStatus(AirplaneStatus.SERVICEABLE);
 
+        this.airplaneRepository.save(airplane);
+        return airplane;
+    }
+
+    @Override
+    public Airplane sendAirplaneToRegistrationConfirmation(Long airplaneId)
+            throws AirplaneNotFoundException, StatusChangeException {
+        Airplane airplane = this.findAirplaneById(airplaneId);
+        if (!airplane.getStatus().equals(AirplaneStatus.SERVICEABLE)) {
+            throw new StatusChangeException(
+                    "Чтобы отправить самолет на подверждение регистрации его" +
+                            " техосмотр должен быть подтвержден главным инженером!"
+            );
+        }
+
+        airplane.setStatus(AirplaneStatus.REGISTRATION_PENDING_CONFIRMATION);
+
+        this.airplaneRepository.save(airplane);
+        //"Самолет отправлен на подтверждение регистрации! Текущий статус самолета:[%s]"
+        return airplane;
+    }
+
+    @Override
+    public Airplane confirmAirplaneRegistration(Long airplaneId) throws AirplaneNotFoundException, StatusChangeException {
+        Airplane airplane = this.findAirplaneById(airplaneId);
+        if(!airplane.getStatus().equals(AirplaneStatus.REGISTRATION_PENDING_CONFIRMATION)) {
+            throw new StatusChangeException(
+                    "Для подтверждения регистрации самолета он должен быть направлен главному диспетчеру диспетчером"
+            );
+        }
+
+        airplane.setStatus(AirplaneStatus.AVAILABLE);
+        //"Регистрация самолета подтверждена! Текущий статус самолета: [%s]"
+                
+        this.airplaneRepository.save(airplane);
+        return airplane;
+    }
+
+    @Override
+    public Airplane refuelAirplane(Long AirplaneId)
+            throws AirplaneNotFoundException, StatusChangeException, EngineerIsBusyException {
+        return null;
+    }
+
+    @Override
+    public Airplane assignAirplaneRefueling(Long airplaneId, 
+                                            Long engineerId) 
+            throws AirplaneNotFoundException, StatusChangeException, AppUserNotFoundException, EngineerIsBusyException 
+    {
+        Airplane airplane = this.findAirplaneById(airplaneId);
+        List<Flight> airplanesFlights = airplane.getFlights();
+        if (!airplanesFlights.get(airplanesFlights.size() - 1).getStatus().equals(FlightStatus.DEPARTURE_INITIATED)) {
+            throw new StatusChangeException(
+                    "Чтобы отправить самолет на заправку отпрака рейса самолета должна быть инициирована!"
+            );
+        }
+
+        AppUser engineer = this.appUserService.getEngineerAppUserById(engineerId);
+        if (Objects.nonNull(engineer.getServicedAirplane())) {
+            throw new EngineerIsBusyException(
+                    String.format(
+                            "Невозможно назначить инженера с ID[%d] на заправку." +
+                                    " В данный момент инженер обслуживает другой самолет!",
+                            engineerId
+                    )
+            );
+        }
+
+        airplane.setStatus(AirplaneStatus.ON_REFUELING);
+
+        engineer.setServicedAirplane(airplane);
+        airplane.setServicedBy(engineer);
+        //"Самолет отправлен на заправку! Текущий статус самолета:[%s]"
+                
         airplane = this.airplaneRepository.save(airplane);
         return airplane;
     }
 
-//    @Override
-//    public Airplane assignAirplaneRepairs(Airplane airplane, AppUser appUser) {
-//
-//        airplane.setServicedBy(appUser);
-//
-//        return airplane;
-//    }
     @Override
-    public Airplane sendAirplaneToRegistrationConfirmation(Long AirplaneId) throws AirplaneNotFoundException, StatusChangeException {
-        return null;
+    public List<Airplane> getAllAirplanes(AirplaneType airplaneType,
+                                                     AirplaneStatus AirplaneStatus,
+                                                     LocalDateTime registeredBefore,
+                                                     LocalDateTime registeredAfter)
+            throws IncorrectFiltersException, AirplaneNotFoundException
+    {
+        BooleanBuilder booleanBuilder = new BooleanBuilder(
+                this.buildCommonairplanesSearchPredicate(airplaneType, registeredAfter, registeredBefore)
+        );
+        QAirplane root = QAirplane.airplane;
+
+        if(Objects.nonNull(AirplaneStatus)) {
+            booleanBuilder.and(root.status.eq(AirplaneStatus));
+        }
+
+        return this.findAirplanesByBuiltPredicate(booleanBuilder.getValue());
     }
 
     @Override
-    public Airplane confirmAirplaneRegistration(Long AirplaneId) throws AirplaneNotFoundException, StatusChangeException {
-        return null;
+    public List<Airplane> getAirplanesForRepairs(AirplaneType airplaneType,
+                                                            LocalDateTime registeredBefore,
+                                                            LocalDateTime registeredAfter)
+            throws IncorrectFiltersException, AirplaneNotFoundException
+    {
+        AppUser authorizedUser =
+                (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder(
+                this.buildCommonairplanesSearchPredicate(airplaneType, registeredAfter, registeredBefore)
+        );
+        QAirplane root = QAirplane.airplane;
+        booleanBuilder.and(root.status.eq(AirplaneStatus.ON_REPAIRS));
+        if (AppUserRoleUtils.checkIfUserRolesListContainsSuchUserRoleTitle(
+                authorizedUser.getAppRoles(),
+                "ENGINEER"
+        )) {
+            booleanBuilder.and(root.servicedBy.id.eq(authorizedUser.getId()));
+        }
+        return this.findAirplanesByBuiltPredicate(booleanBuilder.getValue());
     }
 
     @Override
-    public Airplane refuelAirplane(Long AirplaneId) throws AirplaneNotFoundException, StatusChangeException, EngineerIsBusyException {
-        return null;
+    public List<Airplane> getNewAirplanes(AirplaneType airplaneType, LocalDateTime registeredBefore, LocalDateTime registeredAfter) throws IncorrectFiltersException, AirplaneNotFoundException {
+        AppUser authorizedUser =
+                (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        BooleanBuilder booleanBuilder = new BooleanBuilder(
+                this.buildCommonairplanesSearchPredicate(airplaneType, registeredAfter, registeredBefore)
+        );
+        QAirplane root = QAirplane.airplane;
+        booleanBuilder.and(root.status.eq(AirplaneStatus.TO_CHECKUP));
+        if (AppUserRoleUtils.checkIfUserRolesListContainsSuchUserRoleTitle(
+                authorizedUser.getAppRoles(),
+                "ENGINEER"
+        )) {
+            booleanBuilder.and(root.servicedBy.id.eq(authorizedUser.getId()));
+        }
+        return this.findAirplanesByBuiltPredicate(booleanBuilder.getValue());
     }
 
     @Override
-    public Airplane assignAirplaneRefueling(Long AirplaneId, Long engineerId) throws AirplaneNotFoundException, StatusChangeException, AppUserNotFoundException, EngineerIsBusyException {
-        return null;
-    }
-
-    @Override
-    public List<AirplaneResponseDto> getAllAirplanes(AirplaneType AirplaneType, AirplaneStatus AirplaneStatus, LocalDateTime registeredBefore, LocalDateTime registeredAfter) throws IncorrectFiltersException, AirplaneNotFoundException {
-        return null;
-    }
-
-    @Override
-    public List<AirplaneResponseDto> getAirplanesForRepairs(AirplaneType AirplaneType, LocalDateTime registeredBefore, LocalDateTime registeredAfter) throws IncorrectFiltersException, AirplaneNotFoundException {
-        return null;
-    }
-
-    @Override
-    public List<AirplaneResponseDto> getNewAirplanes(AirplaneType airplaneType, LocalDateTime registeredBefore, LocalDateTime registeredAfter) throws IncorrectFiltersException, AirplaneNotFoundException {
-        return null;
-    }
-
-    @Override
-    public List<AirplaneResponseDto> getAirplanesForRefueling(AirplaneType AirplaneType, LocalDateTime registeredBefore, LocalDateTime registeredAfter) throws IncorrectFiltersException, AirplaneNotFoundException {
-        return null;
+    public List<Airplane> getAirplanesForRefueling(AirplaneType airplaneType,
+                                                   LocalDateTime registeredBefore,
+                                                   LocalDateTime registeredAfter)
+            throws IncorrectFiltersException, AirplaneNotFoundException
+    {
+        AppUser authorizedUser =
+                (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        BooleanBuilder booleanBuilder = new BooleanBuilder(
+                this.buildCommonairplanesSearchPredicate(airplaneType, registeredAfter, registeredBefore)
+        );
+        QAirplane root = QAirplane.airplane;
+        booleanBuilder.and(root.status.eq(AirplaneStatus.ON_REFUELING));
+        if (AppUserRoleUtils.checkIfUserRolesListContainsSuchUserRoleTitle(
+                authorizedUser.getAppRoles(),
+                "ENGINEER"
+        )) {
+            booleanBuilder.and(root.servicedBy.id.eq(authorizedUser.getId()));
+        }
+        return this.findAirplanesByBuiltPredicate(booleanBuilder.getValue());
     }
 
     @Override
     public AirplaneTypesResponseDto getAllAirplaneTypes() {
         return AirplaneMapper.mapToAirplaneTypesResponseDto(List.of(AirplaneType.values()));
+    }
+
+    private Predicate buildCommonairplanesSearchPredicate(
+            AirplaneType airplaneType,
+            LocalDateTime registeredAfter,
+            LocalDateTime registeredBefore
+    )
+            throws IncorrectFiltersException
+    {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QAirplane root = QAirplane.airplane;
+
+        if(Objects.nonNull(airplaneType)) {
+            booleanBuilder.and(root.marka.eq(airplaneType));
+        }
+        boolean registeredAfterIsNonNull = Objects.nonNull(registeredAfter);
+        if(registeredAfterIsNonNull) {
+            booleanBuilder.and(root.dateRegister.goe(registeredAfter));
+        }
+        if(Objects.nonNull(registeredBefore)) {
+            if(registeredAfterIsNonNull && registeredAfter.isAfter(registeredBefore)) {
+                throw new IncorrectFiltersException(
+                        "Неверно заданы фильтры поиска по дате! Начальная дата не может быть позже конечной!"
+                );
+            }
+            booleanBuilder.and(root.dateRegister.goe(registeredAfter));
+        }
+
+        return booleanBuilder.getValue();
+    }
+
+    private List<Airplane> findAirplanesByBuiltPredicate(Predicate builtPredicate)
+            throws AirplaneNotFoundException
+    {
+        Iterable<Airplane> AirplaneIterable =
+                this.airplaneRepository.findAll(builtPredicate);
+        List<Airplane> airplaneList =
+                StreamSupport
+                        .stream(AirplaneIterable.spliterator(), false)
+                        .collect(Collectors.toList());
+
+        if (airplaneList.isEmpty()) {
+            throw new AirplaneNotFoundException("Самолетов по заданным параметрам не найдено!");
+        }
+        return airplaneList;
     }
 
 }

@@ -1,5 +1,6 @@
 package kg.kuban.airport.controller.v1;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.AirplanePartRequestDto;
 import kg.kuban.airport.dto.AirplanePartResponseDto;
 import kg.kuban.airport.dto.AirplanePartTypesResponseDto;
@@ -19,6 +20,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/airplaneParts")
+@Tag(
+        name = "Контроллер для регистрации частей Самолета",
+        description = "Описывает точки доступа по регистрации частей самолета для тех осмотра работниками аэропорта"
+)
 public class AirplanePartController {
     private final PartService partService;
 

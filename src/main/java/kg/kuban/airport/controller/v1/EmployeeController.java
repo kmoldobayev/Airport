@@ -11,7 +11,9 @@ import kg.kuban.airport.entity.AppUser;
 import kg.kuban.airport.mapper.EmployeeReportMapper;
 import kg.kuban.airport.mapper.FlightMapper;
 import kg.kuban.airport.repository.FlightRepository;
+import kg.kuban.airport.service.AppUserService;
 import kg.kuban.airport.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,13 +35,14 @@ import java.util.Objects;
 )
 public class EmployeeController {
 
-    private FlightRepository flightRepository;
-    private EmployeeService employeeService;
+    private final AppUserService appUserService;
+    private final EmployeeService employeeService;
 
-//    @GetMapping("/available-flights")
-//    public List<FlightResponseDto> getAvailableFlights() {
-//        return FlightMapper.mapFlightEntityListToDto(this.flightRepository.findAvailableFlights());
-//    }
+    @Autowired
+    public EmployeeController(AppUserService appUserService, EmployeeService employeeService) {
+        this.appUserService = appUserService;
+        this.employeeService = employeeService;
+    }
 
     @Operation(
             summary = "Формирование отчета по работникам аэрропорта",
@@ -110,5 +113,26 @@ public class EmployeeController {
         );
     }
 
+//    @PreAuthorize(value = "hasAnyRole('MANAGER', 'DISPATCHER')")
+//    @GetMapping(value = "/crew-members/free")
+//    public List<ApplicationUserResponseDto> getAllFreeCrewMembers()
+//            throws ApplicationUserNotFoundException
+//    {
+//        return this.applicationUserService.getAllFreeCrewMembers();
+//    }
+//
+//    @PreAuthorize(value = "hasAnyRole('MANAGER', 'CHIEF_ENGINEER')")
+//    @GetMapping(value = "/engineers/free")
+//    public List<ApplicationUserResponseDto> getAllFreeEngineers()
+//            throws ApplicationUserNotFoundException
+//    {
+//        return this.applicationUserService.getAllFreeEngineers();
+//    }
+//
+//    @PreAuthorize(value = "hasAnyRole('MANAGER', 'ADMIN')")
+//    @GetMapping(value = "/positions")
+//    public List<UserPositionResponseDto> getAllEmployeePositions() {
+//        return this.userPositionsService.getAllEmployeePositions();
+//    }
 
 }

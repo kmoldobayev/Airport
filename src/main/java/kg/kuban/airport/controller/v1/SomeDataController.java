@@ -2,7 +2,6 @@ package kg.kuban.airport.controller.v1;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.kuban.airport.dto.DictionaryResponseDto;
 import kg.kuban.airport.mapper.AircompanyMapper;
 import kg.kuban.airport.mapper.AirportMapper;
 import kg.kuban.airport.mapper.PositionMapper;
@@ -20,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
         name = "Контроллер для получения справочных данных Управляющим аэропортом",
         description = "1.Просмотр всех доступных данных в системе (Управляющий аэропортом)."
 )
-public class DictionaryController {
+public class SomeDataController {
 
     private final DictionaryService dictionaryService;
 
     @Autowired
-    public DictionaryController(DictionaryService dictionaryService) {
+    public SomeDataController(DictionaryService dictionaryService) {
         this.dictionaryService = dictionaryService;
     }
 

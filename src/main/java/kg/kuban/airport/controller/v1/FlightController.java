@@ -2,6 +2,7 @@ package kg.kuban.airport.controller.v1;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.AirportRequestDto;
 import kg.kuban.airport.dto.FlightRequestDto;
@@ -48,7 +49,9 @@ public class FlightController {
             summary = "Создание нового рейса",
             description = "Пользовотель с ролью Диспетчер выполняет создание нового рейса",
             parameters = {
-                    @Parameter(name = "flightRequestDto", description = "Данные рейса")
+                    @Parameter(name = "flightRequestDto",
+                                description = "DTO рейса",
+                                schema = @Schema(type = "FlightRequestDto"), required = true)
             }
     )
     @PostMapping("/register")
@@ -64,7 +67,9 @@ public class FlightController {
             summary = "Инициирование отправки рейса ",
             description = "Пользовотель с ролью Диспетчер выполняет Инициирование отправки рейса",
             parameters = {
-                    @Parameter(name = "flightId", description = "ID самолета")
+                    @Parameter(name = "flightId",
+                                description = "ID самолета",
+                                schema = @Schema(type = "Long"), required = true)
             }
     )
     @PreAuthorize(value = "hasRole('DISPATCHER')")
@@ -79,7 +84,9 @@ public class FlightController {
             summary = "Назначение Инженера для заправки самолета",
             description = "Главный инженер назначает Инженера для заправки самолета.",
             parameters = {
-                    @Parameter(name = "flightId", description = "ID самолета")
+                    @Parameter(name = "flightId",
+                                description = "ID самолета",
+                                schema = @Schema(type = "Long"), required = true)
             }
     )
     @PreAuthorize(value = "hasRole('CHIEF_ENGINEER')")
@@ -96,7 +103,9 @@ public class FlightController {
             summary = "Подтверждение нового рейса.",
             description = "Пользователь с ролью Главный Диспетчер подтверждает Регистрацию нового рейса",
             parameters = {
-                    @Parameter(name = "flightId", description = "ID рейса")
+                    @Parameter(name = "flightId",
+                                description = "ID рейса",
+                                schema = @Schema(type = "Long"), required = true)
             }
     )
     @PreAuthorize(value = "hasRole('CHIEF_DISPATCHER')")
@@ -112,7 +121,9 @@ public class FlightController {
             summary = "Диспетчер оповещает Пилота, Главного стюарда и Стюардов о начале рейса.",
             description = "Пользователь с ролью Диспетчер иницирует экипаж по рейсу",
             parameters = {
-                    @Parameter(name = "flightId", description = "ID рейса")
+                    @Parameter(name = "flightId",
+                                description = "ID рейса",
+                                schema = @Schema(type = "Long"), required = true)
             }
     )
     @PreAuthorize(value = "hasRole('DISPATCHER')")
@@ -127,7 +138,7 @@ public class FlightController {
             summary = "Запрос на посадку рейса.",
             description = "Пользователь с ролью Пилот запрашивает посадку по рейсу",
             parameters = {
-                    @Parameter(name = "flightId", description = "ID рейса")
+                    @Parameter(name = "flightId", description = "ID рейса", schema = @Schema(type = "Long"), required = true)
             }
     )
     @PreAuthorize(value = "hasRole('PILOT')")
@@ -142,7 +153,7 @@ public class FlightController {
             summary = "Принятие рейса по посадке.",
             description = "Пользователь с ролью Диспетчер принимает посадку по рейсу",
             parameters = {
-                    @Parameter(name = "flightId", description = "ID рейса")
+                    @Parameter(name = "flightId", description = "ID рейса", schema = @Schema(type = "Long"), required = true)
             }
     )
     @PreAuthorize(value = "hasRole('DISPATCHER')")
@@ -157,7 +168,7 @@ public class FlightController {
             summary = "Подтверждение принятия рейса по посадке.",
             description = "Пользователь с ролью Главный Диспетчер подтверждает принятие по рейсу",
             parameters = {
-                    @Parameter(name = "flightId", description = "ID рейса")
+                    @Parameter(name = "flightId", description = "ID рейса", schema = @Schema(type = "Long"), required = true)
             }
     )
     @PreAuthorize(value = "hasRole('CHIEF_DISPATCHER')")
@@ -168,6 +179,13 @@ public class FlightController {
         return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.confirmLanding(flightId)));
     }
 
+    @Operation(
+            summary = "Начало полета",
+            description = "Пользователь с ролью Пилот выполняет Начало полета",
+            parameters = {
+                    @Parameter(name = "flightId", description = "ID рейса", schema = @Schema(type = "Long"), required = true)
+            }
+    )
     @PreAuthorize(value = "hasRole('PILOT')")
     @PutMapping(value = "/startFlight")
     public ResponseEntity<?> startFlight(
@@ -182,7 +200,7 @@ public class FlightController {
             summary = "Окончание рейса.",
             description = "Пользователь с ролью Пилот выполняет окончание рейса",
             parameters = {
-                    @Parameter(name = "flightId", description = "ID рейса")
+                    @Parameter(name = "flightId", description = "ID рейса", schema = @Schema(type = "Long"), required = true)
             }
     )
     @PreAuthorize(value = "hasRole('PILOT')")
@@ -195,9 +213,17 @@ public class FlightController {
 
     @Operation(
             summary = "Просмотр доступных рейсов",
-            description = "Пользователь с ролью Пилот выполняет окончание рейса",
+            description = "Пользователь с ролью (Управляющий директор, Главный диспетчер, Диспетчер, Пилот, Клиент) выполняет Просмотр доступных рейсов",
             parameters = {
-                    @Parameter(name = "flightId", description = "ID рейса")
+                    @Parameter(name = "dateRegisterBeg",
+                                description = "Дата начала регистрации",
+                                schema = @Schema(type = "LocalDateTime"), required = false),
+                    @Parameter(name = "dateRegisterEnd",
+                            description = "Дата окончания регистрации",
+                            schema = @Schema(type = "LocalDateTime"), required = false),
+                    @Parameter(name = "flightStatus",
+                            description = "Статус рейса",
+                            schema = @Schema(type = "FlightStatus"), required = false)
             }
     )
     @PreAuthorize(value = "hasAnyRole('CHIEF', 'CHIEF_DISPATCHER', 'DISPATCHER', 'PILOT', 'CUSTOMER')")
@@ -251,6 +277,13 @@ public class FlightController {
         return ResponseEntity.ok(AirplaneMapper.mapToAirplaneSeatResponseDtoList(this.seatService.getAllSeats(flight.getAirplane().getId(), isOccupied)));
     }
 
+    @Operation(
+            summary = "Назначение раздачи еды",
+            description = "Пользователь с ролью Главный стюард выполняет Назначение раздачи еды",
+            parameters = {
+                    @Parameter(name = "flightId", description = "ID рейса")
+            }
+    )
     @PreAuthorize(value = "hasRole('CHIEF_STEWARD')")
     @PutMapping(value = "/assignFoodDistribution")
     public ResponseEntity<?> assignFoodDistributionDuringFlight(@RequestParam Long flightId)
