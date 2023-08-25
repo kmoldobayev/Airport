@@ -22,13 +22,13 @@ public interface AirplanePartCheckupService {
                     IllegalAirplaneException;
 
     List<AirplanePartCheckup> getPartCheckupsHistory(Long airplaneId)
-            throws AirplanePartCheckupNotFoundException;
+            throws AirplanePartCheckupsNotFoundException;
 
     List<AirplanePartCheckup> getLastAirplaneCheckups(Long airplaneId)
-            throws AirplanePartCheckupNotFoundException;
+            throws AirplanePartCheckupNotFoundException, StatusNotFoundException;
 
     AirplanePartStatus getLastAirplaneCheckupResult(Long airplaneId)
-            throws AirplanePartCheckupNotFoundException;
+            throws AirplanePartCheckupNotFoundException, StatusNotFoundException;
 
     AirplanePartStatusResponseDto getAllPartStates();
 }

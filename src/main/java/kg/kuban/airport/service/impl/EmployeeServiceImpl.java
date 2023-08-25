@@ -8,6 +8,7 @@ import kg.kuban.airport.repository.AppUserRepository;
 import kg.kuban.airport.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -26,6 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.appUserRepository = appUserRepository;
     }
 
+    @Transactional
     @Override
     public List<AppUser> getEmployeeReport(LocalDate startDate,
                                            LocalDate endDate,

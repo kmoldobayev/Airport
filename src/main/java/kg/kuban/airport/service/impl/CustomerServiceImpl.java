@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,6 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
     private PasswordEncoder bCryptPasswordEncoder;
     private final Logger logger = LoggerFactory.getLogger(AppUserController.class);
 
+    @Transactional
     @Override
     public AppUser createCustomer(CustomerRequestDto appUserDto) throws IllegalArgumentException {
         AppUser possibleDuplicate = appUserRepository.findAll().stream()
@@ -112,6 +114,7 @@ public class CustomerServiceImpl implements CustomerService {
         return appUserList;
     }
 
+    @Transactional
     @Override
     public CustomerReview registerNewReview(CustomerReviewRequestDto requestDto) throws UserFlightNotFoundException,
             FlightNotFoundException

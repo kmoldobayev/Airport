@@ -56,13 +56,15 @@ public class AirplaneServiceImpl implements AirplaneService {
         this.partService = partService;
     }
 
+    @Transactional
     @Override
     public Airplane assignAirplaneRepairs(Long airplaneId, Long engineersId)
             throws EngineerIsBusyException,
                     StatusChangeException,
                     AppUserNotFoundException,
                     AirplaneNotFoundException,
-                    AirplanePartCheckupNotFoundException
+                    AirplanePartCheckupNotFoundException,
+                    StatusNotFoundException
     {
 
         Airplane airplane = this.findAirplaneById(airplaneId);
@@ -106,8 +108,8 @@ public class AirplaneServiceImpl implements AirplaneService {
      * @param airplaneRequestDto
      * @return Airplane
      */
-    @Override
     @Transactional
+    @Override
     public Airplane registerNewAirplane(AirplaneRequestDto airplaneRequestDto)
             throws AirplanePartNotFoundException, IncompatiblePartException
     {
@@ -166,8 +168,8 @@ public class AirplaneServiceImpl implements AirplaneService {
      * @return
      */
 
-    @Override
     @Transactional
+    @Override
     public Airplane assignAirplaneCheckup(Long airplaneId, Long userId)
             throws AirplaneNotFoundException, StatusChangeException, EngineerIsBusyException
     {
@@ -203,6 +205,7 @@ public class AirplaneServiceImpl implements AirplaneService {
      * @param partCheckupsRequestDtoList
      * @return List<AirplanePartCheckup>
      */
+    @Transactional
     @Override
     public List<AirplanePartCheckup> checkupAirplane(Long airplaneId,
                                                      List<AirplanePartCheckupRequestDto> partCheckupsRequestDtoList)
@@ -259,8 +262,8 @@ public class AirplaneServiceImpl implements AirplaneService {
         return airplaneOptional.get();
     }
 
-    @Override
     @Transactional
+    @Override
     public Boolean deleteNewAirplane(Long airplaneId)
             throws IllegalArgumentException, AirplaneNotFoundException, AirplaneSeatNotFoundException
     {
@@ -277,9 +280,14 @@ public class AirplaneServiceImpl implements AirplaneService {
         return true;
     }
 
+    @Transactional
     @Override
     public Airplane confirmAirplaneServiceAbility(Long airplaneId)
-            throws AirplaneNotFoundException, AirplanePartCheckupNotFoundException, StatusChangeException {
+            throws AirplaneNotFoundException,
+                AirplanePartCheckupNotFoundException,
+                StatusChangeException,
+                StatusNotFoundException
+    {
 
         Airplane airplane = this.findAirplaneById(airplaneId);
         if (!airplane.getStatus().equals(AirplaneStatus.INSPECTED)) {
@@ -304,6 +312,7 @@ public class AirplaneServiceImpl implements AirplaneService {
         return airplane;
     }
 
+    @Transactional
     @Override
     public Airplane sendAirplaneToRegistrationConfirmation(Long airplaneId)
             throws AirplaneNotFoundException, StatusChangeException {
@@ -322,6 +331,7 @@ public class AirplaneServiceImpl implements AirplaneService {
         return airplane;
     }
 
+    @Transactional
     @Override
     public Airplane confirmAirplaneRegistration(Long airplaneId) throws AirplaneNotFoundException, StatusChangeException {
         Airplane airplane = this.findAirplaneById(airplaneId);
@@ -338,6 +348,7 @@ public class AirplaneServiceImpl implements AirplaneService {
         return airplane;
     }
 
+    @Transactional
     @Override
     public Airplane refuelAirplane(Long airplaneId)
             throws AirplaneNotFoundException, StatusChangeException, EngineerIsBusyException {
@@ -357,6 +368,7 @@ public class AirplaneServiceImpl implements AirplaneService {
         return airplane;
     }
 
+    @Transactional
     @Override
     public Airplane assignAirplaneRefueling(Long airplaneId, 
                                             Long engineerId) 

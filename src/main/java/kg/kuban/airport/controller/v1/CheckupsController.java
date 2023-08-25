@@ -2,6 +2,7 @@ package kg.kuban.airport.controller.v1;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.exception.AirplanePartCheckupNotFoundException;
+import kg.kuban.airport.exception.AirplanePartCheckupsNotFoundException;
 import kg.kuban.airport.mapper.AirplanePartCheckupMapper;
 import kg.kuban.airport.service.AirplanePartCheckupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class CheckupsController {
     public ResponseEntity<?> getAirplanePartCheckupsHistory(
             @RequestParam Long airplaneId
     )
-            throws AirplanePartCheckupNotFoundException
+            throws AirplanePartCheckupsNotFoundException
     {
         return ResponseEntity.ok(AirplanePartCheckupMapper.mapToPartCheckupResponseDtoList(this.partCheckupService.getPartCheckupsHistory(airplaneId)));
     }

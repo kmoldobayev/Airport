@@ -20,6 +20,7 @@ import kg.kuban.airport.service.FlightService;
 import kg.kuban.airport.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,6 +48,7 @@ public class FlightServiceImpl implements FlightService {
         this.seatService = seatService;
     }
 
+    @Transactional
     @Override
     public Flight registerNewFlight(FlightRequestDto flightRequestDto)
             throws AirplaneNotFoundException, UnavailableAirplaneException
@@ -85,10 +87,15 @@ public class FlightServiceImpl implements FlightService {
         flight.setStatus(FlightStatus.REGISTERED);
         flight.setTicketsLeft(airplaneSeatsNumber);
 
+        Airport existingAirportDestination = this.airportRepository.findByTitle(flightRequestDto.getDestination().getTitle());
+        flight.setDestination(existingAirportDestination);
+
+
         this.flightRepository.save(flight);
         return flight;
     }
 
+    @Transactional
     @Override
     public Flight updateNumberOfRemainingTickets(Long flightId) throws FlightNotFoundException
     {
@@ -103,6 +110,7 @@ public class FlightServiceImpl implements FlightService {
         return this.flightRepository.save(flight);
     }
 
+    @Transactional
     @Override
     public void informThatAllCrewMembersIsReadyForFlight(Long flightId)
             throws FlightNotFoundException, StatusChangeException
@@ -117,6 +125,7 @@ public class FlightServiceImpl implements FlightService {
         this.flightRepository.save(flight);
     }
 
+    @Transactional
     @Override
     public void informThatAllCustomersAreChecked(Long flightId) throws FlightNotFoundException, StatusChangeException {
         Flight Flight = this.getFlightEntityByFlightId(flightId);
@@ -129,6 +138,7 @@ public class FlightServiceImpl implements FlightService {
         this.flightRepository.save(Flight);
     }
 
+    @Transactional
     @Override
     public void informThatAllCustomersAreBriefed(Long flightId) throws FlightNotFoundException, StatusChangeException {
         Flight Flight = this.getFlightEntityByFlightId(flightId);
@@ -141,6 +151,7 @@ public class FlightServiceImpl implements FlightService {
         this.flightRepository.save(Flight);
     }
 
+    @Transactional
     @Override
     public void informThatAllCustomersFoodIsDistributed(Long flightId) throws FlightNotFoundException, StatusChangeException {
         Flight Flight = this.getFlightEntityByFlightId(flightId);
@@ -153,6 +164,7 @@ public class FlightServiceImpl implements FlightService {
         this.flightRepository.save(Flight);
     }
 
+    @Transactional
     @Override
     public Flight confirmFlightRegistration(Long flightId)
             throws FlightNotFoundException, StatusChangeException
@@ -171,6 +183,7 @@ public class FlightServiceImpl implements FlightService {
         return Flight;
     }
 
+    @Transactional
     @Override
     public Flight initiateFlightDeparturePreparations(Long flightId)
             throws
@@ -190,6 +203,7 @@ public class FlightServiceImpl implements FlightService {
         return Flight;
     }
 
+    @Transactional
     @Override
     public Flight initiateCrewPreparation(Long flightId) throws FlightNotFoundException, StatusChangeException
     {
@@ -206,6 +220,7 @@ public class FlightServiceImpl implements FlightService {
         return Flight;
     }
 
+    @Transactional
     @Override
     public Flight confirmAirplaneRefueling(Long flightId)
             throws FlightNotFoundException,
@@ -230,6 +245,7 @@ public class FlightServiceImpl implements FlightService {
         return Flight;
     }
 
+    @Transactional
     @Override
     public Flight assignBriefing(Long flightId) throws FlightNotFoundException, StatusChangeException
     {
@@ -246,6 +262,7 @@ public class FlightServiceImpl implements FlightService {
         return Flight;
     }
 
+    @Transactional
     @Override
     public Flight confirmCustomerReadiness(Long flightId) throws FlightNotFoundException, StatusChangeException
     {
@@ -262,6 +279,7 @@ public class FlightServiceImpl implements FlightService {
         return Flight;
     }
 
+    @Transactional
     @Override
     public Flight initiateDeparture(Long flightId) throws FlightNotFoundException, StatusChangeException
     {
@@ -278,6 +296,7 @@ public class FlightServiceImpl implements FlightService {
         return Flight;
     }
 
+    @Transactional
     @Override
     public Flight confirmDeparture(Long flightId) throws FlightNotFoundException, StatusChangeException
     {
@@ -294,6 +313,7 @@ public class FlightServiceImpl implements FlightService {
         return flight;
     }
 
+    @Transactional
     @Override
     public Flight startFlight(Long flightId) throws FlightNotFoundException, StatusChangeException
     {
@@ -311,6 +331,7 @@ public class FlightServiceImpl implements FlightService {
         return Flight;
     }
 
+    @Transactional
     @Override
     public Flight assignFoodDistribution(Long flightId) throws FlightNotFoundException, StatusChangeException
     {
@@ -327,6 +348,7 @@ public class FlightServiceImpl implements FlightService {
         return Flight;
     }
 
+    @Transactional
     @Override
     public Flight requestLanding(Long flightId)
             throws FlightNotFoundException,
@@ -345,6 +367,7 @@ public class FlightServiceImpl implements FlightService {
         return Flight;
     }
 
+    @Transactional
     @Override
     public Flight assignLanding(Long flightId) throws FlightNotFoundException, StatusChangeException
     {
@@ -361,6 +384,7 @@ public class FlightServiceImpl implements FlightService {
         return Flight;
     }
 
+    @Transactional
     @Override
     public Flight confirmLanding(Long flightId) throws FlightNotFoundException, StatusChangeException
     {
@@ -377,6 +401,7 @@ public class FlightServiceImpl implements FlightService {
         return Flight;
     }
 
+    @Transactional
     @Override
     public Flight endFlight(Long flightId)
             throws FlightNotFoundException,

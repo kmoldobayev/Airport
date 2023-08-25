@@ -1,10 +1,12 @@
 package kg.kuban.airport.service.impl;
 
+import com.querydsl.core.BooleanBuilder;
 import kg.kuban.airport.dto.AirplanePartCheckupRequestDto;
 import kg.kuban.airport.dto.AirplanePartStatusResponseDto;
 import kg.kuban.airport.entity.Airplane;
 import kg.kuban.airport.entity.AirplanePart;
 import kg.kuban.airport.entity.AirplanePartCheckup;
+import kg.kuban.airport.entity.QAirplanePartCheckup;
 import kg.kuban.airport.enums.AirplanePartStatus;
 import kg.kuban.airport.exception.*;
 import kg.kuban.airport.mapper.AirplanePartCheckupMapper;
@@ -13,11 +15,15 @@ import kg.kuban.airport.service.AirplanePartCheckupService;
 import kg.kuban.airport.service.AirplanePartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class AirplanePartCheckupServiceImpl implements AirplanePartCheckupService {
@@ -42,6 +48,7 @@ public class AirplanePartCheckupServiceImpl implements AirplanePartCheckupServic
         }
     }
 
+    @Transactional
     @Override
     public List<AirplanePartCheckup> registerPartCheckups(
             Airplane airplane,
@@ -51,7 +58,7 @@ public class AirplanePartCheckupServiceImpl implements AirplanePartCheckupServic
                     IncompatiblePartException,
                     AirplaneIsNotOnServiceException,
                     IllegalAirplaneException {
-        if(Objects.isNull(requestDtoList)) {
+        if (Objects.isNull(requestDtoList)) {
             throw new IllegalArgumentException("Список создаваемых осмотров деталей не может быть null!");
         }
 
@@ -87,26 +94,26 @@ public class AirplanePartCheckupServiceImpl implements AirplanePartCheckupServic
             );
         }
 
-//        LocalDateTime localDateTimeNow = LocalDateTime.now();
-//        for (int i = 0; i < partsEntities.size(); i++) {
-//            Part part = partsEntities.get(i);
-//            if (!part.getAircraftType().equals(airplane.getMarka())) {
-//                throw new IncompatiblePartException(
-//                        String.format(
-//                                "Деталь %s [%s] не подходит к самолетам типа %s!",
-//                                part.getTitle(),
-//                                part.getPartType(),
-//                                airplane.getMarka().toString()
-//                        )
-//                );
-//            }
-//
-//            partCheckupsEntities.get(i)
-//                    .setPart(part)
-//                    .setDateRegister(localDateTimeNow)
-//                    .setAirplane(airplane)
-//                    .setAppUser(airplane.getServicedBy());
-//        }
+        LocalDateTime localDateTimeNow = LocalDateTime.now();
+        for (int i = 0; i < partsEntities.size(); i++) {
+            AirplanePart airplanePart = partsEntities.get(i);
+            if (!airplanePart.getAirplaneType().equals(airplane.getMarka())) {
+                throw new IncompatiblePartException(
+                        String.format(
+                                "Деталь %s [%s] не подходит к самолетам типа %s!",
+                                airplanePart.getTitle(),
+                                airplanePart.getPartType(),
+                                airplane.getMarka().toString()
+                        )
+                );
+            }
+
+            partCheckupsEntities.get(i)
+                    .setPart(airplanePart)
+                    .setDateRegister(localDateTimeNow)
+                    .setAirplane(airplane)
+                    .setAppUser(airplane.getServicedBy());
+        }
 
         this.currentMaxCheckupCode += 1L;
         for (AirplanePartCheckup airplanePartCheckup : partCheckupsEntities) {
@@ -117,38 +124,37 @@ public class AirplanePartCheckupServiceImpl implements AirplanePartCheckupServic
         return partCheckupsEntities;
     }
 
+    @Transactional
     @Override
-    public List<AirplanePartCheckup> getPartCheckupsHistory(Long airplaneId) throws AirplanePartCheckupNotFoundException
+    public List<AirplanePartCheckup> getPartCheckupsHistory(Long airplaneId) throws AirplanePartCheckupsNotFoundException
     {
-//        if(Objects.isNull(airplaneId)) {
-//            throw new IllegalArgumentException("ID самолета не может быть null!");
-//        }
-//
-//        BooleanBuilder booleanBuilder = new BooleanBuilder();
-//        QPartCheckup root = QPartCheckup.partCheckup;
-//
-//        booleanBuilder.and(root.airplane.id.eq(airplaneId));
-//
-//        Iterable<PartCheckup> partCheckupsIterable =
-//                this.partCheckupRepository.findAll(booleanBuilder.getValue());
-//        List<PartCheckupsResponseDto> partCheckupsResponseDtoList =
-//                StreamSupport
-//                        .stream(partCheckupsIterable.spliterator(), false)
-//                        .map(CheckupMapper::mapToPartCheckupsResponseDto)
-//                        .collect(Collectors.toList());
-//
-//        if(partCheckupsResponseDtoList.isEmpty()) {
-//            throw new PartCheckupsNotFoundException(
-//                    String.format(
-//                            "По ID[%d] самолета технических осмотров не найдено!",
-//                            airplaneId
-//                    )
-//            );
-//        }
-//        return partCheckupsResponseDtoList;
-        return null;
+        if (Objects.isNull(airplaneId)) {
+            throw new IllegalArgumentException("ID самолета не может быть null!");
+        }
+
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        QAirplanePartCheckup root = QAirplanePartCheckup.airplanePartCheckup;
+
+        booleanBuilder.and(root.airplane.id.eq(airplaneId));
+
+        Iterable<AirplanePartCheckup> partCheckupsIterable = this.airplanePartCheckupRepository.findAll(booleanBuilder.getValue());
+        List<AirplanePartCheckup> airplanePartCheckupsList =
+                StreamSupport
+                        .stream(partCheckupsIterable.spliterator(), false)
+                        .collect(Collectors.toList());
+
+        if (airplanePartCheckupsList.isEmpty()) {
+            throw new AirplanePartCheckupsNotFoundException(
+                    String.format(
+                            "По ID[%d] самолета технических осмотров не найдено!",
+                            airplaneId
+                    )
+            );
+        }
+        return airplanePartCheckupsList;
     }
 
+    @Transactional
     @Override
     public List<AirplanePartCheckup> getLastAirplaneCheckups(Long airplaneId) throws AirplanePartCheckupNotFoundException {
         if (Objects.isNull(airplaneId)) {
@@ -165,14 +171,19 @@ public class AirplanePartCheckupServiceImpl implements AirplanePartCheckupServic
         return lastCheckup;
     }
 
+    @Transactional
     @Override
     public AirplanePartStatus getLastAirplaneCheckupResult(Long airplaneId)
-            throws AirplanePartCheckupNotFoundException
+            throws AirplanePartCheckupNotFoundException, StatusNotFoundException
     {
-        List<AirplanePartCheckup> partCheckupsEntityList =
-                this.getLastAirplaneCheckups(airplaneId);
+        List<AirplanePartCheckup> partCheckupsEntityList = this.getLastAirplaneCheckups(airplaneId);
 
         for (AirplanePartCheckup partCheckup : partCheckupsEntityList) {
+
+            if (Objects.isNull(partCheckup.getStatus())) {
+                throw new StatusNotFoundException("Статус детали самолета пустой!");
+            }
+
             if(partCheckup.getStatus().equals(AirplanePartStatus.MAINTENANCE)) {
                 return AirplanePartStatus.MAINTENANCE;
             }

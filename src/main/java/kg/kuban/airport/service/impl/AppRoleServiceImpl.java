@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +31,7 @@ public class AppRoleServiceImpl implements AppRoleService {
         this.positionRepository = positionRepository;
     }
 
+    @Transactional
     @Override
     public AppRole createRole(AppRoleRequestDto roleDto) throws IllegalArgumentException {
         if (Objects.isNull(roleDto)) {
@@ -57,6 +59,7 @@ public class AppRoleServiceImpl implements AppRoleService {
         }
     }
 
+    @Transactional
     @Override
     public AppRole updateRole(AppRoleRequestDto appRoleDto, Long roleId) throws NoSuchElementException {
         AppRole findRole = this.getRoles().stream().
@@ -98,6 +101,7 @@ public class AppRoleServiceImpl implements AppRoleService {
         return this.appRoleRepository.findAll();
     }
 
+    @Transactional
     @Override
     public AppRole deleteRole(Long roleId) throws NoSuchElementException {
         AppRole findRole = this.getRoles().stream().

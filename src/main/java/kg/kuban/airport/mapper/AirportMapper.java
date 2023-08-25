@@ -20,9 +20,9 @@ public class AirportMapper {
 
     public static Airport mapAirportDtoToEntity(AirportRequestDto airportRequestDto) {
         Airport airport = new Airport();
-        airport.setId(airport.getId());
-        airport.setCity(airport.getCity());
-        airport.setTitle(airport.getCity());
+        //airport.setId(airportRequestDto.getId());
+        //airport.setCity(airportRequestDto.getCity());
+        airport.setTitle(airportRequestDto.getTitle());
         return airport;
     }
 

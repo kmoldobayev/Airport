@@ -11,11 +11,12 @@ public class AirplanePartCheckupRequestDto {
     public AirplanePartCheckupRequestDto() {
     }
 
-    public AirplanePartStatus getPartState() {
+
+    public AirplanePartStatus getPartStatus() {
         return partStatus;
     }
 
-    public AirplanePartCheckupRequestDto setPartState(AirplanePartStatus partStatus) {
+    public AirplanePartCheckupRequestDto setPartStatus(AirplanePartStatus partStatus) {
         this.partStatus = partStatus;
         return this;
     }

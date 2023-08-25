@@ -14,6 +14,7 @@ import kg.kuban.airport.repository.AirplanePartRepository;
 import kg.kuban.airport.service.AirplanePartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,13 +33,15 @@ public class AirplanePartServiceImpl implements AirplanePartService {
         this.airplanePartRepository = airplanePartRepository;
     }
 
+    @Transactional
     @Override
     public AirplanePart registerNewPart(AirplanePartRequestDto requestDto) {
         AirplanePart airplanePart = AirplanePartMapper.mapAirplanePartRequestDtoToEntity(requestDto);
-        airplanePart = this.airplanePartRepository.save(airplanePart);
+        this.airplanePartRepository.save(airplanePart);
         return airplanePart;
     }
 
+    @Transactional
     @Override
     public List<AirplanePart> registerNewParts(List<AirplanePartRequestDto> partRequestDtoList) {
         if(partRequestDtoList.isEmpty()) {

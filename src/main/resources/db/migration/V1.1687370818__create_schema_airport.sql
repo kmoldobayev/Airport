@@ -119,9 +119,9 @@ create table if not exists part_inspections(
     id bigserial primary key,
     date_register timestamp without time zone not null,             -- Дата тех осмотра
     user_id bigint references app_users(id),                        -- Ответственный пользователь (Ссылка на таблицу "Пользователи")
-    part_id bigint not null references parts(id),                          -- Ссылка на таблицу "Оборудования"
-    airplane_id bigint not null references airplanes(id),           -- Ссылка на таблицу "Самолеты"
-    status varchar not null,                                        -- Статус
+    part_id bigint references parts(id),                          -- Ссылка на таблицу "Оборудования"
+    airplane_id bigint references airplanes(id),           -- Ссылка на таблицу "Самолеты"
+    status varchar,                                        -- Статус
     inspection_code bigint                                          -- Результат
 );
 

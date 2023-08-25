@@ -70,13 +70,18 @@ public interface AirplaneService{
 
     Boolean deleteNewAirplane(Long airplaneId) throws IllegalArgumentException, AirplaneNotFoundException, AirplaneSeatNotFoundException;
     //Airplane registerNewInspection(Airplane airplane, AppUser appUser);
-    Airplane confirmAirplaneServiceAbility(Long airplaneId) throws AirplaneNotFoundException, AirplanePartCheckupNotFoundException, StatusChangeException ;
+    Airplane confirmAirplaneServiceAbility(Long airplaneId)
+            throws AirplaneNotFoundException,
+                AirplanePartCheckupNotFoundException,
+                StatusChangeException,
+                StatusNotFoundException;
     Airplane assignAirplaneRepairs(Long airplaneId, Long userId)
             throws EngineerIsBusyException,
             StatusChangeException,
             AppUserNotFoundException,
             AirplaneNotFoundException,
-            AirplanePartCheckupNotFoundException;
+            AirplanePartCheckupNotFoundException,
+            StatusNotFoundException;
 
     List<Airplane> getNewAirplanes(LocalDateTime dateRegisterBeg, LocalDateTime dateRegisterEnd, AirplaneType airplaneType) throws IncorrectFiltersException, AirplaneNotFoundException;
 

@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -53,6 +54,7 @@ public class AppUserServiceImpl implements AppUserService {
         return appUserRepository.findAll();
     }
 
+    @Transactional
     @Override
     public AppUser createUser(AppUserRequestDto appUserDto) throws IllegalArgumentException, InvalidCredentialsException {
 
@@ -102,7 +104,7 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
 
-
+    @Transactional
     @Override
     public AppUser updateUser(AppUserRequestDto appUserDto, Long userId) throws IllegalArgumentException, InvalidCredentialsException {
         if (Objects.isNull(appUserDto)) {
@@ -146,6 +148,7 @@ public class AppUserServiceImpl implements AppUserService {
         }
     }
 
+    @Transactional
     @Override
     public Boolean dismissUser(Long userId) throws IllegalArgumentException {
         AppUser findUser = getUserById(userId);

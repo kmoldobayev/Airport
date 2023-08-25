@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class CheckupMapper {
     public static AirplanePartCheckup mapPartInspectionsRequestDtoToEntity(AirplanePartCheckupRequestDto source) {
-        return new AirplanePartCheckup().setStatus(source.getPartState());
+        return new AirplanePartCheckup().setStatus(source.getPartStatus());
     }
 
     public static AirplanePartCheckupResponseDto mapToPartInspectionsResponseDto(AirplanePartCheckup source) {

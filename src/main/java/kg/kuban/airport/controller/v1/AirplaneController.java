@@ -129,7 +129,8 @@ public class AirplaneController {
     public ResponseEntity<?> confirmAirplaneServiceability(@PathVariable(value = "id") Long airplaneId)
             throws AirplaneNotFoundException,
             AirplanePartCheckupNotFoundException,
-            StatusChangeException
+            StatusChangeException,
+            StatusNotFoundException
     {
         return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.confirmAirplaneServiceAbility(airplaneId)));
     }
@@ -158,7 +159,8 @@ public class AirplaneController {
             AirplaneNotFoundException,
             AirplanePartCheckupNotFoundException,
             StatusChangeException,
-            AppUserNotFoundException
+            AppUserNotFoundException,
+            StatusNotFoundException
     {
         return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.assignAirplaneRepairs(airplaneId, userId)));
     }

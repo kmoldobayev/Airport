@@ -29,8 +29,8 @@ public class SeatServiceImpl implements SeatService {
         this.seatRepository = seatRepository;
     }
 
-    @Override
     @Transactional
+    @Override
     public Seat bookingSeat(Long seatId) throws AirplaneSeatNotFoundException, SeatBookingException
     {
 
@@ -45,8 +45,8 @@ public class SeatServiceImpl implements SeatService {
         return this.seatRepository.save(airplaneSeat);
     }
 
-    @Override
     @Transactional
+    @Override
     public Seat cancelBookingSeat(Long seatId) throws AirplaneSeatNotFoundException, SeatBookingException
     {
 
@@ -61,8 +61,8 @@ public class SeatServiceImpl implements SeatService {
         return this.seatRepository.save(airplaneSeat);
     }
 
-    @Override
     @Transactional
+    @Override
     public List<Seat> generateSeats(Integer numberOfSeats) {
         if (Objects.isNull(numberOfSeats)) {
             throw new IllegalArgumentException("Количество мест не может быть null!");
@@ -82,8 +82,8 @@ public class SeatServiceImpl implements SeatService {
         return airplaneSeats;
     }
 
-    @Override
     @Transactional
+    @Override
     public List<Seat> getAllSeats(Long airplaneId, Boolean isOccupied) throws AirplaneSeatNotFoundException {
 
         if (Objects.isNull(airplaneId)) {

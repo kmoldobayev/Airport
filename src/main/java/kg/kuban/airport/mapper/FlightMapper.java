@@ -13,7 +13,9 @@ import java.util.Objects;
 public class FlightMapper {
 
     public static Flight mapFlightRequestDtoToEntity(FlightRequestDto source) {
-        return new Flight().setDestination(AirportMapper.mapAirportDtoToEntity(source.getDestination()));
+        return new Flight()
+                .setDestination(AirportMapper.mapAirportDtoToEntity(source.getDestination()))
+                .setFlightNumber(source.getFlightNumber());
     }
 
     public static FlightResponseDto mapFlightEntityToDto(Flight flight) {

@@ -17,6 +17,7 @@ import kg.kuban.airport.util.AppUserRoleUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class UserFlightServiceImpl implements UserFlightService {
         this.flightService = flightService;
     }
 
+    @Transactional
     @Override
     public List<UserFlight> registerEmployeesForFlight(List<UserFlightRequestDto> requestDtoList)
             throws
@@ -127,6 +129,7 @@ public class UserFlightServiceImpl implements UserFlightService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public UserFlight bookingCustomerForFlight(UserFlightRequestDto requestDto)
             throws 
@@ -170,6 +173,7 @@ public class UserFlightServiceImpl implements UserFlightService {
         return userFlight;
     }
 
+    @Transactional
     @Override
     public UserFlight cancelCustomerBooking(Long bookingId)
             throws
@@ -199,6 +203,7 @@ public class UserFlightServiceImpl implements UserFlightService {
         return customerBooking;
     }
 
+    @Transactional
     @Override
     public UserFlight checkCustomer(Long customerBookingId)
             throws UserFlightNotFoundException,
@@ -223,6 +228,7 @@ public class UserFlightServiceImpl implements UserFlightService {
         return customerBooking;
     }
 
+    @Transactional
     @Override
     public UserFlight distributeCustomersFood(Long customerBookingId)
             throws UserFlightNotFoundException,
@@ -247,6 +253,7 @@ public class UserFlightServiceImpl implements UserFlightService {
         return customerBooking;
     }
 
+    @Transactional
     @Override
     public UserFlight conductCustomersBriefing(Long customerBookingId)
             throws UserFlightNotFoundException,
@@ -271,6 +278,7 @@ public class UserFlightServiceImpl implements UserFlightService {
         return customerBooking;
     }
 
+    @Transactional
     @Override
     public UserFlight confirmReadinessForFlight() throws UserFlightNotFoundException, StatusChangeException
     {
@@ -344,6 +352,7 @@ public class UserFlightServiceImpl implements UserFlightService {
         return userFlight;
     }
 
+    @Transactional
     @Override
     public List<UserFlight> getAllCustomerBookings(
             Long flightId,
@@ -470,6 +479,7 @@ public class UserFlightServiceImpl implements UserFlightService {
         return userFlightOptional.get();
     }
 
+    @Transactional
     @Override
     public boolean checkIfAllPassengersOfFlightHaveStatus(
             Long flightId,
@@ -504,6 +514,7 @@ public class UserFlightServiceImpl implements UserFlightService {
         return true;
     }
 
+    @Transactional
     @Override
     public boolean checkIfAllCrewMembersIsReadyForFlight(Long flightId)
     {

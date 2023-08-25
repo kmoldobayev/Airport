@@ -50,6 +50,12 @@ public class Flight {
         return id;
     }
 
+    @PrePersist
+    public void init() {
+        this.isAvailable = false;
+        this.dateRegister = LocalDateTime.now();
+    }
+
     public Flight setId(Long id) {
         this.id = id;
         return this;
