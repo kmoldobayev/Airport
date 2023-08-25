@@ -20,7 +20,7 @@ public interface AirplaneService{
             throws AirplaneNotFoundException, StatusChangeException, EngineerIsBusyException;
 
     List<AirplanePartCheckup> checkupAirplane(
-            Long AirplaneId,
+            Long airplaneId,
             List<AirplanePartCheckupRequestDto> partInspectionsRequestDtoList
     )
             throws AirplaneNotFoundException,
@@ -31,42 +31,37 @@ public interface AirplaneService{
             IllegalAirplaneException,
             IncompatiblePartException;
 
-    Airplane sendAirplaneToRegistrationConfirmation(Long AirplaneId)
+    Airplane sendAirplaneToRegistrationConfirmation(Long airplaneId)
             throws AirplaneNotFoundException,
             StatusChangeException;
 
 
-    Airplane confirmAirplaneRegistration(Long AirplaneId)
+    Airplane confirmAirplaneRegistration(Long airplaneId)
             throws AirplaneNotFoundException,
             StatusChangeException;
 
-    Airplane refuelAirplane(Long AirplaneId)
+    Airplane refuelAirplane(Long airplaneId)
             throws
             AirplaneNotFoundException,
             StatusChangeException,
             EngineerIsBusyException;
 
-
-
-    Airplane assignAirplaneRefueling(Long AirplaneId, Long engineerId)
+    Airplane assignAirplaneRefueling(Long airplaneId, Long engineerId)
             throws AirplaneNotFoundException,
             StatusChangeException,
             AppUserNotFoundException,
-            EngineerIsBusyException;
+            EngineerIsBusyException,
+            FlightNotFoundException;
 
-
-
-    List<Airplane> getAllAirplanes(
-            AirplaneType AirplaneType,
-            AirplaneStatus AirplaneStatus,
-            LocalDateTime registeredBefore,
-            LocalDateTime registeredAfter
-    )
+    List<Airplane> getAllAirplanes( LocalDateTime dateRegisterBeg,
+                                    LocalDateTime dateRegisterEnd,
+                                    AirplaneType airplaneType,
+                                    AirplaneStatus airplaneStatus)
             throws IncorrectFiltersException,
             AirplaneNotFoundException;
 
     List<Airplane> getAirplanesForRepairs(
-            AirplaneType AirplaneType,
+            AirplaneType airplaneType,
             LocalDateTime registeredBefore,
             LocalDateTime registeredAfter
     )
@@ -83,16 +78,11 @@ public interface AirplaneService{
             AirplaneNotFoundException,
             AirplanePartCheckupNotFoundException;
 
-    List<Airplane> getNewAirplanes(
-            AirplaneType airplaneType,
-            LocalDateTime registeredBefore,
-            LocalDateTime registeredAfter
-    )
-            throws IncorrectFiltersException,
-            AirplaneNotFoundException;
+    List<Airplane> getNewAirplanes(LocalDateTime dateRegisterBeg, LocalDateTime dateRegisterEnd, AirplaneType airplaneType) throws IncorrectFiltersException, AirplaneNotFoundException;
+
 
     List<Airplane> getAirplanesForRefueling(
-            AirplaneType AirplaneType,
+            AirplaneType airplaneType,
             LocalDateTime registeredBefore,
             LocalDateTime registeredAfter
     )

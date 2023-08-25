@@ -1,7 +1,6 @@
 package kg.kuban.airport.service;
 
 import kg.kuban.airport.dto.AirplanePartRequestDto;
-import kg.kuban.airport.dto.AirplanePartResponseDto;
 import kg.kuban.airport.dto.AirplanePartTypesResponseDto;
 import kg.kuban.airport.entity.AirplanePart;
 import kg.kuban.airport.enums.AirplanePartType;
@@ -12,7 +11,7 @@ import kg.kuban.airport.exception.AirplanePartNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface PartService {
+public interface AirplanePartService {
     AirplanePart registerNewPart(AirplanePartRequestDto requestDto);
 
     List<AirplanePart> registerNewParts(List<AirplanePartRequestDto> partRequestDtoList);

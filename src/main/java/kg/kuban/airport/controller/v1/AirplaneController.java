@@ -18,6 +18,7 @@ import kg.kuban.airport.service.AirplaneService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,7 +44,7 @@ public class AirplaneController {
 
     @Operation(
             summary = "Метод регистрации самолета Диспетчером",
-            description = "Регистрация нового самолета выполняется работником банка с ролью Диспетчер",
+            description = "1.Диспетчер регистрирует новый самолет и отправляет на обработку Главному инженеру",
             parameters = {
                     @Parameter(name = "AirplaneRequestDto",
                                 description = "DTO самолета",
@@ -54,39 +55,15 @@ public class AirplaneController {
     @PostMapping(value = "/register")
     @PreAuthorize("hasAnyRole('DISPATCHER')")
     public ResponseEntity<?> registerNewAirplane(@RequestBody AirplaneRequestDto airplaneRequestDto)
-            throws AirplanePartNotFoundException,
-            IncompatiblePartException
+            throws AirplanePartNotFoundException, IncompatiblePartException
     {
-        logger.info("registerNewAirplane");
+        //logger.info("registerNewAirplane");
         return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.registerNewAirplane(airplaneRequestDto)));
     }
-
-    @Operation(
-            summary = "Метод удаления самолета Диспетчером",
-            description = "Удаление нового самолета выполняется работником банка с ролью Диспетчер",
-            parameters = {
-                    @Parameter(name = "airplaneId",
-                                description = "ID самолета",
-                                schema = @Schema(type = "Long"),
-                                required = true)
-            }
-    )
-    @DeleteMapping(value = "/deleteAirplane/{id}")
-    @PreAuthorize("hasAnyRole('DISPATCHER')")
-    public ResponseEntity<?> deleteNewAirplane(@PathVariable(value = "id") Long airplaneId)
-            throws IllegalArgumentException, AirplaneNotFoundException, AirplaneSeatNotFoundException
-    {
-        boolean isDeleted = this.airplaneService.deleteNewAirplane(airplaneId);
-        if (isDeleted) {
-            return ResponseEntity.ok().body(new SuccessResponse(HttpStatus.OK, "Самолет успешно удален!."));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
+    // --------------------2--------------
     @Operation(
             summary = "Метод выдачи самолета на техосмотр",
-            description = "Выдача самолета на техосмотр выполняется работником банка с ролью Главный инженер",
+            description = "2.Главный инженер выдает самолет на технический осмотр Инженеру",
             parameters = {
                     @Parameter(name = "airplaneId",
                             description = "ID самолета",
@@ -104,10 +81,10 @@ public class AirplaneController {
             throws AirplaneNotFoundException, StatusChangeException, EngineerIsBusyException {
         return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.assignAirplaneCheckup(airplaneId, userId)));
     }
-
+    // --------------3------------------------
     @Operation(
             summary = "Метод составление технического осмотра самолета.",
-            description = "Составление технического осмотра самолета выполняется работником банка с ролью Инженер",
+            description = "3.Инженер составляет технический осмотр ",
             parameters = {
                     @Parameter(name = "airplaneId",
                                 description = "ID самолета",
@@ -138,33 +115,43 @@ public class AirplaneController {
 
     @Operation(
             summary = "Метод подтверждения исправности самолета.",
-            description = "Подтверждение исправности самолета выполняется работником банка с ролью Главный Инженер",
+            description = "4.Главный инженер принимает решение по техническому осмотру: если все нормально, то подтверждает технический осмотр и отправляет назад Диспетчеру",
             parameters = {
-                    @Parameter(name = "airplaneId", description = "ID самолета")
+                    @Parameter(name = "airplaneId",
+                                description = "ID самолета",
+                                schema = @Schema(type = "Long"),
+                                required = true
+                    )
             }
     )
     @PutMapping(value = "/confirmServiceability/{id}")
     @PreAuthorize(value = "hasRole('CHIEF_ENGINEER')")
-    public ResponseEntity<?> confirmAirplaneServiceability(@PathVariable Long airplaneId)
+    public ResponseEntity<?> confirmAirplaneServiceability(@PathVariable(value = "id") Long airplaneId)
             throws AirplaneNotFoundException,
             AirplanePartCheckupNotFoundException,
             StatusChangeException
     {
-        return ResponseEntity.ok(this.airplaneService.confirmAirplaneServiceAbility(airplaneId));
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.confirmAirplaneServiceAbility(airplaneId)));
     }
 
     @Operation(
             summary = "Метод назначения ремонта самолета.",
-            description = "Назначение ремонта самолета выполняется работником банка с ролью Главный Инженер",
+            description = "4.1.Главный инженер принимает решение по техническому осмотру, если не ОК, то назначает Инженеру ремонт самолета",
             parameters = {
-                    @Parameter(name = "airplaneId", description = "ID самолета"),
-                    @Parameter(name = "userId", description = "ID инженера")
+                    @Parameter(name = "airplaneId",
+                                description = "ID самолета",
+                                schema = @Schema(type = "Long"),
+                                required = true),
+                    @Parameter(name = "userId",
+                                description = "ID инженера",
+                                schema = @Schema(type = "Long"),
+                                required = true),
             }
     )
-    @PreAuthorize(value = "hasRole('CHIEF_ENGINEER')")
-    @PutMapping(value = "/assignRepairs/{id}/")
+    @PreAuthorize(value = "hasRole('СHIEF_ENGINEER')")
+    @PutMapping(value = "/assignRepairs/{id}")
     public ResponseEntity<?> assignAirplaneToRepairs(
-            @PathVariable Long airplaneId,
+            @PathVariable(value = "id") Long airplaneId,
             @RequestParam Long userId
     )
             throws EngineerIsBusyException,
@@ -173,124 +160,267 @@ public class AirplaneController {
             StatusChangeException,
             AppUserNotFoundException
     {
-        return ResponseEntity.ok(this.airplaneService.assignAirplaneRepairs(airplaneId, userId));
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.assignAirplaneRepairs(airplaneId, userId)));
     }
 
     @Operation(
-            summary = "Метод назначения ремонта самолета.",
-            description = "Назначение ремонта самолета выполняется работником банка с ролью Главный Инженер",
+            summary = "Отправка самолета на подтверждение регистрации",
+            description = "5.Диспетчер отправляет самолет на подтверждение регистрации Главному диспетчеру.",
             parameters = {
-                    @Parameter(name = "airplaneId", description = "ID самолета")
+                    @Parameter(name = "airplaneId",
+                                description = "ID самолета",
+                                schema = @Schema(type = "Long"),
+                                required = true)
             }
     )
     @PreAuthorize(value = "hasRole('DISPATCHER')")
     @PutMapping(value = "/sendToConfirmation/{id}")
-    public ResponseEntity<?> sendAirplaneToRegistrationConfirmation(@PathVariable Long airplaneId)
+    public ResponseEntity<?> sendAirplaneToRegistrationConfirmation(@PathVariable(value = "id") Long airplaneId)
             throws AirplaneNotFoundException, StatusChangeException
     {
-        return ResponseEntity.ok(this.airplaneService.sendAirplaneToRegistrationConfirmation(airplaneId));
-    }
-
-    @PreAuthorize(value = "hasRole('CHIEF_DISPATCHER')")
-    @PutMapping(value = "/confirmRegistration/{id}")
-    public ResponseEntity<?> confirmAirplaneRegistration(
-            @PathVariable Long airplaneId
-    )
-            throws AirplaneNotFoundException,
-            StatusChangeException
-    {
-        return ResponseEntity.ok(this.airplaneService.confirmAirplaneRegistration(airplaneId));
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.sendAirplaneToRegistrationConfirmation(airplaneId)));
     }
 
     @Operation(
-            summary = "Метод Подтверждение технического осмотра самолета.",
-            description = "Подтверждение технического осмотра самолета работником банка с ролью Главный Инженер",
+            summary = "Подтверждение отправки рейса",
+            description = "6.Главный диспетчер подтверждает регистрацию и самолет регистрируется в системе как доступный.",
             parameters = {
-                    @Parameter(name = "airplaneId", description = "ID самолета"),
-                    @Parameter(name = "engineerId", description = "ID инженера")
+                    @Parameter(name = "airplaneId",
+                            description = "ID самолета",
+                            schema = @Schema(type = "Long"),
+                            required = true)
+            }
+    )
+    @PreAuthorize(value = "hasRole('СHIEF_DISPATCHER')")
+    @PutMapping(value = "/confirmRegistration/{id}")
+    public ResponseEntity<?> confirmAirplaneRegistration(@PathVariable(value = "id") Long airplaneId)
+            throws AirplaneNotFoundException, StatusChangeException
+    {
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.confirmAirplaneRegistration(airplaneId)));
+    }
+
+    @Operation(
+            summary = "Главный инженер назначает Инженера для заправки самолета..",
+            description = "Главный инженер назначает Инженера для заправки самолета.",
+            parameters = {
+                    @Parameter(name = "airplaneId",
+                                description = "ID самолета",
+                                schema = @Schema(type = "Long"),
+                                required = true),
+                    @Parameter(name = "engineerId",
+                                description = "ID инженера",
+                                schema = @Schema(type = "Long"),
+                                required = true)
             }
     )
     @PreAuthorize(value = "hasRole('CHIEF_ENGINEER')")
-    @PutMapping(value = "/assign_refueling/{id}")
+    @PutMapping(value = "/assignRefueling/{id}")
     public ResponseEntity<?> assignAirplaneRefueling(
-            @PathVariable Long airplaneId,
+            @PathVariable(value = "id") Long airplaneId,
             @RequestParam Long engineerId
     )
             throws AirplaneNotFoundException,
             EngineerIsBusyException,
             StatusChangeException,
-            AppUserNotFoundException
+            AppUserNotFoundException,
+            FlightNotFoundException
     {
-        return ResponseEntity.ok(this.airplaneService.assignAirplaneRefueling(airplaneId, engineerId));
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.assignAirplaneRefueling(airplaneId, engineerId)));
     }
 
+    @Operation(
+            summary = "Заправка самолета.",
+            description = "Заправка самолета выполняется работником банка с ролью Инженер",
+            parameters = {
+                    @Parameter(name = "airplaneId",
+                            description = "ID самолета",
+                            schema = @Schema(type = "Long"),
+                            required = true)
+            }
+    )
     @PreAuthorize(value = "hasRole('ENGINEER')")
     @PutMapping(value = "/refuelAirplane/{id}")
-    public ResponseEntity<?> refuelAirplane(
-            @PathVariable Long airplaneId
-    )
+    public ResponseEntity<?> refuelAirplane(@PathVariable(value = "id") Long airplaneId)
             throws AirplaneNotFoundException,
             StatusChangeException,
             EngineerIsBusyException
     {
-        return ResponseEntity.ok(this.airplaneService.refuelAirplane(airplaneId));
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityToDto(this.airplaneService.refuelAirplane(airplaneId)));
     }
 
+    @Operation(
+            summary = "Просмотр всех самолетов",
+            description = "Просмотр всех самолетов выполняется работниками банка с ролью (Управляющий директор, Главный диспетчер, Диспетчер, Главный инженер, Инженер",
+            parameters = {
+                    @Parameter(name = "airplaneType",
+                            description = "Марка самолета",
+                            schema = @Schema(type = "AirplaneType"),
+                            required = false),
+                    @Parameter(name = "airplaneStatus",
+                            description = "Статус самолета",
+                            schema = @Schema(type = "AirplaneStatus"),
+                            required = false),
+                    @Parameter(name = "registeredAfter",
+                            description = "Дата начала регистрации",
+                            schema = @Schema(type = "LocalDateTime"),
+                            required = false),
+                    @Parameter(name = "registeredBefore",
+                            description = "Дата конца регистрации",
+                            schema = @Schema(type = "LocalDateTime"),
+                            required = false)
+            }
+    )
     @PreAuthorize(value = "hasAnyRole('CHIEF', 'CHIEF_DISPATCHER', 'DISPATCHER', 'CHIEF_ENGINEER', 'ENGINEER')")
     @GetMapping(value = "/all")
-    public List<Airplane> getAllAirplanes(
-            @RequestParam(required = false) AirplaneType AirplaneType,
-            @RequestParam(required = false) AirplaneStatus AirplaneStatus,
-            @RequestParam(required = false) LocalDateTime registeredAfter,
-            @RequestParam(required = false) LocalDateTime registeredBefore
-    )
-            throws AirplaneNotFoundException,
-            IncorrectFiltersException
-    {
-        return this.airplaneService.getAllAirplanes(AirplaneType, AirplaneStatus, registeredBefore, registeredAfter);
-    }
+    public ResponseEntity<?> getAllAirplanes(
 
-    @PreAuthorize(value = "hasAnyRole('CHEIF', 'ENGINEER')")
-    @GetMapping(value = "/new")
-    public ResponseEntity<?> getNewAirplanes(
-            @RequestParam(required = false) AirplaneType AirplaneType,
-            @RequestParam(required = false) LocalDateTime registeredAfter,
-            @RequestParam(required = false) LocalDateTime registeredBefore
+            @RequestParam(name = "dateRegisterBeg", required = true)
+            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+            LocalDateTime dateRegisterBeg,
+            @RequestParam(name = "dateRegisterEnd", required = true)
+            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+            LocalDateTime dateRegisterEnd,
+            @RequestParam(required = false) AirplaneType airplaneType,
+            @RequestParam(required = false) AirplaneStatus airplaneStatus
     )
             throws AirplaneNotFoundException, IncorrectFiltersException
     {
-        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityListToDto(this.airplaneService.getNewAirplanes(AirplaneType, registeredBefore, registeredAfter))); //List<AirplaneResponseDto>
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityListToDto(this.airplaneService.getAllAirplanes(dateRegisterBeg, dateRegisterEnd, airplaneType, airplaneStatus))); //List<Airplane>
     }
 
+    @Operation(
+            summary = "Просмотр новых самолетов",
+            description = "Просмотр новых самолетов выполняется работниками банка с ролью (Управляющий директор, Инженер",
+            parameters = {
+                    @Parameter(name = "airplaneType",
+                            description = "Марка самолета",
+                            schema = @Schema(type = "AirplaneType"),
+                            required = false),
+                    @Parameter(name = "registeredAfter",
+                            description = "Дата начала регистрации",
+                            schema = @Schema(type = "LocalDateTime"),
+                            required = false),
+                    @Parameter(name = "registeredBefore",
+                            description = "Дата конца регистрации",
+                            schema = @Schema(type = "LocalDateTime"),
+                            required = false)
+            }
+    )
+    @PreAuthorize(value = "hasAnyRole('CHEIF', 'ENGINEER')")
+    @GetMapping(value = "/new")
+    public ResponseEntity<?> getNewAirplanes(
+
+            @RequestParam(required = true)
+            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+            LocalDateTime dateRegisterBeg,
+            @RequestParam(required = true)
+            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+            LocalDateTime dateRegisterEnd,
+            @RequestParam(required = false) AirplaneType airplaneType
+    )
+            throws AirplaneNotFoundException, IncorrectFiltersException
+    {
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityListToDto(this.airplaneService.getNewAirplanes(dateRegisterBeg, dateRegisterEnd, airplaneType))); //List<AirplaneResponseDto>
+    }
+
+    @Operation(
+            summary = "Просмотр самолетов, отправленных на ремонт",
+            description = "Просмотр самолетов, отправленных на ремонт выполняется работниками банка с ролью (Управляющий директор, Инженер)",
+            parameters = {
+                    @Parameter(name = "airplaneType",
+                            description = "Марка самолета",
+                            schema = @Schema(type = "AirplaneType"),
+                            required = false),
+                    @Parameter(name = "registeredAfter",
+                            description = "Дата начала регистрации",
+                            schema = @Schema(type = "LocalDateTime"),
+                            required = false),
+                    @Parameter(name = "registeredBefore",
+                            description = "Дата конца регистрации",
+                            schema = @Schema(type = "LocalDateTime"),
+                            required = false)
+            }
+    )
     @PreAuthorize(value = "hasAnyRole('CHIEF', 'ENGINEER')")
     @GetMapping(value = "/forRepairs")
     public ResponseEntity<?> getAirplanesForRepairs(
-            @RequestParam(required = false) AirplaneType AirplaneType,
-            @RequestParam(required = false) LocalDateTime registeredAfter,
-            @RequestParam(required = false) LocalDateTime registeredBefore
+            @RequestParam(required = false) AirplaneType airplaneType,
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+            LocalDateTime registeredAfter,
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+            LocalDateTime registeredBefore
     )
-            throws AirplaneNotFoundException,
-            IncorrectFiltersException
+            throws AirplaneNotFoundException, IncorrectFiltersException
     {
-        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityListToDto(this.airplaneService.getAirplanesForRepairs(AirplaneType, registeredBefore, registeredAfter)));
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityListToDto(this.airplaneService.getAirplanesForRepairs(airplaneType, registeredBefore, registeredAfter)));
     }
 
+    @Operation(
+            summary = "Просмотр самолетов, отправленных на заправку",
+            description = "Просмотр самолетов, отправленных на заправку выполняется работниками банка с ролью (Управляющий директор, Инженер)",
+            parameters = {
+                    @Parameter(name = "airplaneType",
+                            description = "Марка самолета",
+                            schema = @Schema(type = "AirplaneType"),
+                            required = false),
+                    @Parameter(name = "registeredAfter",
+                            description = "Дата начала регистрации",
+                            schema = @Schema(type = "LocalDateTime"),
+                            required = false),
+                    @Parameter(name = "registeredBefore",
+                            description = "Дата конца регистрации",
+                            schema = @Schema(type = "LocalDateTime"),
+                            required = false)
+            }
+    )
     @PreAuthorize(value = "hasAnyRole('CHIEF', 'ENGINEER')")
     @GetMapping(value = "/forRefueling")
     public ResponseEntity<?> getAirplaneForRefueling(
-            @RequestParam(required = false) AirplaneType AirplaneType,
-            @RequestParam(required = false) LocalDateTime registeredBefore,
-            @RequestParam(required = false) LocalDateTime registeredAfter
+            @RequestParam(required = false) AirplaneType airplaneType,
+            @RequestParam(required = true)
+            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+            LocalDateTime registeredBefore,
+            @RequestParam(required = true)
+            @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
+            LocalDateTime registeredAfter
     )
-            throws AirplaneNotFoundException,
-            IncorrectFiltersException
+            throws AirplaneNotFoundException, IncorrectFiltersException
     {
-        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityListToDto(this.airplaneService.getAirplanesForRefueling(AirplaneType, registeredBefore, registeredAfter)));
+        return ResponseEntity.ok(AirplaneMapper.mapAirplaneEntityListToDto(this.airplaneService.getAirplanesForRefueling(airplaneType, registeredBefore, registeredAfter)));
     }
 
+    @Operation(
+            summary = "Просмотр всех марок самолетов",
+            description = "Просмотр всех марок самолетов (Управляющий директор, Главный диспетчер, Диспетчер, Главный инженер, Инженер)"
+    )
     @PreAuthorize(value = "hasAnyRole('DISPATCHER', 'CHIEF', 'ENGINEER', 'CHIEF_ENGINEER', 'CHIEF_DISPATCHER')")
     @GetMapping(value = "/airplaneTypes")
     public ResponseEntity<?> getAirplaneTypes() {
         return ResponseEntity.ok(this.airplaneService.getAllAirplaneTypes());
+    }
+
+    @Operation(
+            summary = "Метод удаления самолета Диспетчером",
+            description = "Удаление нового самолета выполняется работником банка с ролью Диспетчер",
+            parameters = {
+                    @Parameter(name = "airplaneId",
+                            description = "ID самолета",
+                            schema = @Schema(type = "Long"),
+                            required = true)
+            }
+    )
+    @DeleteMapping(value = "/deleteAirplane/{id}")
+    @PreAuthorize("hasAnyRole('DISPATCHER')")
+    public ResponseEntity<?> deleteNewAirplane(@PathVariable(value = "id") Long airplaneId)
+            throws IllegalArgumentException, AirplaneNotFoundException, AirplaneSeatNotFoundException
+    {
+        boolean isDeleted = this.airplaneService.deleteNewAirplane(airplaneId);
+        if (isDeleted) {
+            return ResponseEntity.ok().body(new SuccessResponse(HttpStatus.OK, "Самолет успешно удален!."));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

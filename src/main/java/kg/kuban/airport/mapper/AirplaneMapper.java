@@ -20,6 +20,8 @@ public class AirplaneMapper {
         airplaneResponseDto.setBoardNumber(airplane.getBoardNumber());
         airplaneResponseDto.setMarka(airplane.getMarka());
         airplaneResponseDto.setNumberSeats(airplane.getNumberSeats());
+        airplaneResponseDto.setAirplaneStatus(airplane.getStatus());
+        airplaneResponseDto.setAircompanyResponseDto(AircompanyMapper.mapAircompanyEntityToDto(airplane.getAirCompany()));
         airplaneResponseDto.setDateRegister(airplane.getDateRegister());
 
 
@@ -34,6 +36,10 @@ public class AirplaneMapper {
             airplaneResponseDto.setId(airplane.getId());
             airplaneResponseDto.setBoardNumber(airplane.getBoardNumber());
             airplaneResponseDto.setDateRegister(airplane.getDateRegister());
+            airplaneResponseDto.setMarka(airplane.getMarka());
+            airplaneResponseDto.setNumberSeats(airplane.getNumberSeats());
+            airplaneResponseDto.setAirplaneStatus(airplane.getStatus());
+            airplaneResponseDto.setAircompanyResponseDto(AircompanyMapper.mapAircompanyEntityToDto(airplane.getAirCompany()));
             result.add(airplaneResponseDto);
         }
 

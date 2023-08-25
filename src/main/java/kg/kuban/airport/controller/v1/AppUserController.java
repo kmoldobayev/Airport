@@ -73,7 +73,7 @@ public class AppUserController {
     )
     @PostMapping(value = "/createUser")
     @PreAuthorize("hasAnyRole('ADMIN', 'CHIEF')")
-    public ResponseEntity<AppUserResponseDto> createUser(@RequestBody AppUserRequestDto user) throws InvalidCredentialsException{
+    public ResponseEntity<?> createUser(@RequestBody AppUserRequestDto user) throws InvalidCredentialsException{
         return  ResponseEntity.ok(AppUserMapper.mapAppUserEntityToDto(this.userService.createUser(user)));
     }
 

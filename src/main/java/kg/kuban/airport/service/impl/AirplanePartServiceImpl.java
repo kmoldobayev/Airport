@@ -2,7 +2,6 @@ package kg.kuban.airport.service.impl;
 
 import com.querydsl.core.BooleanBuilder;
 import kg.kuban.airport.dto.AirplanePartRequestDto;
-import kg.kuban.airport.dto.AirplanePartResponseDto;
 import kg.kuban.airport.dto.AirplanePartTypesResponseDto;
 import kg.kuban.airport.entity.AirplanePart;
 import kg.kuban.airport.entity.QAirplanePart;
@@ -12,7 +11,7 @@ import kg.kuban.airport.exception.IncompatiblePartException;
 import kg.kuban.airport.exception.AirplanePartNotFoundException;
 import kg.kuban.airport.mapper.AirplanePartMapper;
 import kg.kuban.airport.repository.AirplanePartRepository;
-import kg.kuban.airport.service.PartService;
+import kg.kuban.airport.service.AirplanePartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +23,12 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class PartServiceImpl implements PartService {
+public class AirplanePartServiceImpl implements AirplanePartService {
 
     private final AirplanePartRepository airplanePartRepository;
 
     @Autowired
-    public PartServiceImpl(AirplanePartRepository airplanePartRepository) {
+    public AirplanePartServiceImpl(AirplanePartRepository airplanePartRepository) {
         this.airplanePartRepository = airplanePartRepository;
     }
 

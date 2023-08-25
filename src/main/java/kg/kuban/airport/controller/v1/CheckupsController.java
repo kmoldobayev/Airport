@@ -3,7 +3,7 @@ package kg.kuban.airport.controller.v1;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.exception.AirplanePartCheckupNotFoundException;
 import kg.kuban.airport.mapper.AirplanePartCheckupMapper;
-import kg.kuban.airport.service.PartCheckupService;
+import kg.kuban.airport.service.AirplanePartCheckupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
         description = "Описывает точки доступа по истории тех осмотра"
 )
 public class CheckupsController {
-    private final PartCheckupService partCheckupService;
+    private final AirplanePartCheckupService partCheckupService;
 
     @Autowired
-    public CheckupsController(PartCheckupService partCheckupService) {
+    public CheckupsController(AirplanePartCheckupService partCheckupService) {
         this.partCheckupService = partCheckupService;
     }
 

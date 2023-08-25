@@ -6,15 +6,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.AuthDto;
 import kg.kuban.airport.dto.TokenResponseDto;
 import kg.kuban.airport.exception.InvalidCredentialsException;
+import kg.kuban.airport.exception.UnauthorizedException;
 import kg.kuban.airport.service.impl.AuthServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.*;
 
 /**
  Контроллер по аутентификации:
@@ -47,9 +47,8 @@ public class AuthController {
             }
     )
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(
-            @RequestBody AuthDto authDto
-    ) throws InvalidCredentialsException {
+    public ResponseEntity<?> login(@RequestBody AuthDto authDto)
+            throws InvalidCredentialsException, UsernameNotFoundException {
         TokenResponseDto tokenResponseDto;
 
         logger.info("authDto login=" + authDto.getLogin());
@@ -60,6 +59,12 @@ public class AuthController {
         logger.info("Token: " + tokenResponseDto.getAccessToken());
         return ResponseEntity.ok(tokenResponseDto);
 
+    }
+
+    @ExceptionHandler({ UnauthorizedException.class })
+    public ResponseEntity<Object> handleUnauthorizedException(UnauthorizedException ex) {
+        // Обработка и возврат ResponseEntity с соответствующим кодом состояния и сообщением об ошибке
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 
 //    @PostMapping(value = "/logout")

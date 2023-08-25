@@ -1,5 +1,6 @@
 package kg.kuban.airport.dto;
 
+import kg.kuban.airport.enums.AirplaneStatus;
 import kg.kuban.airport.enums.AirplaneType;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,10 @@ public class AirplaneResponseDto {
     private String boardNumber;
 
     private Integer numberSeats;
+
+    private AirplaneStatus airplaneStatus;
+
+    private AircompanyResponseDto aircompanyResponseDto;
 
     private LocalDateTime dateRegister;
 
@@ -58,6 +63,24 @@ public class AirplaneResponseDto {
 
     public AirplaneResponseDto setNumberSeats(Integer numberSeats) {
         this.numberSeats = numberSeats;
+        return this;
+    }
+
+    public AirplaneStatus getAirplaneStatus() {
+        return airplaneStatus;
+    }
+
+    public AirplaneResponseDto setAirplaneStatus(AirplaneStatus airplaneStatus) {
+        this.airplaneStatus = airplaneStatus;
+        return this;
+    }
+
+    public AircompanyResponseDto getAircompanyResponseDto() {
+        return aircompanyResponseDto;
+    }
+
+    public AirplaneResponseDto setAircompanyResponseDto(AircompanyResponseDto aircompanyResponseDto) {
+        this.aircompanyResponseDto = aircompanyResponseDto;
         return this;
     }
 }

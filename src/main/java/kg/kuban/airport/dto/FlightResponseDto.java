@@ -9,7 +9,7 @@ public class FlightResponseDto {
 
     private Long id;                            // Уникальный идентификатор рейса
 
-    private String number;                      // Номер рейса строковый
+    private String flightNumber;                      // Номер рейса строковый
 
     private AirportResponseDto destination;             // Пункт назначения
 
@@ -30,12 +30,12 @@ public class FlightResponseDto {
         return this;
     }
 
-    public String getNumber() {
-        return number;
+    public String getFlightNumber() {
+        return flightNumber;
     }
 
-    public FlightResponseDto setNumber(String number) {
-        this.number = number;
+    public FlightResponseDto setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
         return this;
     }
 

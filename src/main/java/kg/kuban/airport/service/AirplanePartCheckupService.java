@@ -9,7 +9,7 @@ import kg.kuban.airport.exception.*;
 
 import java.util.List;
 
-public interface PartCheckupService {
+public interface AirplanePartCheckupService {
 
     List<AirplanePartCheckup> registerPartCheckups(
             Airplane airplane,

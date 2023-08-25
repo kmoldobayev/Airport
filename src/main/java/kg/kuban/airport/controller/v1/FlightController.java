@@ -59,7 +59,7 @@ public class FlightController {
     public ResponseEntity<?> registerNewFlight(@RequestBody FlightRequestDto flightRequestDto)
             throws AirplaneNotFoundException, UnavailableAirplaneException
     {
-        return ResponseEntity.ok(this.flightService.registerNewFlight(flightRequestDto));
+        return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.registerNewFlight(flightRequestDto)));
     }
 
 

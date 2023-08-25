@@ -2,14 +2,11 @@ package kg.kuban.airport.controller.v1;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.kuban.airport.dto.AirplanePartRequestDto;
-import kg.kuban.airport.dto.AirplanePartResponseDto;
-import kg.kuban.airport.dto.AirplanePartTypesResponseDto;
 import kg.kuban.airport.enums.AirplanePartType;
 import kg.kuban.airport.enums.AirplaneType;
 import kg.kuban.airport.exception.AirplanePartNotFoundException;
-import kg.kuban.airport.mapper.AirplaneMapper;
 import kg.kuban.airport.mapper.AirplanePartMapper;
-import kg.kuban.airport.service.PartService;
+import kg.kuban.airport.service.AirplanePartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,10 +22,10 @@ import java.util.List;
         description = "Описывает точки доступа по регистрации частей самолета для тех осмотра работниками аэропорта"
 )
 public class AirplanePartController {
-    private final PartService partService;
+    private final AirplanePartService partService;
 
     @Autowired
-    public AirplanePartController(PartService partService) {
+    public AirplanePartController(AirplanePartService partService) {
         this.partService = partService;
     }
 

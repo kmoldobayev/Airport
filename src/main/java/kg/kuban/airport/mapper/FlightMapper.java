@@ -1,5 +1,6 @@
 package kg.kuban.airport.mapper;
 
+import kg.kuban.airport.dto.FlightRequestDto;
 import kg.kuban.airport.dto.FlightResponseDto;
 import kg.kuban.airport.dto.UserFlightRegistrationResponseDto;
 import kg.kuban.airport.entity.Flight;
@@ -10,6 +11,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class FlightMapper {
+
+    public static Flight mapFlightRequestDtoToEntity(FlightRequestDto source) {
+        return new Flight().setDestination(AirportMapper.mapAirportDtoToEntity(source.getDestination()));
+    }
+
     public static FlightResponseDto mapFlightEntityToDto(Flight flight) {
         FlightResponseDto flightResponseDto = new FlightResponseDto();
         flightResponseDto.setId(flight.getId());

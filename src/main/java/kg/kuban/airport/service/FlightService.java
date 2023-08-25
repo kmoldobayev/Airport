@@ -5,10 +5,7 @@ import kg.kuban.airport.dto.FlightRequestDto;
 import kg.kuban.airport.dto.FlightResponseDto;
 import kg.kuban.airport.entity.Flight;
 import kg.kuban.airport.enums.FlightStatus;
-import kg.kuban.airport.exception.AirplaneNotReadyException;
-import kg.kuban.airport.exception.FlightNotFoundException;
-import kg.kuban.airport.exception.IncorrectFiltersException;
-import kg.kuban.airport.exception.StatusChangeException;
+import kg.kuban.airport.exception.*;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface FlightService {
-    Flight registerNewFlight(FlightRequestDto flightRequestDto);
+    Flight registerNewFlight(FlightRequestDto flightRequestDto) throws AirplaneNotFoundException, UnavailableAirplaneException;
 
     Flight updateNumberOfRemainingTickets(Long flightId) throws FlightNotFoundException;
 

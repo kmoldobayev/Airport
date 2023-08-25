@@ -9,8 +9,8 @@ import kg.kuban.airport.enums.AirplanePartStatus;
 import kg.kuban.airport.exception.*;
 import kg.kuban.airport.mapper.AirplanePartCheckupMapper;
 import kg.kuban.airport.repository.AirplanePartCheckupRepository;
-import kg.kuban.airport.service.PartCheckupService;
-import kg.kuban.airport.service.PartService;
+import kg.kuban.airport.service.AirplanePartCheckupService;
+import kg.kuban.airport.service.AirplanePartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +20,16 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class PartCheckupServiceImpl implements PartCheckupService {
+public class AirplanePartCheckupServiceImpl implements AirplanePartCheckupService {
     private static final Long MIN_Checkup_CODE_VALUE = 1L;
 
     private final AirplanePartCheckupRepository airplanePartCheckupRepository;
-    private final PartService partsService;
+    private final AirplanePartService partsService;
 
     private Long currentMaxCheckupCode;
 
     @Autowired
-    public PartCheckupServiceImpl(AirplanePartCheckupRepository airplanePartCheckupRepository, PartService partsService) {
+    public AirplanePartCheckupServiceImpl(AirplanePartCheckupRepository airplanePartCheckupRepository, AirplanePartService partsService) {
         this.airplanePartCheckupRepository = airplanePartCheckupRepository;
         this.partsService = partsService;
     }

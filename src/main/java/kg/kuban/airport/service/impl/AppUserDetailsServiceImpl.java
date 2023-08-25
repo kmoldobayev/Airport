@@ -1,6 +1,7 @@
 package kg.kuban.airport.service.impl;
 
 import kg.kuban.airport.entity.AppUser;
+import kg.kuban.airport.exception.AppUserNotFoundException;
 import kg.kuban.airport.repository.AppRoleRepository;
 import kg.kuban.airport.repository.AppUserRepository;
 import kg.kuban.airport.service.AppUserDetailsService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -40,10 +42,12 @@ public class AppUserDetailsServiceImpl implements AppUserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        logger.info("username=" + username);
+        logger.info("loadUserByUsername username=" + username);
         Optional<AppUser> appUser = this.appUserRepository.findByUserLogin(username);
-        if (appUser.isEmpty()) {
-            throw new UsernameNotFoundException("User not found: " + username);
+
+        //logger.info("appUser=" + appUser.get().getUserLogin());
+        if (!appUser.isPresent()) {
+            throw new UsernameNotFoundException("Пользователь не найден: " + username);
         }
         logger.info(appUser.get().getUserLogin());
         return appUser.get();

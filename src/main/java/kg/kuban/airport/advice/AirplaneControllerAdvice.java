@@ -16,7 +16,7 @@ public class AirplaneControllerAdvice {
     }
 
     @ExceptionHandler(value = AirplaneNotFoundException.class)
-    public ErrorResponse handleAircraftNotFoundException(AirplaneNotFoundException e) {
+    public ErrorResponse handleAirplaneNotFoundException(AirplaneNotFoundException e) {
         return new ErrorResponse().setHttpStatus(HttpStatus.BAD_REQUEST).setMessage(e.getMessage());
     }
 
@@ -56,7 +56,13 @@ public class AirplaneControllerAdvice {
     }
 
     @ExceptionHandler(value = IllegalAirplaneException.class)
-    public ErrorResponse handleWrongAircraftException(IllegalAirplaneException e) {
+    public ErrorResponse handleWrongAirplaneException(IllegalAirplaneException e) {
         return new ErrorResponse().setHttpStatus(HttpStatus.BAD_REQUEST).setMessage(e.getMessage());
     }
+
+    @ExceptionHandler(value =  FlightNotFoundException.class)
+    public ErrorResponse handleWrongAirplaneException( FlightNotFoundException e) {
+        return new ErrorResponse().setHttpStatus(HttpStatus.BAD_REQUEST).setMessage(e.getMessage());
+    }
+
 }

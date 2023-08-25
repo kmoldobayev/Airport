@@ -1,12 +1,14 @@
 package kg.kuban.airport.security;
 
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -71,6 +73,7 @@ public class JwtTokenHandler {
             System.out.println("Token signature incorrect");
         } catch (IllegalArgumentException ex) {
             System.out.println("Token must contain claims");
+            //throw new IllegalArgumentException();
 
         }
         return false;

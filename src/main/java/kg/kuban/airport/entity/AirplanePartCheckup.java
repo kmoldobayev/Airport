@@ -63,7 +63,10 @@ public class AirplanePartCheckup {
     @Column(name = "inspection_code")
     private Long checkupCode;            //
 
-
+    @PrePersist
+    public void init() {
+        this.dateRegister = LocalDateTime.now();
+    }
 
     public AirplanePartCheckup() {
     }

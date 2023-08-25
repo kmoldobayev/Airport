@@ -1,6 +1,7 @@
 package kg.kuban.airport.service.impl;
 
 import kg.kuban.airport.dto.TokenResponseDto;
+import kg.kuban.airport.exception.AppUserNotFoundException;
 import kg.kuban.airport.exception.InvalidCredentialsException;
 import kg.kuban.airport.security.JwtTokenHandler;
 import kg.kuban.airport.service.AppUserDetailsService;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,15 +43,39 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public TokenResponseDto loginUser(String username, String password) throws InvalidCredentialsException {
+    public TokenResponseDto loginUser(String username, String password)
+            throws InvalidCredentialsException, UsernameNotFoundException {
+        // Проверить валидность логина и пароля
+        if (Objects.isNull(username) || username.isEmpty()) {
+            throw new InvalidCredentialsException("Логин не должен быть пустым!");
+        }
+        if (Objects.isNull(password) || password.isEmpty()) {
+            throw new InvalidCredentialsException("Пароль не должен быть пустым!");
+        }
+
         TokenResponseDto result = new TokenResponseDto();
+
+
         UserDetails user = this.appUserDetailsService.loadUserByUsername(username);
+
+        if (Objects.isNull(user)) {
+            throw new InvalidCredentialsException("Пользователь не найден с логином " + username);
+        }
+        if (!this.passwordEncoder.matches(password, user.getPassword())) {
+            logger.info("Неверно введен пароль!!!!!!!!");
+            throw new InvalidCredentialsException("Неверно введен пароль");
+        }
+
+
+
         if (this.passwordEncoder.matches(password, user.getPassword())) {
             Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, null, user.getAuthorities());
             String jwtToken = this.jwtTokenHandler.generateToken(authentication);
             result.setAccessToken(jwtToken);
             return result;
         }
+
+
         return null;
     }
 

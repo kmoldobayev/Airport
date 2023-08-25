@@ -4,22 +4,22 @@ import java.time.LocalDateTime;
 
 public class FlightRequestDto {
 
-    private String number;                              // Номер рейса строковый
+    private String flightNumber;                              // Номер рейса строковый
 
     private AirportRequestDto destination;              // Пункт назначения
 
 
-    private AirplaneRequestDto airplane;                // Самолет
+    private Long airplaneId;                // Самолет
 
     public FlightRequestDto() {
     }
 
-    public String getNumber() {
-        return number;
+    public String getFlightNumber() {
+        return flightNumber;
     }
 
-    public FlightRequestDto setNumber(String number) {
-        this.number = number;
+    public FlightRequestDto setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
         return this;
     }
 
@@ -32,12 +32,12 @@ public class FlightRequestDto {
         return this;
     }
 
-    public AirplaneRequestDto getAirplane() {
-        return airplane;
+    public Long getAirplaneId() {
+        return airplaneId;
     }
 
-    public FlightRequestDto setAirplane(AirplaneRequestDto airplane) {
-        this.airplane = airplane;
+    public FlightRequestDto setAirplaneId(Long airplaneId) {
+        this.airplaneId = airplaneId;
         return this;
     }
 }
