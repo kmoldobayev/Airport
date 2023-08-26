@@ -156,6 +156,10 @@ public class CustomerServiceImpl implements CustomerService {
             throw new IllegalArgumentException("ID регистрации на рейс не может быть null");
         }
 
+        if (Objects.isNull(requestDto.getMark())) {
+            throw new IllegalArgumentException("Оценка не может быть null");
+        }
+
         CustomerReview review = CustomerReviewMapper.mapCustomerDtoToEntity(requestDto);
         AppUser currentUser = (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -164,6 +168,8 @@ public class CustomerServiceImpl implements CustomerService {
 
         review.setAppUser(currentUser);
         review.setFlight(flight);
+        review.setDateRegister(LocalDateTime.now());
+        review.setMark(requestDto.getMark());
 
         this.customerReviewRepository.save(review);
         return review;

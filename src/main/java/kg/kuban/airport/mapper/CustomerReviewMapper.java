@@ -14,6 +14,11 @@ public class CustomerReviewMapper {
     public static CustomerReviewResponseDto mapCustomerReviewToDto(CustomerReview customerReview) {
         MapstructProviderMapper mapper = Mappers.getMapper(MapstructProviderMapper.class);
         CustomerReviewResponseDto result = mapper.mapCustomerReviewToDto(customerReview);
+
+        result.setClientId(customerReview.getAppUser().getId());
+        result.setFlightId(customerReview.getFlight().getId());
+        result.setMark(customerReview.getMark());
+
         return result;
     }
 

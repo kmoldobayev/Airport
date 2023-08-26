@@ -8,6 +8,7 @@ import kg.kuban.airport.dto.EmployeeReportResponseDto;
 import kg.kuban.airport.dto.FlightResponseDto;
 import kg.kuban.airport.dto.PositionRequestDto;
 import kg.kuban.airport.entity.AppUser;
+import kg.kuban.airport.exception.AppUserNotFoundException;
 import kg.kuban.airport.mapper.EmployeeReportMapper;
 import kg.kuban.airport.mapper.FlightMapper;
 import kg.kuban.airport.repository.FlightRepository;
@@ -15,6 +16,7 @@ import kg.kuban.airport.service.AppUserService;
 import kg.kuban.airport.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,7 +59,7 @@ public class EmployeeController {
     )
     @GetMapping(value = "/report")
     @PreAuthorize("hasAnyRole('CHIEF')")
-    public EmployeeReportResponseDto getEmployeeReport(
+    public ResponseEntity<?> getEmployeeReport(
             @RequestParam(name = "startDate", required = false)
             @DateTimeFormat(pattern = "dd.MM.yyyy")
             LocalDate startDate,
@@ -100,7 +102,7 @@ public class EmployeeController {
         Integer countEnabledUsers = employeeEnabled.size();
         Integer countDismissedUsers = employeeDismissed.size();
 
-        return EmployeeReportMapper.mapReportFilterToDto(   startDate,
+        return ResponseEntity.ok(EmployeeReportMapper.mapReportFilterToDto(   startDate,
                                                             endDate,
                                                             fullName,
                                                             position,
@@ -110,29 +112,7 @@ public class EmployeeController {
                                                             employeeAll,
                                                             employeeEnabled,
                                                             employeeDismissed
-        );
+        ));
     }
-
-//    @PreAuthorize(value = "hasAnyRole('MANAGER', 'DISPATCHER')")
-//    @GetMapping(value = "/crew-members/free")
-//    public List<ApplicationUserResponseDto> getAllFreeCrewMembers()
-//            throws ApplicationUserNotFoundException
-//    {
-//        return this.applicationUserService.getAllFreeCrewMembers();
-//    }
-//
-//    @PreAuthorize(value = "hasAnyRole('MANAGER', 'CHIEF_ENGINEER')")
-//    @GetMapping(value = "/engineers/free")
-//    public List<ApplicationUserResponseDto> getAllFreeEngineers()
-//            throws ApplicationUserNotFoundException
-//    {
-//        return this.applicationUserService.getAllFreeEngineers();
-//    }
-//
-//    @PreAuthorize(value = "hasAnyRole('MANAGER', 'ADMIN')")
-//    @GetMapping(value = "/positions")
-//    public List<UserPositionResponseDto> getAllEmployeePositions() {
-//        return this.userPositionsService.getAllEmployeePositions();
-//    }
 
 }

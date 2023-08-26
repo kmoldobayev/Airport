@@ -166,10 +166,15 @@ public class FlightServiceImpl implements FlightService {
 
     @Transactional
     @Override
-    public Flight confirmFlightRegistration(Long flightId)
-            throws FlightNotFoundException, StatusChangeException
+    public Flight confirmFlightRegistration(Long flightId) throws FlightNotFoundException, StatusChangeException
     {
         Flight flight = this.getFlightEntityByFlightId(flightId);
+        if (flight.getStatus().equals(FlightStatus.SELLING_TICKETS)) {
+            throw new StatusChangeException(
+                    "Регистрация рейса уже подтверждена!"
+            );
+        }
+
         if (!flight.getStatus().equals(FlightStatus.CREW_MEMBERS_REGISTERED)) {
             throw new StatusChangeException(
                     "Чтобы регистрация рейса могла быть подтверждена на" +

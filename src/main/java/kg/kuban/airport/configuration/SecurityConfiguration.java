@@ -56,7 +56,7 @@ public class SecurityConfiguration {
                 .antMatchers("/users/**").hasAnyRole("ADMIN", "CHIEF")
                 .antMatchers("/user-roles/**").hasRole("ADMIN")
                 .antMatchers("/airplanes/**").hasAnyRole("DISPATCHER", "CHIEF", "ENGINEER", "CHIEF_ENGINEER", "СHIEF_DISPATCHER")
-                .antMatchers("/flights/**").hasAnyRole("DISPATCHER", "CHIEF", "ENGINEER", "CHIEF_ENGINEER", "СHIEF_DISPATCHER")
+                .antMatchers("/flights/**").hasAnyRole("DISPATCHER", "CHIEF", "ENGINEER", "CHIEF_ENGINEER", "СHIEF_DISPATCHER", "CUSTOMER")
                 //.antMatchers("/flights/**").permitAll()
 
                 .anyRequest().authenticated()

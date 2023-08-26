@@ -1,19 +1,19 @@
 package kg.kuban.airport.enums;
 
 public enum Mark {
-    ONE_STAR(1),
-    TWO_STARS(2),
-    THREE_STARS(3),
-    FOUR_STARS(4),
-    FIVE_STARS(5);
+    ONE_STAR("1"),
+    TWO_STARS("2"),
+    THREE_STARS("3"),
+    FOUR_STARS("4"),
+    FIVE_STARS("5");
 
-    private Integer num;
+    private String num;
 
-    private Mark(Integer num) {
+    private Mark(String num) {
         this.num = num;
     }
 
-    public Integer getNum() {
+    public String getNum() {
         return num;
     }
 }

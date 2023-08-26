@@ -21,6 +21,8 @@ public class FlightMapper {
     public static FlightResponseDto mapFlightEntityToDto(Flight flight) {
         FlightResponseDto flightResponseDto = new FlightResponseDto();
         flightResponseDto.setId(flight.getId());
+        flightResponseDto.setFlightNumber(flight.getFlightNumber());
+        flightResponseDto.setDateRegister(flight.getDateRegister());
         flightResponseDto.setAirplane(AirplaneMapper.mapAirplaneEntityToDto(flight.getAirplane()));
         flightResponseDto.setDateRegister(flight.getDateRegister());
         flightResponseDto.setDestination(AirportMapper.mapAirportEntityToDto(flight.getDestination()));
@@ -33,6 +35,8 @@ public class FlightMapper {
         for ( Flight flight : flightList) {
             FlightResponseDto flightResponseDto = new FlightResponseDto();
             flightResponseDto.setId(flight.getId());
+            flightResponseDto.setFlightNumber(flight.getFlightNumber());
+            flightResponseDto.setDateRegister(flight.getDateRegister());
             flightResponseDto.setAirplane(AirplaneMapper.mapAirplaneEntityToDto(flight.getAirplane()));
             flightResponseDto.setDateRegister(flight.getDateRegister());
             flightResponseDto.setDestination(AirportMapper.mapAirportEntityToDto(flight.getDestination()));
@@ -51,12 +55,12 @@ public class FlightMapper {
                         .setEmployeeId(source.getId())
                         .setEmployeeFullName(source.getAppUser().getFullName())
                         .setEmployeePositionTitle(
-                                source.getAppUser().getPosition().getTitle()
+                                source.getAppUser() != null && source.getAppUser().getPosition() != null ? source.getAppUser().getPosition().getTitle() : null
                         )
                         .setRegisteredAt(source.getDateRegister())
                         .setUserStatus(source.getStatus());
 
-        if(Objects.nonNull(source.getSeat())) {
+        if (Objects.nonNull(source.getSeat())) {
             responseDto
                     .setSeatNumber(source.getSeat().getSeatNumber());
         }

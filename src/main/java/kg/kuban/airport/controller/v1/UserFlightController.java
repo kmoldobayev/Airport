@@ -76,9 +76,7 @@ public class UserFlightController {
     )
     @PreAuthorize(value = "hasRole('CUSTOMER')")
     @PostMapping(value = "/customers/booking")
-    public ResponseEntity<?> bookingCustomerForFlight(
-            @RequestBody UserFlightRequestDto requestDto
-    )
+    public ResponseEntity<?> bookingCustomerForFlight(@RequestBody UserFlightRequestDto requestDto)
             throws IllegalFlightException,
             AirplaneSeatNotFoundException,
             SeatBookingException,
@@ -97,8 +95,8 @@ public class UserFlightController {
             }
     )
     @PreAuthorize(value = "hasRole('CUSTOMER')")
-    @PutMapping(value = "/customers/cancelBooking")
-    public ResponseEntity<?> cancelCustomerBookingForFlight(@RequestParam Long bookingId)
+    @PutMapping(value = "/customers/cancelBooking/{id}")
+    public ResponseEntity<?> cancelCustomerBookingForFlight(@PathVariable(value = "id") Long bookingId)
             throws AirplaneSeatNotFoundException,
             SeatBookingException,
             TicketCancelingException,
@@ -116,15 +114,13 @@ public class UserFlightController {
             }
     )
     @PreAuthorize(value = "hasRole('STEWARD')")
-    @PutMapping(value = "/customers/briefCustomer")
-    public UserFlightRegistrationResponseDto conductCustomerBriefing(
-            @RequestParam Long bookingId
-    )
+    @PutMapping(value = "/customers/briefCustomer/{id}")
+    public ResponseEntity<?> conductCustomerBriefing(@PathVariable(value = "id") Long bookingId)
             throws UserFlightNotFoundException,
             StatusChangeException, FlightNotFoundException
     {
         UserFlightRegistrationResponseDto responseDto = UserFlightMapper.mapToUserFlightRegistrationResponseDto(this.userFlightService.conductCustomersBriefing(bookingId));
-        if(
+        if (
                 this.userFlightService.checkIfAllPassengersOfFlightHaveStatus(
                         responseDto.getFlightId(),
                         UserFlightStatus.CUSTOMER_BRIEFED
@@ -132,7 +128,7 @@ public class UserFlightController {
         ) {
             this.flightService.informThatAllCustomersAreBriefed(responseDto.getFlightId());
         }
-        return responseDto;
+        return ResponseEntity.ok(responseDto);  //UserFlightRegistrationResponseDto
     }
 
     @Operation(
@@ -143,8 +139,8 @@ public class UserFlightController {
             }
     )
     @PreAuthorize(value = "hasRole('STEWARD')")
-    @PutMapping(value = "/customers/checkCustomer")
-    public ResponseEntity<?> checkCustomer(@RequestParam Long bookingId)
+    @PutMapping(value = "/customers/checkCustomer/{id}")
+    public ResponseEntity<?> checkCustomer(@PathVariable(value = "id") Long bookingId)
             throws UserFlightNotFoundException,
             StatusChangeException,
             FlightNotFoundException
@@ -169,17 +165,19 @@ public class UserFlightController {
             }
     )
     @PreAuthorize(value = "hasRole('STEWARD')")
-    @PutMapping(value = "/customers/distributeCustomersFood")
-    public ResponseEntity<?> distributeCustomersFood(@RequestParam Long bookingId)
+    @PutMapping(value = "/customers/distributeCustomersFood/{id}")
+    public ResponseEntity<?> distributeCustomersFood(@PathVariable(value = "id") Long bookingId)
             throws UserFlightNotFoundException,
-            StatusChangeException, FlightNotFoundException {
+            StatusChangeException,
+            FlightNotFoundException
+    {
         UserFlightRegistrationResponseDto responseDto = UserFlightMapper.mapToUserFlightRegistrationResponseDto(this.userFlightService.distributeCustomersFood(bookingId));
         if (this.userFlightService.checkIfAllPassengersOfFlightHaveStatus(
                         responseDto.getFlightId(),
                         UserFlightStatus.CUSTOMER_FOOD_DISTRIBUTED)) {
             this.flightService.informThatAllCustomersAreBriefed(responseDto.getFlightId());
         }
-        return ResponseEntity.ok(responseDto);  //UserFlightRegistrationResponseDto
+        return ResponseEntity.ok(responseDto);
     }
 
     @Operation(
@@ -216,7 +214,7 @@ public class UserFlightController {
     )
             throws UserFlightNotFoundException
     {
-        return ResponseEntity.ok(this.userFlightService.getAllCustomerBookings(flightId, customerStatus));  //List<UserFlightRegistrationResponseDto>
+        return ResponseEntity.ok(UserFlightMapper.mapUserFlightEntityListToDto(this.userFlightService.getAllCustomerBookings(flightId, customerStatus)));  //List<UserFlightRegistrationResponseDto>
     }
 
     @Operation(

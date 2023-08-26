@@ -41,8 +41,14 @@ public class UserFlightMapper {
             UserFlightRegistrationResponseDto userFlightRegistrationResponseDto = new UserFlightRegistrationResponseDto();
             userFlightRegistrationResponseDto.setId(userFlight.getId());
             userFlightRegistrationResponseDto.setFlightId(userFlight.getFlight().getId());
-            userFlightRegistrationResponseDto.setSeatNumber(userFlight.getSeat().getSeatNumber());
-            //userFlightRegistrationResponseDto.setFlightDestination(userFlight..getDestination()));
+            if (Objects.nonNull(userFlight.getSeat())) {
+                userFlightRegistrationResponseDto.setSeatNumber(userFlight.getSeat().getSeatNumber());
+            }
+            userFlightRegistrationResponseDto.setEmployeeId(userFlight.getAppUser().getId());
+            userFlightRegistrationResponseDto.setEmployeeFullName(userFlight.getAppUser().getFullName());
+            userFlightRegistrationResponseDto.setEmployeePositionTitle(userFlight.getAppUser() != null && userFlight.getAppUser().getPosition() != null ? userFlight.getAppUser().getPosition().getTitle() : null);
+            userFlightRegistrationResponseDto.setFlightDestination(AirportMapper.mapAirportEntityToDto(userFlight.getFlight().getDestination()));
+
             userFlightRegistrationResponseDto.setUserStatus(userFlight.getStatus());
             userFlightRegistrationResponseDto.setRegisteredAt(userFlight.getDateRegister());
             result.add(userFlightRegistrationResponseDto);

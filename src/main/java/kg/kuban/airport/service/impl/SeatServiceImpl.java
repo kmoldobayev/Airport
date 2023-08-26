@@ -125,14 +125,13 @@ public class SeatServiceImpl implements SeatService {
             throw new IllegalArgumentException("ID места в самолете не может быть меньше 1!");
         }
 
-        Optional<Seat> aircraftSeatsEntityOptional =
-                this.seatRepository.getSeatById(seatId);
-        if(aircraftSeatsEntityOptional.isEmpty()) {
+        Optional<Seat> airplaneSeatsEntityOptional = this.seatRepository.getSeatById(seatId);
+        if (airplaneSeatsEntityOptional.isEmpty()) {
             throw new AirplaneSeatNotFoundException(
                     String.format("Места в самолете с ID[%d] не найдено!", seatId)
             );
         }
-        return aircraftSeatsEntityOptional.get();
+        return airplaneSeatsEntityOptional.get();
     }
 
     @Override
@@ -151,11 +150,11 @@ public class SeatServiceImpl implements SeatService {
         booleanBuilder.and(root.airplane.id.eq(airplaneId));
         booleanBuilder.and(root.isOccupied.eq(Boolean.FALSE));
 
-        Iterable<Seat> aircraftSeatsEntityIterable =
+        Iterable<Seat> airplaneSeatsEntityIterable =
                 this.seatRepository.findAll(booleanBuilder.getValue());
         List<Seat> airplaneSeats =
                 StreamSupport
-                        .stream(aircraftSeatsEntityIterable.spliterator(), false)
+                        .stream(airplaneSeatsEntityIterable.spliterator(), false)
                         .collect(Collectors.toList());
 
         return airplaneSeats.size();

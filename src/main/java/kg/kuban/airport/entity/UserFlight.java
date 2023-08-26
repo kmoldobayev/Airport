@@ -41,7 +41,7 @@ public class UserFlight {
     }
 
     @PrePersist
-    private void prePersist() {
+    public void prePersist() {
         this.dateRegister = LocalDateTime.now();
     }
 

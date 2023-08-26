@@ -107,7 +107,7 @@ public class CustomerController {
     )
     @PreAuthorize(value = "hasAnyRole('CHIEF', 'PILOT')")
     @GetMapping(value = "/allReviews")
-    public List<CustomerReviewResponseDto> getAllReviews(
+    public ResponseEntity<?> getAllReviews(
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             @RequestParam(required = false) LocalDateTime dateBegin,
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -117,7 +117,7 @@ public class CustomerController {
             throws CustomerReviewNotFoundException,
             IncorrectFiltersException
     {
-        return this.customerService.getAllCustomersReviews(dateBegin, dateEnd, flightId);
+        return ResponseEntity.ok(this.customerService.getAllCustomersReviews(dateBegin, dateEnd, flightId));
     }
 
 }

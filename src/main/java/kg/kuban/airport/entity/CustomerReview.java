@@ -21,7 +21,7 @@ public class CustomerReview {
     @Column(name = "date_register")
     private LocalDateTime dateRegister;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(name = "mark")
     private Mark mark;
 

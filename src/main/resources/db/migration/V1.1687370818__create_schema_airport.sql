@@ -98,7 +98,7 @@ create table if not exists seats (
 -- Таблица "Рейс-Пользователь-Сиденье"
 create table if not exists users_flights(
     id bigserial primary key,
-    seat_id bigint not null references seats(id),                   -- Ссылка на таблицу "Сиденья в самолете"
+    seat_id bigint references seats(id),                            -- Ссылка на таблицу "Сиденья в самолете"
     flight_id bigint not null references flights(id),               -- Ссылка на таблицу "Рейсы"
     user_id bigint references app_users(id),                        -- Ссылка на таблицу "Пользователи"
     status varchar not null,                                        -- Статус рейса
@@ -164,7 +164,7 @@ create table if not exists customer_reviews (
     id bigserial primary key,                                       --
     review varchar not null,                                        --
     date_register timestamp without time zone not null,                                      --
-    mark integer not null check (mark in (1, 2, 3, 4, 5)),          --
+    mark varchar,                                                   --
     user_id bigint not null references app_users(id),               --
     flight_id bigint not null references flights(id)                -- Ссылка на таблицу "Рейсы"
 );

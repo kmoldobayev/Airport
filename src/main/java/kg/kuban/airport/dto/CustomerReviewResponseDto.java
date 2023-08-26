@@ -1,5 +1,7 @@
 package kg.kuban.airport.dto;
 
+import kg.kuban.airport.enums.Mark;
+
 import java.time.LocalDateTime;
 
 public class CustomerReviewResponseDto {
@@ -8,6 +10,8 @@ public class CustomerReviewResponseDto {
     private LocalDateTime dateRegister;
     private Long clientId;
     private Long flightId;
+
+    private Mark mark;
 
     public CustomerReviewResponseDto() {
     }
@@ -54,6 +58,15 @@ public class CustomerReviewResponseDto {
 
     public CustomerReviewResponseDto setFlightId(Long flightId) {
         this.flightId = flightId;
+        return this;
+    }
+
+    public Mark getMark() {
+        return mark;
+    }
+
+    public CustomerReviewResponseDto setMark(Mark mark) {
+        this.mark = mark;
         return this;
     }
 }

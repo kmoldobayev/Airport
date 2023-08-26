@@ -46,8 +46,8 @@ public class FlightController {
     }
 
     @Operation(
-            summary = "Создание нового рейса",
-            description = "Пользовотель с ролью Диспетчер выполняет создание нового рейса",
+            summary = "Регистрация нового рейса",
+            description = "1.Пользователь с ролью Диспетчер выполняет регистрацию нового рейса",
             parameters = {
                     @Parameter(name = "flightRequestDto",
                                 description = "DTO рейса",
@@ -65,7 +65,7 @@ public class FlightController {
 
     @Operation(
             summary = "Инициирование отправки рейса ",
-            description = "Пользовотель с ролью Диспетчер выполняет Инициирование отправки рейса",
+            description = "Пользователь с ролью Диспетчер выполняет Инициирование отправки рейса",
             parameters = {
                     @Parameter(name = "flightId",
                                 description = "ID самолета",
@@ -73,8 +73,8 @@ public class FlightController {
             }
     )
     @PreAuthorize(value = "hasRole('DISPATCHER')")
-    @PutMapping(value = "/initFlightDeparture")
-    public ResponseEntity<?> initiateFlightDeparture(@RequestParam Long flightId)
+    @PutMapping(value = "/initFlightDeparture/{id}")
+    public ResponseEntity<?> initFlightDeparture(@PathVariable(value = "id") Long flightId)
             throws StatusChangeException, FlightNotFoundException
     {
         return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.initiateFlightDeparturePreparations(flightId)));
@@ -101,7 +101,7 @@ public class FlightController {
 
     @Operation(
             summary = "Подтверждение нового рейса.",
-            description = "Пользователь с ролью Главный Диспетчер подтверждает Регистрацию нового рейса",
+            description = "2.Пользователь с ролью Главный Диспетчер подтверждает Регистрацию нового рейса",
             parameters = {
                     @Parameter(name = "flightId",
                                 description = "ID рейса",
@@ -109,8 +109,8 @@ public class FlightController {
             }
     )
     @PreAuthorize(value = "hasRole('СHIEF_DISPATCHER')")
-    @PutMapping(value = "/confirmFlightRegistration")
-    public ResponseEntity<?> confirmFlightRegistration(@RequestParam Long flightId)
+    @PutMapping(value = "/confirmFlightRegistration/{id}")
+    public ResponseEntity<?> confirmFlightRegistration(@PathVariable(value = "id") Long flightId)
             throws StatusChangeException, FlightNotFoundException
     {
         return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.confirmFlightRegistration(flightId)));
@@ -142,7 +142,7 @@ public class FlightController {
     )
     @PreAuthorize(value = "hasRole('PILOT')")
     @PutMapping(value = "/requestLanding")
-    public ResponseEntity<?> requestLanding(@RequestParam Long flightId)
+    public ResponseEntity<?> requestLanding(@PathVariable(value = "id") Long flightId)
             throws StatusChangeException, FlightNotFoundException
     {
         return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.requestLanding(flightId)));
@@ -157,7 +157,7 @@ public class FlightController {
     )
     @PreAuthorize(value = "hasRole('DISPATCHER')")
     @PutMapping(value = "/assignLanding")
-    public ResponseEntity<?> assignLanding(@RequestParam Long flightId)
+    public ResponseEntity<?> assignLanding(@PathVariable(value = "id") Long flightId)
             throws StatusChangeException, FlightNotFoundException
     {
         return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.assignLanding(flightId)));
@@ -171,8 +171,8 @@ public class FlightController {
             }
     )
     @PreAuthorize(value = "hasRole('CHIEF_DISPATCHER')")
-    @PutMapping(value = "/confirmLanding")
-    public ResponseEntity<?> confirmLanding(@RequestParam Long flightId)
+    @PutMapping(value = "/confirmLanding/{id}")
+    public ResponseEntity<?> confirmLanding(@RequestParam(value = "id") Long flightId)
             throws StatusChangeException, FlightNotFoundException
     {
         return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.confirmLanding(flightId)));
@@ -186,10 +186,8 @@ public class FlightController {
             }
     )
     @PreAuthorize(value = "hasRole('PILOT')")
-    @PutMapping(value = "/startFlight")
-    public ResponseEntity<?> startFlight(
-            @RequestParam Long flightId
-    )
+    @PutMapping(value = "/startFlight/{id}")
+    public ResponseEntity<?> startFlight(@RequestParam Long flightId)
             throws StatusChangeException, FlightNotFoundException
     {
         return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.startFlight(flightId)));
@@ -203,8 +201,8 @@ public class FlightController {
             }
     )
     @PreAuthorize(value = "hasRole('PILOT')")
-    @PutMapping(value = "/endFlight")
-    public ResponseEntity<?> endFlight(@RequestParam Long flightId)
+    @PutMapping(value = "/endFlight/{id}")
+    public ResponseEntity<?> endFlight(@PathVariable(value = "id") Long flightId)
             throws StatusChangeException, FlightNotFoundException
     {
         return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.endFlight(flightId)));

@@ -29,9 +29,7 @@ public class CheckupsController {
 
     @PreAuthorize(value = "hasRole('CHIEF_ENGINEER')")
     @GetMapping(value = "/history")
-    public ResponseEntity<?> getAirplanePartCheckupsHistory(
-            @RequestParam Long airplaneId
-    )
+    public ResponseEntity<?> getAirplanePartCheckupsHistory(@RequestParam Long airplaneId)
             throws AirplanePartCheckupsNotFoundException
     {
         return ResponseEntity.ok(AirplanePartCheckupMapper.mapToPartCheckupResponseDtoList(this.partCheckupService.getPartCheckupsHistory(airplaneId)));

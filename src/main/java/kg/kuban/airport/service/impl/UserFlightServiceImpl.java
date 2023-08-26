@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -50,7 +51,7 @@ public class UserFlightServiceImpl implements UserFlightService {
             AppUserNotFoundException,
             NotEnoughRolesForCrewRegistrationException,
             InvalidUserRoleException {
-        if(Objects.isNull(requestDtoList) || requestDtoList.isEmpty()) {
+        if (Objects.isNull(requestDtoList) || requestDtoList.isEmpty()) {
             throw new IllegalArgumentException(
                     "Список регистрируемых на рейс сотрудников не может быть null или пустым!"
             );
@@ -61,17 +62,17 @@ public class UserFlightServiceImpl implements UserFlightService {
         for (UserFlightRequestDto requestDto : requestDtoList) {
             Long crewMemberId = requestDto.getUserId();
             Long comparativeFlightId = requestDto.getFlightId();
-            if(Objects.isNull(comparativeFlightId) || Objects.isNull(crewMemberId)) {
+            if (Objects.isNull(comparativeFlightId) || Objects.isNull(crewMemberId)) {
                 throw new IllegalArgumentException(
                         "ID рейса, на который регистрируется сотрудник, и ID сотрудника не может быть null!"
                 );
             }
-            if(comparativeFlightId < 1L || crewMemberId < 1L) {
+            if (comparativeFlightId < 1L || crewMemberId < 1L) {
                 throw new IllegalArgumentException(
                         "ID рейса, на который регистрируется сотрудник, и ID сотруднка не может быть меньше 1!"
                 );
             }
-            if(!flightId.equals(comparativeFlightId)){
+            if (!flightId.equals(comparativeFlightId)){
                 throw new IllegalArgumentException(
                         "ID рейса для всех регистрируемых на этот рейс сотрудников должен совпадать!"
                 );
@@ -103,7 +104,7 @@ public class UserFlightServiceImpl implements UserFlightService {
                         crewMembers,
                         "PILOT", "STEWARD", "CHIEF_STEWARD"
                 );
-        if(!crewMembersListContainsOnlyUsersWithValidRoles) {
+        if (!crewMembersListContainsOnlyUsersWithValidRoles) {
             throw new InvalidUserRoleException(
                     "Список регистрируемых на рейс сотрудников содержит пользователя с недопустимыми ролями!"
             );
@@ -123,7 +124,7 @@ public class UserFlightServiceImpl implements UserFlightService {
             crewMembersRegistrations.add(crewMemberRegistration);
         }
 
-        crewMembersRegistrations = this.userFlightRepository.saveAll(crewMembersRegistrations);
+        this.userFlightRepository.saveAll(crewMembersRegistrations);
         return crewMembersRegistrations
                 .stream()
                 .collect(Collectors.toList());
@@ -136,37 +137,37 @@ public class UserFlightServiceImpl implements UserFlightService {
             FlightNotFoundException,
             IllegalFlightException,
             AirplaneSeatNotFoundException, SeatBookingException {
-        if(Objects.isNull(requestDto)) {
+        if (Objects.isNull(requestDto)) {
             throw new IllegalArgumentException("Создаваемая регистрация клиента на рейс не может быть null!");
         }
-        if(Objects.isNull(requestDto.getFlightId()) || Objects.isNull(requestDto.getAirplaneSeatId())) {
+        if (Objects.isNull(requestDto.getFlightId()) || Objects.isNull(requestDto.getAirplaneSeatId())) {
             throw new IllegalArgumentException(
                     "ID рейса, на который регистрируется клиент, и ID бронируемого места не могут быть null"
             );
         }
-        if(requestDto.getFlightId() < 1L || requestDto.getAirplaneSeatId() < 1L) {
+        if (requestDto.getFlightId() < 1L || requestDto.getAirplaneSeatId() < 1L) {
             throw new IllegalArgumentException(
                     "ID рейса, на который регистрируется клиент, и ID бронируемого места не могут быть меньше 1!"
             );
         }
 
-        AppUser CUSTOMER =
-                (AppUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        AppUser CUSTOMER = (AppUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Flight flight = this.flightService.getFlightEntityByFlightId(requestDto.getFlightId());
-        if(!flight.getStatus().equals(FlightStatus.SELLING_TICKETS)) {
+        if (!flight.getStatus().equals(FlightStatus.SELLING_TICKETS)) {
             throw new IllegalFlightException(
                     "Регистрация пользователей возможно только на рейсы, на которые продаются билеты!"
             );
         }
 
-        Seat Seat = this.seatService.bookingSeat(requestDto.getAirplaneSeatId());
+        Seat airplaneSeat = this.seatService.bookingSeat(requestDto.getAirplaneSeatId());
         flight = this.flightService.updateNumberOfRemainingTickets(flight.getId());
 
         UserFlight userFlight = new UserFlight();
         userFlight.setFlight(flight);
-        userFlight.setSeat(Seat);
+        userFlight.setSeat(airplaneSeat);
         userFlight.setAppUser(CUSTOMER);
+        userFlight.setDateRegister(LocalDateTime.now());
         userFlight.setStatus(UserFlightStatus.CUSTOMER_BOOKING_FOR_FLIGHT);
 
         this.userFlightRepository.save(userFlight);
@@ -318,33 +319,32 @@ public class UserFlightServiceImpl implements UserFlightService {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QUserFlight root = QUserFlight.userFlight;
 
-        if(Objects.nonNull(flightId)) {
+        if (Objects.nonNull(flightId)) {
             booleanBuilder.and(root.flight.id.eq(flightId));
         }
-        if(Objects.nonNull(status)) {
+        if (Objects.nonNull(status)) {
             booleanBuilder.and(root.status.eq(status));
         }
-        if(Objects.nonNull(userId)) {
-            if(userId < 1L) {
+        if (Objects.nonNull(userId)) {
+            if (userId < 1L) {
                 throw new IllegalArgumentException("ID пользователя не может быть меньше 1!");
             }
             booleanBuilder.and(root.appUser.id.eq(userId));
         }
-        if(Objects.nonNull(isCustomer)) {
+        if (Objects.nonNull(isCustomer)) {
             if(isCustomer) {
-                booleanBuilder.and(root.appUser.position.title.eq("CUSTOMER"));
+                booleanBuilder.and(root.appUser.appRoles.any().title.eq("CUSTOMER"));
             } else {
                 booleanBuilder.and(root.appUser.position.title.ne("CUSTOMER"));
             }
         }
 
-        Iterable<UserFlight> userFlightIterable =
-                this.userFlightRepository.findAll(booleanBuilder.getValue());
+        Iterable<UserFlight> userFlightIterable = this.userFlightRepository.findAll(booleanBuilder.getValue());
         List<UserFlight> userFlight =
                 StreamSupport
                         .stream(userFlightIterable.spliterator(), false)
                         .collect(Collectors.toList());
-        if(userFlight.isEmpty()) {
+        if (userFlight.isEmpty()) {
             throw new UserFlightNotFoundException(
                     "Регистраций пользователей на рейс по укзанным параметрам не найдено!"
             );
