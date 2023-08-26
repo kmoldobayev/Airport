@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/flights/bookings")
+@RequestMapping(value = "/flights/users")
 @Tag(
         name = "Контроллер регистрации клиента на рейс + регистрации экипажа на рейс",
         description = "Описывает точки доступа по регистрации на рейс ролями Клиент, Диспетчер"

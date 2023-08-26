@@ -90,8 +90,8 @@ public class FlightController {
             }
     )
     @PreAuthorize(value = "hasRole('CHIEF_ENGINEER')")
-    @PutMapping(value = "/confirmRefueling")
-    public ResponseEntity<?> confirmRefueling(@RequestParam Long flightId)
+    @PutMapping(value = "/confirmRefueling/{id}")
+    public ResponseEntity<?> confirmRefueling(@PathVariable(value = "id") Long flightId)
             throws AirplaneNotReadyException,
             StatusChangeException,
             FlightNotFoundException
@@ -108,11 +108,10 @@ public class FlightController {
                                 schema = @Schema(type = "Long"), required = true)
             }
     )
-    @PreAuthorize(value = "hasRole('CHIEF_DISPATCHER')")
+    @PreAuthorize(value = "hasRole('СHIEF_DISPATCHER')")
     @PutMapping(value = "/confirmFlightRegistration")
     public ResponseEntity<?> confirmFlightRegistration(@RequestParam Long flightId)
-            throws StatusChangeException,
-            FlightNotFoundException
+            throws StatusChangeException, FlightNotFoundException
     {
         return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.confirmFlightRegistration(flightId)));
     }
@@ -127,11 +126,11 @@ public class FlightController {
             }
     )
     @PreAuthorize(value = "hasRole('DISPATCHER')")
-    @PutMapping(value = "/initСrewOnFlight")
-    public ResponseEntity<?> initCrewOnFlight(@RequestParam Long flightId)
+    @PutMapping(value = "/initCrew/{id}")
+    public ResponseEntity<?> initCrew(@PathVariable(value = "id") Long flightId)
             throws StatusChangeException, FlightNotFoundException
     {
-        return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.initiateCrewPreparation(flightId)));
+        return ResponseEntity.ok(FlightMapper.mapFlightEntityToDto(this.flightService.initCrewPrep(flightId)));
     }
 
     @Operation(
@@ -172,7 +171,7 @@ public class FlightController {
             }
     )
     @PreAuthorize(value = "hasRole('CHIEF_DISPATCHER')")
-    @PutMapping(value = "/confirm-landing")
+    @PutMapping(value = "/confirmLanding")
     public ResponseEntity<?> confirmLanding(@RequestParam Long flightId)
             throws StatusChangeException, FlightNotFoundException
     {
@@ -229,8 +228,8 @@ public class FlightController {
     @PreAuthorize(value = "hasAnyRole('CHIEF', 'CHIEF_DISPATCHER', 'DISPATCHER', 'PILOT', 'CUSTOMER')")
     @GetMapping(value = "/availableFlights")
     public ResponseEntity<?> getAvailableFlights(
-            @RequestParam(required = false) LocalDateTime dateRegisterBeg,
-            @RequestParam(required = false) LocalDateTime dateRegisterEnd,
+            @RequestParam(required = true) LocalDateTime dateRegisterBeg,
+            @RequestParam(required = true) LocalDateTime dateRegisterEnd,
             @RequestParam(required = false) FlightStatus flightStatus
     )
             throws IncorrectFiltersException, FlightNotFoundException
@@ -248,8 +247,8 @@ public class FlightController {
     @PreAuthorize(value = "hasAnyRole('CHIEF', 'CUSTOMER')")
     @GetMapping(value = "/sellingTickets")
     public ResponseEntity<?> getFlightsForTicketBooking(
-            @RequestParam(required = false) LocalDateTime dateCreatedBeg,
-            @RequestParam(required = false) LocalDateTime dateCreatedEnd,
+            @RequestParam(required = true) LocalDateTime dateCreatedBeg,
+            @RequestParam(required = true) LocalDateTime dateCreatedEnd,
             @RequestParam(required = false) AirportRequestDto flightDestination
     )
             throws IncorrectFiltersException, FlightNotFoundException

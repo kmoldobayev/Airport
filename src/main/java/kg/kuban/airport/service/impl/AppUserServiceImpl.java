@@ -187,13 +187,13 @@ public class AppUserServiceImpl implements AppUserService {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         QAppUser root = QAppUser.appUser;
 
-        if(Objects.nonNull(registeredBefore)) {
-            booleanBuilder.and(root.dateBegin.goe(registeredAfter));
+        if (Objects.nonNull(registeredBefore)) {
+            booleanBuilder.and(root.dateBegin.goe(registeredBefore));
         }
-        if(Objects.nonNull(registeredBefore)) {
-            booleanBuilder.and(root.dateBegin.loe(registeredBefore));
+        if (Objects.nonNull(registeredAfter)) {
+            booleanBuilder.and(root.dateBegin.loe(registeredAfter));
         }
-        if(Objects.nonNull(isDeleted)) {
+        if (Objects.nonNull(isDeleted)) {
             booleanBuilder.and(root.isEnabled.eq(isDeleted));
         }
 

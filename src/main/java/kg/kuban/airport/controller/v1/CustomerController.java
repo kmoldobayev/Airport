@@ -43,7 +43,6 @@ public class CustomerController {
             }
     )
     @PostMapping(value = "/register")
-    @PreAuthorize("hasAnyRole('CUSTOMER')")
     public ResponseEntity<?> registerCustomer(
             @RequestBody CustomerRequestDto user
     ) throws InvalidCredentialsException {
@@ -56,15 +55,19 @@ public class CustomerController {
                     " статусу аккаунта (isDeleted -- удален или нет)"
     )
     @PreAuthorize(value = "hasAnyRole('CHIEF')")
-    @GetMapping(value = "/report")
+    @GetMapping(value = "/all")
     public ResponseEntity<?> getAllCustomers(
-            @RequestParam(required = false) LocalDate registeredBefore,
-            @RequestParam(required = false) LocalDate registeredAfter,
+            @RequestParam(required = true)
+            @DateTimeFormat(pattern = "dd.MM.yyyy")
+            LocalDate dateRegisterBeg,
+            @RequestParam(required = true)
+            @DateTimeFormat(pattern = "dd.MM.yyyy")
+            LocalDate dateRegisterEnd,
             @RequestParam(required = false) Boolean isDeleted
     )
             throws AppUserNotFoundException
     {
-        return ResponseEntity.ok(AppUserMapper.mapAppUserEntityListToDto(this.customerService.getAllCustomers(registeredBefore, registeredAfter, isDeleted)));
+        return ResponseEntity.ok(AppUserMapper.mapAppUserEntityListToDto(this.customerService.getAllCustomers(dateRegisterBeg, dateRegisterEnd, isDeleted)));
     }
 
     @Operation(

@@ -16,6 +16,7 @@ import kg.kuban.airport.service.FlightService;
 import kg.kuban.airport.service.UserFlightService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,26 +44,51 @@ public class CustomerServiceImpl implements CustomerService {
     private PasswordEncoder bCryptPasswordEncoder;
     private final Logger logger = LoggerFactory.getLogger(AppUserController.class);
 
+    @Autowired
+    public CustomerServiceImpl(AppUserRepository appUserRepository, AppRoleRepository appRoleRepository, PositionRepository positionRepository, AppUserService appUserService, FlightService flightService, UserFlightService userFlightsService, FlightRepository flightRepository, UserFlightRepository userFlightRepository, CustomerReviewRepository customerReviewRepository, PasswordEncoder bCryptPasswordEncoder) {
+        this.appUserRepository = appUserRepository;
+        this.appRoleRepository = appRoleRepository;
+        this.positionRepository = positionRepository;
+        this.appUserService = appUserService;
+        this.flightService = flightService;
+        this.userFlightsService = userFlightsService;
+        this.flightRepository = flightRepository;
+        this.userFlightRepository = userFlightRepository;
+        this.customerReviewRepository = customerReviewRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
     @Transactional
     @Override
-    public AppUser createCustomer(CustomerRequestDto appUserDto) throws IllegalArgumentException {
-        AppUser possibleDuplicate = appUserRepository.findAll().stream()
-                .filter(x -> x.getUserLogin().equals(appUserDto.getUserLogin()))
-                .findFirst()
-                .orElse(null);
-        logger.info("possibleDuplicate");
-        if (Objects.isNull(possibleDuplicate)){
-            AppUser appUser = new AppUser();
-            //appUser.setAppRoles(Collections.singleton(new AppRole(1L, "ROLE_CUSTOMER")));
+    public AppUser createCustomer(CustomerRequestDto appUserDto)
+            throws IllegalArgumentException, InvalidCredentialsException {
+        if (Objects.isNull(appUserDto)) {
+            throw new IllegalArgumentException("Входящий userDto is null");
+        }
 
-//            Optional<Position> positionOptional =
-//                    this.positionRepository.getUserPositionsEntityByPositionTitle("CLIENT");
+        if (Objects.isNull(appUserDto.getUserLogin())) {
+            throw new InvalidCredentialsException("Login must not be null or empty");
+        }
+        if (Objects.isNull(appUserDto.getUserPassword()) || appUserDto.getUserPassword().isEmpty()) {
+            throw new InvalidCredentialsException("Password must not be null or empty");
+        }
+        if (Objects.isNull(appUserDto.getFullName()) || appUserDto.getFullName().isEmpty()) {
+            throw new InvalidCredentialsException("FullName must not be null or empty");
+        }
+        logger.info("appUserDto.getUserLogin()=" + appUserDto.getUserLogin());
+        //Optional<AppUser> possibleDuplicate = this.appUserRepository.findByUserLogin(appUserDto.getUserLogin());
+        Optional<AppUser> possibleDuplicate = this.appUserRepository.findAll().stream()
+                .filter(x -> x.getUserLogin().equals(appUserDto.getUserLogin()))
+                .findFirst();
+        logger.info("possibleDuplicate");
+        if (possibleDuplicate.isEmpty()){
+            AppUser appUser = new AppUser();
 
             List<AppRole> userRolesEntityList = new ArrayList<>();
             userRolesEntityList.add(this.appRoleRepository.findByTitle("CUSTOMER"));
 
             appUser.setAppRoles(userRolesEntityList);
-
+            appUser.setFullName(appUserDto.getFullName());
             appUser.setUserLogin(appUserDto.getUserLogin());
             appUser.setUserPassword(bCryptPasswordEncoder.encode(appUserDto.getUserPassword()));
             appUserRepository.save(appUser);
@@ -90,17 +116,18 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<AppUser> getAllCustomers(LocalDate dateRegisterBegin,
-                                                  LocalDate dateRegisterEnd,
-                                                  Boolean isDeleted) throws AppUserNotFoundException {
+                                         LocalDate dateRegisterEnd,
+                                         Boolean isDeleted) throws AppUserNotFoundException {
         BooleanBuilder booleanBuilder = new BooleanBuilder(
                 this.appUserService.buildUsersCommonSearchPredicate(dateRegisterBegin, dateRegisterEnd, isDeleted)
         );
         QAppUser root = QAppUser.appUser;
 
-        booleanBuilder.and(root.position.title.eq("CLIENT"));
+        booleanBuilder.and(root.appRoles.any().title.eq("CUSTOMER"));
 
         Iterable<AppUser> applicationUsersEntityIterable =
                 this.appUserRepository.findAll(booleanBuilder.getValue());
+
         List<AppUser> appUserList =
                 StreamSupport
                         .stream(applicationUsersEntityIterable.spliterator(), false)
@@ -116,8 +143,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional
     @Override
-    public CustomerReview registerNewReview(CustomerReviewRequestDto requestDto) throws UserFlightNotFoundException,
-            FlightNotFoundException
+    public CustomerReview registerNewReview(CustomerReviewRequestDto requestDto)
+            throws UserFlightNotFoundException, FlightNotFoundException
     {
         if (Objects.isNull(requestDto)) {
             throw new IllegalArgumentException("Создаваемый отзыв не может быть null!");

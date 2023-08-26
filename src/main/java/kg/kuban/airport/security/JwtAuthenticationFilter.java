@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             System.out.println("Token not found " +ex);
             logger.info("Token not found " +ex);
         }
-        logger.info("Token found=" + token);
+        //logger.info("Token found=" + token);
         if (Objects.nonNull(token) && this.jwtTokenHandler.validateToken(token)) {
             String username = this.jwtTokenHandler.getUsernameFromToken(token);
             logger.info("doFilterInternal username =" + username);
@@ -64,10 +64,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String parseJwt(HttpServletRequest request) throws UnauthorizedException {
         final String authHeader = request.getHeader("Authorization");
-        logger.info("authHeader  = " + authHeader );
-        if (Objects.isNull(authHeader)) {
-            throw new UnauthorizedException("Header запроса пустой!");
-        }
+        //logger.info("authHeader  = " + authHeader );
+//        if (Objects.isNull(authHeader)) {
+//            throw new UnauthorizedException("Header запроса пустой!");
+//        }
 
         if (Objects.nonNull(authHeader) && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);

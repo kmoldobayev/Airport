@@ -29,7 +29,7 @@ public interface FlightService {
 
     Flight initiateFlightDeparturePreparations(Long flightId) throws FlightNotFoundException, StatusChangeException;
 
-    Flight initiateCrewPreparation(Long flightId) throws FlightNotFoundException, StatusChangeException;
+    Flight initCrewPrep(Long flightId) throws FlightNotFoundException, StatusChangeException;
 
     Flight confirmAirplaneRefueling(Long flightId) throws FlightNotFoundException, StatusChangeException, AirplaneNotReadyException;
 

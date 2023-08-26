@@ -48,6 +48,7 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .antMatchers("/**/login/**").permitAll()
                 .antMatchers("/register/**").permitAll()
+                .antMatchers("/customers/register").permitAll()
                 .antMatchers( "/swagger-ui/**",
                                         "/swagger-resources/**",
                                         "/v3/api-docs/**").permitAll()
@@ -55,6 +56,9 @@ public class SecurityConfiguration {
                 .antMatchers("/users/**").hasAnyRole("ADMIN", "CHIEF")
                 .antMatchers("/user-roles/**").hasRole("ADMIN")
                 .antMatchers("/airplanes/**").hasAnyRole("DISPATCHER", "CHIEF", "ENGINEER", "CHIEF_ENGINEER", "СHIEF_DISPATCHER")
+                .antMatchers("/flights/**").hasAnyRole("DISPATCHER", "CHIEF", "ENGINEER", "CHIEF_ENGINEER", "СHIEF_DISPATCHER")
+                //.antMatchers("/flights/**").permitAll()
+
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

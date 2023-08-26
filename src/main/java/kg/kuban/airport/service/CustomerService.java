@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CustomerService {
-    AppUser createCustomer(CustomerRequestDto user) throws IllegalArgumentException;
+    AppUser createCustomer(CustomerRequestDto user) throws IllegalArgumentException, InvalidCredentialsException;
     List<UserFlight> getMyPastFlights(UserFlightStatus status) throws IllegalArgumentException, UserFlightNotFoundException;
 //    List<UserFlight> getAvailableFlights() throws IllegalArgumentException, UserFlightNotFoundException;
     UserFlight getCurrentFlight() throws IllegalArgumentException, UserFlightNotFoundException;
