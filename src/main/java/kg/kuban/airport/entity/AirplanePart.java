@@ -6,6 +6,7 @@ import kg.kuban.airport.enums.AirplanePartType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Schema(name = "Сущность Часть техосмотра самолета", description = "Описывает сущность части для техсмотра самолета")
@@ -42,6 +43,7 @@ public class AirplanePart {
     }
 
     public AirplanePart() {
+        this.airplanes = new ArrayList<>();
     }
 
     public Long getId() {

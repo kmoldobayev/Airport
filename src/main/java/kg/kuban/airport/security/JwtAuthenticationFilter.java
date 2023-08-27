@@ -50,13 +50,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //logger.info("Token found=" + token);
         if (Objects.nonNull(token) && this.jwtTokenHandler.validateToken(token)) {
             String username = this.jwtTokenHandler.getUsernameFromToken(token);
-            logger.info("doFilterInternal username =" + username);
+            //logger.info("doFilterInternal username =" + username);
             UserDetails user = this.appUserDetailsService.loadUserByUsername(username);
-            logger.info("doFilterInternal user =" + user.getUsername());
+            //logger.info("doFilterInternal user =" + user.getUsername());
             UsernamePasswordAuthenticationToken authToken =
                     UsernamePasswordAuthenticationToken.authenticated(user, null, user.getAuthorities());
 
-            logger.info("doFilterInternal authToken=" + authToken.getName());
+            //logger.info("doFilterInternal authToken=" + authToken.getName());
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
         filterChain.doFilter(request, response);

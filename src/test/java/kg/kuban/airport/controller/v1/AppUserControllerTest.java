@@ -5,6 +5,8 @@ import kg.kuban.airport.dto.AppUserResponseDto;
 import kg.kuban.airport.dto.AuthDto;
 import kg.kuban.airport.dto.TokenResponseDto;
 import kg.kuban.airport.exception.InvalidCredentialsException;
+import kg.kuban.airport.repository.AppRoleRepository;
+import kg.kuban.airport.repository.AppUserRepository;
 import kg.kuban.airport.security.JwtTokenHandler;
 import kg.kuban.airport.security.JwtTokenUtil;
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
@@ -39,6 +42,16 @@ class AppUserControllerTest {
 
     @Autowired
     JwtTokenHandler jwtTokenHandler;
+
+    //@MockBean
+    @Autowired
+    private AppUserRepository appUserRepository;
+//    @MockBean
+//    private AppRoleRepository appRoleRepository;
+//    @MockBean
+//    private UserPositionsEntityRepository userPositionsEntityRepository;
+//    @MockBean
+//    private UserDetailsService userDetailsService;
 
     @Autowired
     UserDetailsService appUserDetailsService;
